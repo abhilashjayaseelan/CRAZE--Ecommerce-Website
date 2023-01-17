@@ -1,0 +1,45 @@
+<section class="vh-100">
+    <div class="container py-5 h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-lg-5">
+                <div
+                    class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                    <div class="padding_eight_all bg-white">
+                        <div class="heading_s1">
+                            <h3 class="mb-30">User Login</h3>
+                        </div>
+                        <form method="post" action="/login">
+                            <div class="form-group">
+                                <input type="email" required="" name="email" placeholder="Your Email">
+                            </div>
+                            <div class="form-group">
+                                <input required="" type="password" name="password" placeholder="Password">
+                            </div>
+                            <div>
+                                {{#if loginErr}}
+                                <p style="color: red;">{{loginErr}}</p>
+                                {{/if}}
+
+                                 {{#if statusErr}}
+                                <p style="color: red;">{{statusErr}}</p>
+                                {{/if}}
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Login</button>
+                            </div>
+                            <div class="divider-text-center mt-15 mb-15">
+                                <span> or</span>
+                            </div>
+                            <div class="text-center mt-15 mb-15">
+                               <a href="/otp-login"><button type="button" class="btn btn-fill-out btn-block hover-up" name="otpLogin" >OTP login</button></a>
+                            </div>
+                            <div class="login_footer form-group">
+                                <div class="text-muted text-center">Don't have an account? <a href="/signup">Sign up now</a></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

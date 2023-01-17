@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin-assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+
+
+    <div class="screen-overlay"></div>
+    <main class="main-wrap">
+        <section class="content-main">
+            <h3>Users</h3><br>
+            <div class="card mb-4">
+                <table class="table align-middle mb-0 bg-white">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Joined date</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    {{#each user}}
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    {{!-- <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
+                                        style="width: 45px; height: 45px" class="rounded-circle" /> --}}
+                                    <div class="ms-3">
+                                        <p class="fw-bold mb-1">{{name}}</p>
+                                        <p class="text-muted mb-0">{{email}}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <p class="fw-normal mb-1">{{mobile}}</p>
+                            </td>
+                            <td>{{createdAt}}</td>
+                            <td>
+                                {{#if blocked}}
+                                <p class="fw-normal mb-1" style="color: red;">Blocked</p>
+                                {{else}}
+                                <p class="fw-normal mb-1" style="color: green;">Active</p>
+                                {{/if}}
+                            </td>
+                            <td>
+                                <div >
+
+                                    {{#if blocked}}
+                                    <button id="block-btn" style="width:90px;"
+                                        onclick="unblockUsers('{{_id}}',{{blocked}})"
+                                        class="btn font-sm rounded btn-outline-success rounded mt-2">unblock</button>
+                                    {{else}}
+                                    <button id="block-btn2" style="width:90px;"
+                                        onclick="blockUsers('{{_id}}',{{blocked}})"
+                                        class="btn font-sm btn-outline-danger rounded mt-2">block</button>
+                                    {{/if}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {{/each}}
+                </table>
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i
+                                    class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin-assets/js/main.js" type="text/javascript"></script>
+    <script>
+        function unblockUsers(userId, currStatus) {
+            $.ajax({
+                url: `/admin/unblock-user/${userId}`,
+                data: {
+                    userId: userId,
+                    currentStat: currStatus
+                },
+                type: 'patch',
+                success: (res) => {
+                     swal({
+                        title: "Successfull!",
+                        text: `user has been Unblocked`,
+                        icon: "success",
+                        button: "Ok!",
+                    }).then(() =>{
+                        location.reload();
+                    })
+                }
+            })
+        }
+
+        function blockUsers(userId, currStatus) {
+            $.ajax({
+                url: `/admin/block-user/${userId}`,
+                data: {
+                    userId: userId,
+                    currentStat: currStatus
+                },
+                type: 'patch',
+                success: (res) => {
+                    swal({
+                        title: "Success",
+                        text: "User has been blocked!!",
+                        icon: "success",
+                        button: "Ok",
+                    }).then(() =>{
+                        location.reload();
+                    })
+                    
+                }
+            })
+        }
+    </script>
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
+
+</html>

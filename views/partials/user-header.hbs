@@ -1,0 +1,256 @@
+<section>
+    <header class="header-area header-style-1 header-height-2">
+        {{#if itsUser}}
+        <div class="header-top header-top-ptb-1 d-none d-lg-block">
+            {{!-- <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-xl-3 col-lg-4">
+                        <div class="header-info">
+                            <ul>
+                                <li><i class="fi-rs-marker"></i><a href="page-contact.html">Our location</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-nav">
+                        <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
+                                class="material-icons md-apps"></i> </button>
+                        <ul class="nav">
+
+                        </ul>
+                    </div> --}}
+                </div>
+            </div>
+        </div>
+        {{/if}}
+        <div class="header-middle header-middle-ptb-1 d-none d-lg-block">
+            <div class="container">
+                <div class="header-wrap">
+                    <div class="logo logo-width-1">
+                        <a href="/view-products"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
+                    </div>
+
+
+                    <div class="header-right">
+                        <div class="header-action-right">
+                            <div class="header-action-2">
+                                {{#if user}}
+                                <div class="header-action-icon-2">
+                                    <a href="#">
+                                        <img class="svgInject" alt="Evara"
+                                            src="/assets/imgs/theme/icons/icon-heart.svg">
+                                        <span class="pro-count blue">4</span>
+                                    </a>
+                                </div>
+                                <div class="header-action-icon-2">
+                                    <a class="mini-cart-icon" href="/user-cart">
+                                        <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
+                                        <span class="pro-count blue">2</span>
+                                    </a>
+                                </div>
+                                {{/if}}
+                                {{#if itsUser}}
+                                <div><h1>|</h1></div>
+                                <div class="header-info header-info-right">
+                                    <ul>
+                                        <li class="dropdown nav-item">
+                                            {{#if user}}
+                                            <h5> {{user.response.name}} </h5>
+                                            {{else}}
+                                             <h5> User </h5>
+                                            {{/if}}
+                                            <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#"
+                                                id="dropdownAccount" aria-expanded="false"> <img
+                                                    class="img-xs rounded-circle"
+                                                    src="/admin-assets/imgs/people/avatar2.jpg" width="30em"
+                                                    alt="User"></a>
+                                            <div class="dropdown-menu dropdown-menu-end"
+                                                aria-labelledby="dropdownAccount">
+                                                {{#if user}}
+                                                <a class="dropdown-item text-dark" href="/profile/{{user.response._id}}"><i
+                                                        class="material-icons md-exit_to_app"></i>Profile</a>
+                                                <div class="dropdown-divider"></div>
+                                                {{/if}}
+                                                {{#if user}}
+                                                <a class="dropdown-item text-dark" href="/logout"><i
+                                                        class="material-icons md-exit_to_app"></i>Logout</a>
+                                                {{else}}
+                                                <a class="dropdown-item text-dark" href="/login"><i
+                                                        class="material-icons md-exit_to_app"></i>Log in </a>
+                                                {{/if}}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{#if itsUser}}
+        <div class="header-bottom header-bottom-bg-color sticky-bar">
+            <div class="container">
+                <div class="header-wrap header-space-between position-relative">
+                    <div class="logo logo-width-1 d-block d-lg-none">
+                        <a href="#"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
+                    </div>
+
+                    <div class="header-nav d-none d-lg-flex">
+                        <div class="main-categori-wrap d-none d-lg-block">
+                            <a class="categori-button-active" href="#">
+                                <span class="fi-rs-apps"></span> Browse Categories
+                            </a>
+                            <div class="categori-dropdown-wrap categori-dropdown-active-large">
+                                <ul>
+                                    <li class="has-children">
+                                        <a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's
+                                            Clothing</a>
+                                    </li>
+                                    <li class="has-children">
+                                        <a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's
+                                            Clothing</a>
+                                    </li>
+                                    <li class="has-children">
+                                        <a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i> Kids</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block">
+                            <nav>
+                                <ul>
+                                    <li>
+                                        <a class="active" href="#">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">About</a>
+                                    </li>
+                                    {{!-- <li>
+                                        <a href="shop-grid-right.html">Shop</a>
+                                    </li> --}}
+                                    <li>
+                                        <a href="#">Women</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Men</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Kids</a>
+                                    </li>
+                                    <li>
+                                        <a href="3">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+
+                    <div class="header-action-right d-block d-lg-none">
+                        <div class="header-action-2">
+                            <div class="header-action-icon-2">
+                                <a href="#">
+                                    <img alt="Evara" src="/assets/imgs/theme/icons/icon-heart.svg">
+                                    <span class="pro-count white">4</span>
+                                </a>
+                            </div>
+                            <div class="header-action-icon-2">
+                                <a class="mini-cart-icon" href="/user-cart">
+                                    <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
+                                    <span class="pro-count white">2</span>
+                                </a>
+                            </div>
+                            <div class="header-action-icon-2 d-block d-lg-none">
+                                <div class="burger-icon burger-icon-white">
+                                    <span class="burger-icon-top"></span>
+                                    <span class="burger-icon-mid"></span>
+                                    <span class="burger-icon-bottom"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+    </header>
+    <div class="mobile-header-active mobile-header-wrapper-style">
+        <div class="mobile-header-wrapper-inner">
+            <div class="mobile-header-top">
+                <div class="mobile-header-logo">
+                    <a href="#"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
+                </div>
+                <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
+                    <button class="close-style search-close">
+                        <i class="icon-top"></i>
+                        <i class="icon-bottom"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="mobile-header-content-area">
+                <div class="mobile-menu-wrap mobile-header-border">
+                    <div class="main-categori-wrap mobile-header-border">
+                        <a class="categori-button-active-2" href="#">
+                            <span class="fi-rs-apps"></span> Browse Categories
+                        </a>
+                        <div class="categori-dropdown-wrap categori-dropdown-active-small">
+                            <ul>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-dress"></i>Women's Clothing</a>
+                                </li>
+                                <li><a href="shop-grid-right.html"><i class="evara-font-tshirt"></i>Men's Clothing</a>
+                                </li>
+                                <li> <a href="shop-grid-right.html"><i class="evara-font-teddy-bear"></i> kids
+                                        Clothing</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- mobile menu start -->
+                    <nav>
+                        <ul class="mobile-menu">
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a
+                                    href="index.html">Home</a>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">About</a>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Women</a>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">Men</a>
+                            </li>
+                            <li class="menu-item-has-children"><span class="menu-expand"></span><a href="#">kids</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <!-- mobile menu end -->
+                </div>
+                <div class="mobile-header-info-wrap mobile-header-border">
+                    {{!-- <div class="single-mobile-header-info mt-30">
+                        <a href="page-contact.html"> Our location </a>
+                    </div> --}}
+                    <div class="single-mobile-header-info">
+                        <ul>
+                            {{#if user}}
+                            <li><i class="fi-rs-user"></i>><a href="/logout">{{user.name}} | Log out</a></li>
+                            {{else}}
+                            <li><i class="fi-rs-user"></i><a href="/login">Log In</a></li>
+                            {{/if}}
+                        </ul>
+                    </div>
+                    {{!-- <div class="single-mobile-header-info">
+                        <a href="#">(+01) - 2345 - 6789 </a>
+                    </div> --}}
+                </div>
+                <div class="mobile-social-icon">
+                    <h5 class="mb-15 text-grey-4">Follow Us</h5>
+                    <a href="#"><img src="/assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                    <a href="#"><img src="/assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                    <a href="#"><img src="/assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                    <a href="#"><img src="/assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                    <a href="#"><img src="/assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
