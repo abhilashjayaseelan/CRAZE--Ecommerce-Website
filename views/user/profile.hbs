@@ -27,8 +27,18 @@
                 <a href="#"><i class="fa-solid fa-box"> </i> Your orders</a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                {{!-- <a href="#"><i class="fa-solid fa-screwdriver-wrench"> </i> Account Settings</a> --}}
-                
+
+                <a class="" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
+                  aria-controls="collapseExample">
+                  <i class="fa-solid fa-screwdriver-wrench"> </i> Account Settings</a>
+                </a>
+
+                <div class="collapse" id="collapseExample">
+                  <div class="card card-body">
+                    <a href="/change-password"><i class="fa-solid fa-key"></i> Change Password</a>
+                  </div>
+                </div>
+
               </li>
             </ul>
           </div>
@@ -86,7 +96,7 @@
                     <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
                     <br>
                     <li>
-                      <a href="" onclick="deleteAddress('{{_id}}')"><i class="fa-solid fa-trash"></i></a>
+                      <a onclick="deleteAddress('{{_id}}')"><i class="fa-solid fa-trash"></i></a>
                     </li>
                   </ul>
                   <hr>

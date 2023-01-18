@@ -101,53 +101,92 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="mb-25">
-                            <h4>Billing Details</h4>
+                            <h4>Select Address</h4>
                         </div>
-                        <form method="post">
-                            <div class="form-group">
-                                <input type="text" required="" name="name" placeholder="Name *">
-                            </div>
-                            <div class="form-group">
-                                <input required="" type="tel" name="mobile" placeholder="Mobile *">
-                            </div>
-                            <div class="form-group">
-                                <input required="" type="text" name="pincode" placeholder="Postcode *">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" name="area" required="" placeholder="Address *">
-                            </div>
-                            <div class="form-group">
-                                <input required="" type="text" name="locality" placeholder="Locality *">
-                            </div>
-                            <div class="form-group">
-                                <input required="" type="text" name="district" placeholder="District *">
-                            </div>
-                            <div class="form-group">
-                                <div class="custom_select">
-                                    <select class="form-control select-active" name="state">
-                                        <option>Kerala</option>
-                                        <option>Tamil Nadu</option>
-                                        <option>Andrapradesh</option>
 
-                                    </select>
+
+                        <div class="payment_option">
+                            {{#each address}}
+                            <div class="order_review">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1" value="{{_id}}">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        <ul>
+                                            <li>Name: {{name}}</li>
+                                            <li>Mobile: {{mobile}}</li>
+                                            <li>Pincode: {{pincode}}</li>
+                                            <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
+                                            <br>
+                                        </ul>
+                                    </label>
                                 </div>
+
                             </div>
+                            <br>
+                            {{/each}}
+                        </div>
 
-                            {{!-- <div class="form-group">
-                                <div class="checkbox">
-                                    <div class="custome-checkbox">
-                                        <input class="form-check-input" type="checkbox" name="checkbox"
-                                            id="createaccount">
-                                        <label class="form-check-label label_info" data-bs-toggle="collapse"
-                                            href="#collapsePassword" data-target="#collapsePassword"
-                                            aria-controls="collapsePassword" for="createaccount"><span>Create an
-                                                account?</span></label>
-                                    </div>
-                                </div>
-                            </div> --}}
 
-                        </form>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add new address</button>
+
                     </div>
+
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">New address</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div>
+                                    <form action="/add-address" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <input type="text" required="" name="name" placeholder="Name *">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="tel" name="mobile" placeholder="Mobile *">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="text" name="pincode" placeholder="Postcode *">
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="area" required="" placeholder="Address *">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="text" name="locality" placeholder="Locality *">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="text" name="district" placeholder="District *">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom_select">
+                                                <select class="form-control select-active" name="state"
+                                                    style="width: 140px;">
+                                                    <option>Kerala</option>
+                                                    <option>Tamil Nadu</option>
+                                                    <option>Andrapradesh</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="order_review">
                             <div class="mb-20">
@@ -164,8 +203,8 @@
                                     <tbody>
                                         {{#each products}}
                                         <tr>
-                                            <td class="image product-thumbnail"><img
-                                                    src="/images/{{product._id}}.jpg" alt="#"></td>
+                                            <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg"
+                                                    alt="#"></td>
                                             <td>
                                                 <h5><a href="#">{{product.name}}</a></h5>
                                                 <span class="product-qty">x {{quantity}}</span>

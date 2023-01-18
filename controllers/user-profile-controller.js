@@ -1,6 +1,5 @@
 const { response } = require('../app');
 const userProfileHelpers = require('../helpers/user-profile-helpers');
-const { use } = require('../routes/admin');
 
 module.exports = {
     getProfile: (req, res)=>{
@@ -8,6 +7,7 @@ module.exports = {
         req.session.id = req.params.id;
         userProfileHelpers.userProfile(id)
         .then((profile)=>{
+            console.log(profile);
             req.session.profile = profile;
             let user = JSON.parse(JSON.stringify(profile))
             res.render('user/profile', { user, itsUser: true });
@@ -17,7 +17,8 @@ module.exports = {
         })
     },
     getAddress: (req, res) =>{
-        res.render('user/address')
+        const user = req.session.user;
+        res.render('user/address', { user })  
     },
     postAddress: (req, res) =>{
         let user = req.session.user;
@@ -37,6 +38,15 @@ module.exports = {
         })
         .catch((err)=>{
             console.log(err);
+        })
+    },
+    getPassword: (req, res)=>{
+        const user = req.session.user;
+        res.render('user/change-password', { user });
+    },
+    postPassword: ( req, res)=>{
+        userProfileHelpers.changePassword().then((response)=>{
+            
         })
     }
 }

@@ -1,4 +1,5 @@
 const cartHelper = require('../helpers/cart-helpers');
+const userProfileHelpers = require('../helpers/user-profile-helpers');
 const ObjectId = require('mongodb').ObjectId
 
 
@@ -46,10 +47,13 @@ module.exports = {
     getCheckout: (req, res) =>{
         const user = req.session.user;
         cartHelper.getCartItems(user.response._id).then((data) => {
-            let products = JSON.parse(JSON.stringify(data))
+            const products = JSON.parse(JSON.stringify(data))
             cartHelper.cartTotal(user.response._id).then((total) => {
-
-                res.render('user/checkout', { user, products, total, itsUser: true });
+                userProfileHelpers.getAddress(user.response._id).then((result)=>{
+                    const address = JSON.parse(JSON.stringify(result))
+                    console.log(address);
+                    res.render('user/checkout', { user, products, total, address, itsUser: true });
+                })
  
             })
         })

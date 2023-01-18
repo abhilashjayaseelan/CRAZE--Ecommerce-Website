@@ -41,7 +41,7 @@ router.get('/view-products',
 router.get('/view-sigleProduct/:id', 
     productControllers.getProduct);
 
-// getting  the user profile page
+// getting the user profile page
 router.get('/profile/:id',
     sessionHandler.checkingUser, 
     profileControllers.getProfile);
@@ -57,10 +57,16 @@ router.get('/delete-address/:id',
     sessionHandler.checkingUser,
     profileControllers.deleteAddress)
 
+// change password 
+router.route('/change-password')
+    .get( sessionHandler.checkingUser, 
+        profileControllers.getPassword)
+    .post( profileControllers.postPassword);
+
 // add to cart
 router.get('/add-to-cart/:id',
     sessionHandler.checkingUser,  
-    cartController. addToCart); 
+    cartController.addToCart); 
 
 // get cart
 router.get('/user-cart',

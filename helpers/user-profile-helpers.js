@@ -52,6 +52,17 @@ module.exports = {
                reject(err)
             })
         })
+    },
+    getAddress: (userId)=>{
+        return new Promise(( resolve, reject) =>{
+            address.find({ userId: objectId(userId)}).then((address) =>{
+                if(address){
+                    resolve(address);
+                }else{
+                    reject( new Error('No address found for the user'));
+                }
+            })
+        })
     }
 
 }

@@ -3,7 +3,6 @@ const userHelpers = require('../helpers/user-helpers')
 const twilio = require('twilio');
 const sendOtp = require('../middlewares/twilio');
 const { Enqueue } = require('twilio/lib/twiml/VoiceResponse');
-const cartHelpers = require('../helpers/cart-helpers');
 
 
 
@@ -45,10 +44,10 @@ module.exports = {
          req.session.user = response
          blockedStatus = response.blockedStatus;
          if(loginStatus === true){   
-            res.redirect('/');
+            res.redirect('/');   
          }else if(blockedStatus === true){
             req.session.statusErr = "Access has been denied";
-            res.redirect('/login')
+            res.redirect('/login');
          }else{
             req.session.loginErr = "Invalid email or password"   
             res.redirect('/login');
