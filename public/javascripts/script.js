@@ -63,7 +63,7 @@ function removeProduct(productId) {
                     button: "Ok!",
                 }).then(()=>[
                     location.reload()
-                ])
+                ])   
             }
         }
     })

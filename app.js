@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const fileUpload = require('express-fileupload');
+const handlebars = require('handlebars');
 
 // environment file setup
 require('dotenv').config();
@@ -24,6 +25,9 @@ app.use(nocache());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts', partialsDir: __dirname + '/views/partials' }))
+handlebars.registerHelper('eq', function(a, b) {
+  return a === b;
+});
 
 app.use(logger('dev'));
 app.use(express.json());

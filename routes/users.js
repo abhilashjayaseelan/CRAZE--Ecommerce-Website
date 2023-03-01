@@ -13,7 +13,7 @@ router.get('/', userController.getHomePage);
 
 // user login & logout
 router.route('/login')
-    .get( userControllers.getLogin)
+    .get(userControllers.getLogin)
     .post(userControllers.postLogin);
 
 router.get('/logout', userControllers.userLogout);
@@ -26,31 +26,31 @@ router.route('/otp-login')
 // otp varification
 router.route('/otp-varification')
     .get(userControllers.getOtpVarification)
-    .post(userController.postOtpVarification);   
+    .post(userController.postOtpVarification);
 
 // user signup
 router.route('/signup')
-    .get( userControllers.getSignup)
-    .post( userControllers.postSignup);
-  
+    .get(userControllers.getSignup)
+    .post(userControllers.postSignup);
+
 // product view
-router.get('/view-products', 
+router.get('/view-products',
     userControllers.getHomePage);
 
 // sigle product view
-router.get('/view-sigleProduct/:id', 
+router.get('/view-sigleProduct/:id',
     productControllers.getProduct);
 
 // getting the user profile page
 router.get('/profile/:id',
-    sessionHandler.checkingUser, 
+    sessionHandler.checkingUser,
     profileControllers.getProfile);
- 
+
 // add address  
-router.route('/add-address') 
-    .get(sessionHandler.checkingUser, 
+router.route('/add-address')
+    .get(sessionHandler.checkingUser,
         userProfileController.getAddress)
-    .post( userProfileController.postAddress);
+    .post(userProfileController.postAddress);
 
 // delete address
 router.get('/delete-address/:id',
@@ -59,18 +59,21 @@ router.get('/delete-address/:id',
 
 // change password 
 router.route('/change-password')
-    .get( sessionHandler.checkingUser, 
+    .get(sessionHandler.checkingUser,
         profileControllers.getPassword)
-    .post( profileControllers.postPassword);
+    .post(profileControllers.putPassword);
+
+
+
 
 // add to cart
 router.get('/add-to-cart/:id',
-    sessionHandler.checkingUser,  
-    cartController.addToCart); 
+    sessionHandler.checkingUser,
+    cartController.addToCart);
 
 // get cart
 router.get('/user-cart',
-    sessionHandler.checkingUser, 
+    sessionHandler.checkingUser,
     cartController.getCart);
 
 // changing product quantity in cart
@@ -79,19 +82,31 @@ router.post('/change-quantity',
     cartController.changeProductQuantity);
 
 // delete product in 
-router.get('/delete-from-cart/:id', 
+router.get('/delete-from-cart/:id',
     sessionHandler.checkingUser,
     cartController.deleteProduct);
 
 // get checkout page
-router.get('/checkout', 
-    sessionHandler.checkingUser, 
+router.get('/checkout',
+    sessionHandler.checkingUser,
     cartController.getCheckout);
+ 
+router.post('/place-order', cartController.placeOrder);
+
+// go to the order page
+router.get('/orders', userControllers.showOrders);
+
+// edit profile
+router.route('/edit-profile/:id')
+    .get(sessionHandler.checkingUser,  
+        profileControllers.editProfile)
+    .post(profileControllers.postEditProfile);
+
+// cancel order
+router.post('/cancel-order', userController.cancelOrder);
 
 
-// router.get('/orders', userControllers.showOrders); 
-  
 // router.get('/wishlist', userControllers.showWishlist);
 
 
-module.exports = router;
+module.exports = router; 

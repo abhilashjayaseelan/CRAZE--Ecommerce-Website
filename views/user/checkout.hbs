@@ -98,167 +98,173 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="mb-25">
-                            <h4>Select Address</h4>
-                        </div>
-
-
-                        <div class="payment_option">
-                            {{#each address}}
-                            <div class="order_review">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                        id="flexRadioDefault1" value="{{_id}}">
-                                    <label class="form-check-label" for="flexRadioDefault1">
-                                        <ul>
-                                            <li>Name: {{name}}</li>
-                                            <li>Mobile: {{mobile}}</li>
-                                            <li>Pincode: {{pincode}}</li>
-                                            <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
-                                            <br>
-                                        </ul>
-                                    </label>
-                                </div>
-
+                {{!-- modal for adding new address --}}
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New address</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
-                            <br>
-                            {{/each}}
-                        </div>
-
-
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add new address</button>
-
-                    </div>
-
-
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">New address</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div>
-                                    <form action="/add-address" method="post" enctype="multipart/form-data">
-                                        <div class="form-group">
-                                            <input type="text" required="" name="name" placeholder="Name *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required="" type="tel" name="mobile" placeholder="Mobile *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required="" type="text" name="pincode" placeholder="Postcode *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" name="area" required="" placeholder="Address *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required="" type="text" name="locality" placeholder="Locality *">
-                                        </div>
-                                        <div class="form-group">
-                                            <input required="" type="text" name="district" placeholder="District *">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="custom_select">
-                                                <select class="form-control select-active" name="state"
-                                                    style="width: 140px;">
-                                                    <option>Kerala</option>
-                                                    <option>Tamil Nadu</option>
-                                                    <option>Andrapradesh</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Save</button>
-                                        </div>
-                                    </form>
-
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="order_review">
-                            <div class="mb-20">
-                                <h4>Your Orders</h4>
-                            </div>
-                            <div class="table-responsive order_table text-center">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2">Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{#each products}}
-                                        <tr>
-                                            <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg"
-                                                    alt="#"></td>
-                                            <td>
-                                                <h5><a href="#">{{product.name}}</a></h5>
-                                                <span class="product-qty">x {{quantity}}</span>
-                                            </td>
-                                            <td>₹{{product.price}}</td>
-                                        </tr>
-                                        {{/each}}
-
-                                        <tr>
-                                            <th>SubTotal</th>
-                                            <td class="product-subtotal" colspan="2">₹{{total}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td colspan="2"><em>Free Shipping</em></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Total</th>
-                                            <td colspan="2" class="product-subtotal"><span
-                                                    class="font-xl text-brand fw-900">₹{{total}}</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                            <div class="payment_method">
-                                <div class="mb-25">
-                                    <h5>Payment</h5>
-                                </div>
-                                <div class="payment_option">
-                                    <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios3" checked="" value="cod">
-                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
-                                            data-target="#" aria-controls="bankTranfer">COD</label>
+                            <div>
+                                <form action="/add-address" method="post" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <input type="text" required="" name="name" placeholder="Name *">
                                     </div>
-                                    <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios4" checked="" value="bank">
-                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
-                                            data-target="#" aria-controls="checkPayment">Bank transfer</label>
+                                    <div class="form-group">
+                                        <input required="" type="tel" name="mobile" placeholder="Mobile *">
                                     </div>
-                                    <div class="custome-radio">
-                                        <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios5" checked="" value="paypal">
-                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
-                                            data-target="#" aria-controls="paypal">Paypal</label>
+                                    <div class="form-group">
+                                        <input required="" type="text" name="pincode" placeholder="Postcode *">
                                     </div>
-                                </div>
+                                    <div class="form-group">
+                                        <input type="text" name="area" required="" placeholder="Address *">
+                                    </div>
+                                    <div class="form-group">
+                                        <input required="" type="text" name="locality" placeholder="Locality *">
+                                    </div>
+                                    <div class="form-group">
+                                        <input required="" type="text" name="district" placeholder="District *">
+                                        <input type="text" name="newAddress" hidden value="true">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom_select">
+                                            <select class="form-control select-active" name="state"
+                                                style="width: 140px;">
+                                                <option>Kerala</option>
+                                                <option>Tamil Nadu</option>
+                                                <option>Andrapradesh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </form>
                             </div>
-                            <a href="#" class="btn btn-fill-out btn-block mt-30">Place Order</a>
+
                         </div>
                     </div>
                 </div>
+
+                {{!-- address and payment method selection to chechout --}}
+                <form id="checkout-form">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" hidden name="userId" value="{{user.response._id}}">
+                            <div class="mb-25">
+                                <h4>Select Address</h4>
+                            </div>
+                            <div class="payment_option">
+                                {{#each address}}
+                                <div class="order_review">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="deliveryAddress"
+                                            id="flexRadioDefault1" value="{{_id}}" required>
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            <ul>
+                                                <li>Name: {{name}}</li>
+                                                <li>Mobile: {{mobile}}</li>
+                                                <li>Pincode: {{pincode}}</li>
+                                                <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
+                                                <br>
+                                            </ul>
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <br>
+                                {{/each}}
+                            </div>
+
+
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add new address</button>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="order_review">
+                                <div class="mb-20">
+                                    <h4>Your Orders</h4>
+                                </div>
+                                <div class="table-responsive order_table text-center">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">Product</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each products}}
+                                            <tr>
+                                                <td class="image product-thumbnail"><img
+                                                        src="/images/{{product._id}}.jpg" alt="#"></td>
+                                                <td>
+                                                    <h5><a href="#">{{product.name}}</a></h5>
+                                                    <span class="product-qty">x {{quantity}}</span>
+                                                </td>
+                                                <td>₹{{product.price}}</td>
+                                            </tr>
+                                            {{/each}}
+
+                                            <tr>
+                                                <th>SubTotal</th>
+                                                <td class="product-subtotal" colspan="2">₹{{total}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipping</th>
+                                                <td colspan="2"><em>Free Shipping</em></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total</th>
+                                                <td colspan="2" class="product-subtotal"><span
+                                                        class="font-xl text-brand fw-900">₹{{total}}</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                <div class="payment_method">
+                                    <div class="mb-25">
+                                        <h5>Payment</h5>
+                                    </div>
+                                    <div class="payment_option">
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" required="" type="radio"
+                                                name="payment_option" id="exampleRadios3" checked="" value="COD">
+                                            <label class="form-check-label" for="exampleRadios3"
+                                                data-bs-toggle="collapse" data-target="#"
+                                                aria-controls="bankTranfer">COD</label>
+                                        </div> 
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" required="" type="radio"
+                                                name="payment_option" id="exampleRadios4" checked="" value="bank">
+                                            <label class="form-check-label" for="exampleRadios4"
+                                                data-bs-toggle="collapse" data-target="#"
+                                                aria-controls="checkPayment">Bank transfer</label>
+                                        </div>
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" required="" type="radio"
+                                                name="payment_option" id="exampleRadios5" checked="" value="paypal">
+                                            <label class="form-check-label" for="exampleRadios5"
+                                                data-bs-toggle="collapse" data-target="#"
+                                                aria-controls="paypal">Paypal</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-fill-out btn-block mt-30">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
             </div>
         </section>
     </main>
@@ -416,6 +422,24 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/shop.js"></script>
 </body>
+
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault();
+        $.ajax({
+            method: 'POST',
+            url: ('/place-order'),
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                location.replace('/orders');
+            },
+            error: (response, stat, err) => {
+                console.log(response);
+            }
+            
+        })
+    })
+</script>
 
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->

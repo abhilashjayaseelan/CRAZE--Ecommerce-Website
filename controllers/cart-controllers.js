@@ -1,3 +1,4 @@
+const { response } = require('../app');
 const cartHelper = require('../helpers/cart-helpers');
 const userProfileHelpers = require('../helpers/user-profile-helpers');
 const ObjectId = require('mongodb').ObjectId
@@ -46,18 +47,26 @@ module.exports = {
     // get checkout page
     getCheckout: (req, res) =>{
         const user = req.session.user;
+        console.log(user.response._id);
         cartHelper.getCartItems(user.response._id).then((data) => {
             const products = JSON.parse(JSON.stringify(data))
             cartHelper.cartTotal(user.response._id).then((total) => {
                 userProfileHelpers.getAddress(user.response._id).then((result)=>{
                     const address = JSON.parse(JSON.stringify(result))
-                    console.log(address);
                     res.render('user/checkout', { user, products, total, address, itsUser: true });
                 })
  
             })
         })
 
+    },
+    // place order
+    placeOrder: async(req, res) => {
+        let products = await cartHelper.getCartProductList(req.body.userId);
+        let totalPrice = await cartHelper.cartTotal(req.body.userId);
+        cartHelper.placeOrder(req.body, products, totalPrice).then((response) =>{
+            res.json({status: true});
+        })
     }
 
 

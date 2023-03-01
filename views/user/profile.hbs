@@ -16,7 +16,7 @@
                   {{!-- <p class="text-secondary mb-1">Full Stack Developer</p>
                   <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
                   {{!-- <button class="btn btn-primary">Logout</button> --}}
-                  <button class="btn btn-outline-primary">Edit profile</button>
+                  <a href="/edit-profile/{{user.userData._id}}"><button class="btn btn-outline-primary">Edit profile</button></a>
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@
           <div class="card mt-3">
             <ul class="list-group list-group-flush">
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                <a href="#"><i class="fa-solid fa-box"> </i> Your orders</a>
+                <a href="/orders"><i class="fa-solid fa-box"> </i> Your orders</a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
 

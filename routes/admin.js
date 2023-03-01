@@ -8,8 +8,8 @@ const adminHelper = require('../helpers/admin-helpers');
 const sessionHandler = require('../middlewares/session-handling');
 
 // home
-router.get('/', 
-    sessionHandler.checkingAdmin, 
+router.get('/',
+    sessionHandler.checkingAdmin,
     adminController.adminDashboard);
 
 // Admin login and logut
@@ -18,18 +18,18 @@ router.route('/admin-login')
         adminController.getAdminLogin)
     .post(adminController.postAdminLogin);
 
-router.get('/admin-logout', 
+router.get('/admin-logout',
     adminController.getAdminLogout);
 
 // dash board
-router.get('/dashboard', 
-    sessionHandler.checkingAdmin, 
+router.get('/dashboard',
+    sessionHandler.checkingAdmin,
     adminController.adminDashboard);
 
 // Product Category handling
 router.route('/add-productCategory')
-    .get(sessionHandler.checkingAdmin, 
-    categoryController.getProductCategory)
+    .get(sessionHandler.checkingAdmin,
+        categoryController.getProductCategory)
     .post(categoryController.addProductCategory);
 
 // router.get('/edit-productCategory/:id', adminController.editProductCategory);
@@ -40,29 +40,29 @@ router.route('/add-productCategory')
 
 
 // Product handling
-router.get('/view-products', 
-    sessionHandler.checkingAdmin, 
+router.get('/view-products',
+    sessionHandler.checkingAdmin,
     productController.viewProducts);
 
 // add prioduct
 router.route('/add-product')
-    .get(sessionHandler.checkingAdmin, 
+    .get(sessionHandler.checkingAdmin,
         productController.getAddProduct)
     .post(productController.postAddProduct);
 
 // edit product
 router.route('/edit-product/:id')
-    .get(sessionHandler.checkingAdmin, 
+    .get(sessionHandler.checkingAdmin,
         productController.getEditProduct)
     .post(productController.postEditProduct);
 
 // delete procuct
-router.get('/delete-product/:id', 
+router.get('/delete-product/:id',
     productController.getDeleteProduct);
 
 // User handling...
-router.get('/view-users', 
-    sessionHandler.checkingAdmin, 
+router.get('/view-users',
+    sessionHandler.checkingAdmin,
     adminController.viewUsers);
 
 // block user
@@ -77,7 +77,20 @@ router.patch('/unblock-user/:id', (req, res) => {
     adminHelper.unblockUser(req.params.id).then((response) => {
         res.send('user unblocked');
     })
-
 })
+
+// user orders
+router.get('/user-orders',
+    sessionHandler.checkingAdmin,
+    adminController.getuserOrders)
+ 
+router.get('/user-orderDetails/:id',
+sessionHandler.checkingAdmin,
+adminController.getOrderDetails)
+
+// change order status
+router.post('/change-status',
+adminController.changeOrderStatus);
+
 
 module.exports = router;

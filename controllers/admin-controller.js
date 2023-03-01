@@ -1,4 +1,6 @@
+const { json } = require('express');
 const adminHelper = require('../helpers/admin-helpers');
+const userHelpers = require('../helpers/user-helpers');
 
 module.exports = {
     adminDashboard: (req, res) => {
@@ -35,6 +37,36 @@ module.exports = {
         adminHelper.getUsers().then((user) => {
             user = JSON.parse(JSON.stringify(user))
             res.render('admin/admin-allUsers', { user, admin: true });
+        })
+    },
+    // getting user orders
+    getuserOrders: (req, res) =>{
+        adminHelper.getOrders().then((allOrders) =>{
+            allOrders = JSON.parse(JSON.stringify(allOrders))
+            res.render('admin/admin-allOrders', {admin: true, allOrders}); 
+        })
+    },
+    // order details
+    getOrderDetails: async(req, res) =>{
+        let productId = req.params.id;
+        let status = JSON.parse(JSON.stringify(req.query.status));
+        console.log(status);
+        let singleDetails = await adminHelper.singleOrder(productId);
+        adminHelper.orderDetails(productId).then((details) =>{
+            details = JSON.parse(JSON.stringify(details));
+            res.render('admin/order-details', {admin: true, details, singleDetails, status});
+        })
+        .catch((err)=> {
+            console.log(err);
+        })
+    },
+    // change order status 
+    changeOrderStatus: (req, res) => {
+        adminHelper.changeStatus(req.body).then((result) => {
+            res.json({status: true});
+        })
+        .catch((err) => {
+            console.log(err);
         })
     }
     

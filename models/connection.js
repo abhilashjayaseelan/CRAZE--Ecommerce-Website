@@ -129,9 +129,9 @@ const addressSchema = new Schema({
     type: String,
     required: true
   },
-  userId:{
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'user' 
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
   }
 })
 
@@ -147,9 +147,41 @@ const cartSchema = new Schema({
 
 })
 
+const ordersSchema = new Schema({
+  deliveryAddress: {
+    type: Object,
+    required: true
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  products: {
+    type: Object,
+    required: true
+  },
+  paymentStatus: {
+    type: String,
+    required: true
+  },
+  totalPrice: {
+    type: Number,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now 
+  },
+  orderStatus: {
+    type: String,
+    required: true
+  }
+})
+
 module.exports.user = mongoose.model('user', userSchema);
 module.exports.admin = mongoose.model('admin', adminSchema);
 module.exports.category = mongoose.model('category', categorySchema);
 module.exports.products = mongoose.model('products', productSchema);
 module.exports.address = mongoose.model('address', addressSchema);
 module.exports.cart = mongoose.model('cart', cartSchema);
+module.exports.orders = mongoose.model('orders', ordersSchema);

@@ -1,0 +1,183 @@
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Order detail</h2>
+            </div>
+        </div>
+        <div class="card">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                        <span>
+                            <i class="material-icons md-calendar_today"></i> <b>{{details.createdAt}}</b>
+                        </span> <br>
+                        <small class="text-muted">Order ID: {{details._id}}</small>
+                    </div>
+
+
+                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        Change status:
+                        <div class="dropdown">
+
+                            <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i
+                                    class="material-icons md-more_horiz"></i> </a>
+                            <div class="dropdown-menu">
+                                <button id="block-btn"
+                                    onclick="changeOrderStatus('{{details._id}}','{{deatails.orderStatus}}','placed')"
+                                    style="border: none;" class="dropdown-item">Placed</button>
+                                <button id="block-btn"
+                                    onclick="changeOrderStatus('{{details._id}}','{{deatails.orderStatus}}','pending')"
+                                    style="border: none;" class="dropdown-item">Pending</button>
+                                <button id="block-btn"
+                                    onclick="changeOrderStatus('{{details._id}}','{{deatails.orderStatus}}','cancelled')"
+                                    style="border: none;" class="dropdown-item">Cancell</button>
+                                <button id="block-btn"
+                                    onclick="changeOrderStatus('{{details._id}}','{{deatails.orderStatus}}','recieved')"
+                                    style="border: none;" class="dropdown-item">Reiceved</button>
+                            </div>
+
+                        </div>
+                        {{!-- <button class="btn btn-primary">Save</button> --}}
+                    </div>
+
+
+                </div>
+            </header> <!-- card-header end// -->
+            <div class="card-body">
+                <div class="row mb-50 mt-20 order-info-wrap">
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-person"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Customer Id</h6>
+                                <p class="mb-1">
+                                    {{details.userId}} <br>
+                                </p>
+                                <a href="#">View profile</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                    {{!-- <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-local_shipping"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Order info</h6>
+                                <p class="mb-1">
+                                    Shipping: Fargo express <br> Pay method: card <br> Status: new
+                                </p>
+                                <a href="#">Download info</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// --> --}}
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-place"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Deliver to</h6>
+                                <p class="mb-1">
+                                    Locality: {{details.deliveryAddress.locality}}, {{details.deliveryAddress.area}}
+                                    <br>District: {{details.deliveryAddress.district}} <br> Pin:
+                                    {{details.deliveryAddress.pincode}}
+                                </p>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                </div> <!-- row // -->
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Product</th>
+                                        <th width="20%">Unit Price</th>
+                                        <th width="20%">Quantity</th>
+                                        {{!-- <th width="20%" class="text-end">Total</th> --}}
+                                    </tr>
+                                </thead>
+                                {{#each singleDetails}}
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a class="itemside" href="#">
+                                                <div class="left">
+                                                    <img src="/images/{{product._id}}.jpg" width="40" height="40"
+                                                        class="img-xs" alt="Item">
+                                                </div>
+                                                <div class="info">{{product.name}}</div>
+                                            </a>
+                                        </td>
+                                        <td> {{product.price}} </td>
+                                        <td> {{quantity}} </td>
+                                        {{!-- <td class="text-end"> $99.50 </td> --}}
+                                    </tr>
+                                </tbody>
+                                {{/each}}
+                                <tr>
+                                    <td colspan="4">
+                                        <article class="float-end">
+                                            <dl class="dlist">
+                                                <dt>Subtotal:</dt>
+                                                <dd>₹{{details.totalPrice}}</dd>
+                                            </dl>
+                                            <dl class="dlist">
+                                                <dt>Shipping cost:</dt>
+                                                <dd>nil</dd>
+                                            </dl>
+                                            <dl class="dlist">
+                                                <dt>Grand total:</dt>
+                                                <dd> <b class="h5">₹{{details.totalPrice}}</b> </dd>
+                                            </dl>
+                                            <dl class="dlist">
+                                                <dt class="text-muted">Status:</dt>
+                                                <dd>
+                                                    {{#if (eq status "placed")}}
+                                                    <span class="badge rounded-pill alert-success">Placed</span>
+                                                    {{else if (eq status "pending")}}
+                                                    <span class="badge rounded-pill alert-warning">Pending</span>
+                                                    {{else if (eq status "recieved")}}
+                                                    <span class="badge rounded-pill alert-success">Recieved</span>
+                                                    {{else if (eq status "cancelled")}}
+                                                    <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                                    {{/if}}
+                                                </dd>
+                                            </dl>
+                                        </article>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div> <!-- table-responsive// -->
+                    </div> <!-- col// -->
+                    <div class="col-lg-1"></div>
+                </div>
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+    </section> <!-- content-main end// -->
+
+    <script>
+        const changeOrderStatus = (orderId, currStatus, newStatus) => {
+            console.log(orderId, currStatus, newStatus)
+            $.ajax({
+                url: "/admin/change-status",
+                data: {
+                    orderId: orderId,
+                    currentStatus: currStatus,
+                    newStatus: newStatus
+                },
+                method: 'post',
+                success: (res) => {
+                    location.replace('/admin/user-orders');
+                }
+            })
+        }
+    </script>
+    {{>admin-footer}} 

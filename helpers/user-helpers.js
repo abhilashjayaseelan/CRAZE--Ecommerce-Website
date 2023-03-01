@@ -1,6 +1,7 @@
-const { user, products } = require("../models/connection");
+const { user, products, orders } = require("../models/connection");
 const bcrypt = require('bcrypt');
 const { response } = require("../app");
+const objectId = require('mongodb').ObjectId
 
 module.exports = {
   doSignup: (userData) => {
@@ -74,6 +75,62 @@ module.exports = {
         }
       })
     })
+  },
+  // getting items from the orders
+  getOrders: async (userId) => {
+    try {
+      const orderItems = await orders.aggregate([
+        {
+          $match: { userId: objectId(userId) }
+        },
+        {
+          $unwind: '$products'
+        },
+        {
+          $project: {
+            item: '$products.item',
+            quantity: '$products.quantity',
+            id: '$_id',
+            status: '$orderStatus'
+          }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'item',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $project: {
+            status: 1, id: 1, item: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+          }
+        }
+      ]);
+      return orderItems;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  },
+  // getting the order status
+  getStatus: async (userId) => {
+    let order = await orders.findOne({ userId: objectId(userId) });
+    return (order);
+  },
+  // cancel order
+  cancelOrder: (orderId, newStatus) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await orders.updateOne({ _id: orderId },
+          {
+            $set: { orderStatus: newStatus }
+          })
+        resolve();
+      } catch (err) {
+        reject(err);
+      }
+    })
   }
-
 }

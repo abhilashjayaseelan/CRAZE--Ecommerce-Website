@@ -1,6 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
 const { ReturnDocument } = require('mongodb');
-const { cart, user } = require('../models/connection');
+const { cart, user, orders, address } = require('../models/connection');
 
 module.exports = {
     toCart: (productId, userId) => {
@@ -28,7 +28,6 @@ module.exports = {
                     }
                 }
                 else {
-
                     const data = new cart({
                         userId: ObjectId(userId),
                         products: [productObj]
@@ -43,6 +42,7 @@ module.exports = {
             }
         })
     },
+    // get cart items
     getCartItems: async (userId) => {
         try {
             const cartItems = await cart.aggregate([
@@ -89,28 +89,28 @@ module.exports = {
                 })
         ])
     },
-    removeProduct: (uId, pId) =>{
+    removeProduct: (uId, pId) => {
         const userId = ObjectId(uId);
         const productId = ObjectId(pId);
 
-        return new Promise( async(resolve, reject) =>{
-            cart.findOneAndUpdate({userId: userId},
-            {
-                $pull:{ products:{item: productId} }
-            })
-            .then((response)=>{
-                if(response){
-                    resolve({removed: true})
-                }else{
-                    reject(error)
-                }
-            })
-            .catch((err)=>{
-                console.log(err);   
-            })
+        return new Promise(async (resolve, reject) => {
+            cart.findOneAndUpdate({ userId: userId },
+                {
+                    $pull: { products: { item: productId } }
+                })
+                .then((response) => {
+                    if (response) {
+                        resolve({ removed: true })
+                    } else {
+                        reject(error)
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
         })
     },
-    cartTotal: async(userId)=>{
+    cartTotal: async (userId) => {
         try {
             const cartTotal = await cart.aggregate([
                 {
@@ -142,7 +142,7 @@ module.exports = {
                 {
                     $group: {
                         _id: null,
-                        total: {$sum:{$multiply:['$quantity', '$product.price']}}
+                        total: { $sum: { $multiply: ['$quantity', '$product.price'] } }
                     }
                 }
             ]);
@@ -151,6 +151,44 @@ module.exports = {
             console.log(error);
             return [];
         }
+    },
+    // placing order
+placeOrder: (order, products, totalPrice) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                let deliveryAddress = await address.findOne({ _id: ObjectId(order.deliveryAddress) });
+                let paymentStatus = order.payment_option === 'COD' ? 'placed' : 'pending';
+                let deliveryDetails = {
+                    mobile: deliveryAddress.mobile,
+                    locality: deliveryAddress.locality,
+                    area: deliveryAddress.area,
+                    district: deliveryAddress.district,
+                    pincode: deliveryAddress.pincode,
+                    pincode: deliveryAddress.pincode
+                }
+                let orderData = new orders({
+                    'deliveryAddress': deliveryDetails,
+                    'paymentStatus': paymentStatus,
+                    'products': products,
+                    'userId': order.userId,
+                    'totalPrice': parseInt(totalPrice),
+                    'orderStatus': "placed"
+                })
+                await orderData.save()
+                // deleting the items from the cart after placing the order
+                await cart.deleteOne({ userId: ObjectId(order.userId) });
+                resolve(orderData);
+            } catch (err) {
+                reject (err);
+            }
+        })
+    },
+    // getting product details of cart products
+    getCartProductList: (userId) => {
+        return new Promise(async (resolve, reject) => {
+            let cartData = await cart.findOne({ userId: ObjectId(userId) });
+            resolve(cartData.products);
+        })
     }
 
 }
