@@ -1,25 +1,3 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
-
-
-
-<head>
-    <meta charset="utf-8">
-    <title>Evara - eCommerce HTML Template</title>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-</head>
-
-<body>
 
     <main class="main">
         <div class="page-header breadcrumb-wrap">
@@ -33,9 +11,13 @@
         </div>
         <section class="mt-50 mb-50">
             <div class="container">
+                {{#if products}}
+                <h3>Cart</h3>
+                <br>
+                {{/if}}
                 <div class="row">
                     <div class="col-12">
-                        <div class="table-responsive">
+                        <div class="col-lg-6 col-md-12 table-responsive" style="float: left;">
                             <table class="table shopping-summery text-center clean" id="cart-table">
                                 <thead>
                                     <tr class="main-heading">
@@ -50,40 +32,44 @@
                                 {{#each products}}
                                 <tbody>
                                     <tr>
-                                        <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg" alt="#"></td>
+                                        <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg"
+                                                alt="#"></td>
                                         <td class="product-des product-name">
                                             <h5 class="product-name"><a href="#">{{product.name}}</a></h5>
                                             <p class="font-xs">{{product.description}}
                                             </p>
                                         </td>
-                                        <td class="price" data-title="Price"><span>₹{{product.price}}</span></td>
+                                        <td class="price" data-title="Price"><span>₹{{product.price}}</span>
+                                        </td>
                                         {{!-- <td class="text-right" data-title="Cart">
                                             <span>₹{{product.price}}</span>
                                         </td> --}}
                                         <td class="text-center" data-title="Stock">
-                                            <button class="cart-item-count mr-3" onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}', 1)" style="border: 0cm;">▴</button>
-                                            <p  id="{{product._id}}">{{quantity}}</p>
-                                            <button class="cart-item-count ml-3" onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}',-1)" style="border: 0cm;">▾</button>
+                                            <button class="cart-item-count mr-3"
+                                                onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}', 1)"
+                                                style="border: 0cm;">▴</button>
+                                            <p id="{{product._id}}">{{quantity}}</p>
+                                            <button class="cart-item-count ml-3"
+                                                onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}',-1)"
+                                                style="border: 0cm;">▾</button>
                                         </td>
-                                        <td class="action" data-title="Remove"><a href="#" class="text-muted" onclick="removeProduct('{{ product._id }}')"><i
+                                        <td class="action" data-title="Remove"><a href="#" class="text-muted"
+                                                onclick="removeProduct('{{ product._id }}')"><i
                                                     class="fi-rs-trash"></i></a></td>
                                     </tr>
                                 </tbody>
                                 {{/each}}
                                 {{#if products}}
                                 {{else}}
-                                <h3>Your cart is empty</h3>
+                                <h5>Cart is empty</h5>
                                 {{/if}}
                             </table>
+
                         </div>
-                        <div class="cart-action text-end">
-                            <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
-                            <a class="btn " href="/"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
-                        </div>
-                        <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
-                        <div class="row mb-50">
-                            
-                            <div class="col-lg-6 col-md-12">
+
+                        {{#if products}}
+                        <div class="col-lg-6 col-md-12 row" style="float: right;">
+                            <div class="col-12">
                                 <div class="border p-md-4 p-30 border-radius cart-totals">
                                     <div class="heading_s1 mb-3">
                                         <h4>Cart Totals</h4>
@@ -92,10 +78,11 @@
                                         <table class="table">
                                             <tbody>
                                                 <tr>
-                                                 
+
                                                     <td class="cart_total_label">Cart Subtotal</td>
                                                     <td class="cart_total_amount">₹<span
-                                                            class="font-lg fw-900 text-brand" id="cart-subtotal">{{total}}</span></td>
+                                                            class="font-lg fw-900 text-brand"
+                                                            id="cart-subtotal">{{total}}</span></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="cart_total_label">Shipping</td>
@@ -105,7 +92,8 @@
                                                 <tr>
                                                     <td class="cart_total_label">Total</td>
                                                     <td class="cart_total_amount"><strong>₹<span
-                                                                class="font-xl fw-900 text-brand" id="cart-total">{{total}}</span></strong>
+                                                                class="font-xl fw-900 text-brand"
+                                                                id="cart-total">{{total}}</span></strong>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -116,7 +104,13 @@
                                 </div>
                             </div>
                         </div>
+                        {{/if}}
                     </div>
+                    {{!-- <div class="cart-action text-end">
+                        <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
+                        <a class="btn " href="/"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                    </div> --}}
+                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
                 </div>
             </div>
         </section>
@@ -236,47 +230,4 @@
                 </div>
             </div>
         </div>
-    </footer>
-    <!-- Preloader Start -->
-    {{!-- <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <h5 class="mb-5">Now Loading</h5>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- Vendor JS-->
-    <script src="/assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-    <script src="/assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/plugins/slick.js"></script>
-    <script src="/assets/js/plugins/jquery.syotimer.min.js"></script>
-    <script src="/assets/js/plugins/wow.js"></script>
-    <script src="/assets/js/plugins/jquery-ui.js"></script>
-    <script src="/assets/js/plugins/perfect-scrollbar.js"></script>
-    <script src="/assets/js/plugins/magnific-popup.js"></script>
-    <script src="/assets/js/plugins/select2.min.js"></script>
-    <script src="/assets/js/plugins/waypoints.js"></script>
-    <script src="/assets/js/plugins/counterup.js"></script>
-    <script src="/assets/js/plugins/jquery.countdown.min.js"></script>
-    <script src="/assets/js/plugins/images-loaded.js"></script>
-    <script src="/assets/js/plugins/isotope.js"></script>
-    <script src="/assets/js/plugins/scrollup.js"></script>
-    <script src="/assets/js/plugins/jquery.vticker-min.js"></script>
-    <!-- Template  JS -->
-    <script src="/assets/js/main.js"></script>
-    <script src="/assets/js/shop.js"></script>
-</body>
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->
-
-</html>
+    

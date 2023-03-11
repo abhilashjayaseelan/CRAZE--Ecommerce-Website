@@ -2,9 +2,10 @@ const { response } = require('../app');
 const cartHelper = require('../helpers/cart-helpers');
 const userProfileHelpers = require('../helpers/user-profile-helpers');
 const ObjectId = require('mongodb').ObjectId
-
+const razorPay = require('../api/razorPay');
 
 module.exports = {
+    // add to cart
     addToCart: (req, res) => {
         const user = req.session.user.response._id;
         const productId = req.params.id
@@ -16,6 +17,7 @@ module.exports = {
             }
         })
     },
+    // get cart items
     getCart: (req, res) => {
         const user = req.session.user;
         cartHelper.getCartItems(user.response._id).then((data) => {
@@ -27,6 +29,7 @@ module.exports = {
             })
         })
     },
+    // change the product quantity
     changeProductQuantity: (req, res, next) => {
         cartHelper.changeQuantity(req.body).then((quantity) => {
             cartHelper.cartTotal(req.body.user).then((total) => {
@@ -34,6 +37,7 @@ module.exports = {
             })
         })
     },
+    // delete the product
     deleteProduct: (req, res) => {
         const userId = req.session.user.response._id;
         const productId = req.params.id
@@ -47,7 +51,7 @@ module.exports = {
     // get checkout page
     getCheckout: (req, res) =>{
         const user = req.session.user;
-        console.log(user.response._id);
+        // console.log(user.response._id);
         cartHelper.getCartItems(user.response._id).then((data) => {
             const products = JSON.parse(JSON.stringify(data))
             cartHelper.cartTotal(user.response._id).then((total) => {
@@ -62,12 +66,18 @@ module.exports = {
     },
     // place order
     placeOrder: async(req, res) => {
+        // console.log(req.body.userId);
         let products = await cartHelper.getCartProductList(req.body.userId);
         let totalPrice = await cartHelper.cartTotal(req.body.userId);
+        // console.log(products, totalPrice +"hai");
         cartHelper.placeOrder(req.body, products, totalPrice).then((response) =>{
-            res.json({status: true});
-        })
+            if(req.body['payment_option'] == 'COD') {
+                res.json({status: 'cod'});
+            } else if(req.body['payment_option'] == 'Razorpay'){
+                razorPay.generateRazorpay(response.orderId, response.totalPrice).then((order) =>{
+                    res.json({response, order, status: 'razorpay'});
+                })
+            }
+        })  
     }
-
-
-}
+}   

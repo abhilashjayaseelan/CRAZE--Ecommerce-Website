@@ -31,6 +31,7 @@ module.exports = {
       }
     })
   },
+
   doLogin: (userData) => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -58,12 +59,16 @@ module.exports = {
       }
     })
   },
+
   otpLogin: (userNumber) => {
     return new Promise(async (resolve, reject) => {
+      let response = {};
       let user1 = await user.findOne({ mobile: userNumber });
-      resolve(user1);
+      response = user1
+      resolve({ response });
     })
   },
+
   // home page
   homePage: () => {
     return new Promise(async (resolve, reject) => {
@@ -76,35 +81,24 @@ module.exports = {
       })
     })
   },
+
   // getting items from the orders
   getOrders: async (userId) => {
     try {
       const orderItems = await orders.aggregate([
         {
           $match: { userId: objectId(userId) }
-        },
-        {
-          $unwind: '$products'
-        },
+        }, 
         {
           $project: {
-            item: '$products.item',
-            quantity: '$products.quantity',
-            id: '$_id',
-            status: '$orderStatus'
-          }
-        },
-        {
-          $lookup: {
-            from: 'products',
-            localField: 'item',
-            foreignField: '_id',
-            as: 'product'
+            id: '$orderId',
+            status: '$orderStatus',
+            totalPrice: '$totalPrice'
           }
         },
         {
           $project: {
-            status: 1, id: 1, item: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+            status: 1, totalPrice: 1, id: 1, item: 1, quantity: 1 
           }
         }
       ]);
@@ -114,16 +108,51 @@ module.exports = {
       throw error;
     }
   },
+
   // getting the order status
   getStatus: async (userId) => {
     let order = await orders.findOne({ userId: objectId(userId) });
     return (order);
   },
+
+  // varify payment
+  varifyingPayment: (details) => {
+    return new Promise((resolve, reject) => {
+      const crypto = require('crypto');
+      let hmac = crypto.createHmac('sha256', 'VTe4tcPjxXRWHLbvpysPjnMJ');
+      hmac.update(details['payment[razorpay_order_id]'] + '|' + details['payment[razorpay_payment_id]'])
+      hmac = hmac.digest('hex')
+      if (hmac == details['payment[razorpay_signature]']) {
+        resolve();
+      }
+      else {
+        reject();
+      }
+    })
+  },
+
+  // change payment status
+  changePaymentStatus: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await orders.updateOne({ orderId: orderId },
+          {
+            $set: { paymentStatus: 'completed' }
+          })  
+        resolve();
+
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    })
+  },
+
   // cancel order
   cancelOrder: (orderId, newStatus) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await orders.updateOne({ _id: orderId },
+        await orders.updateOne({ orderId: orderId },
           {
             $set: { orderStatus: newStatus }
           })

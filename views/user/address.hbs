@@ -25,7 +25,7 @@
     <main class="main-wrap">
         <section class="content-main">
             <div>
-               <a href="/profile/{{user.response._id}}"><i class="fa-solid fa-arrow-left-long"></i>  Go back</a>
+                <a href="/profile?id={{user.response._id}}"><i class="fa-solid fa-arrow-left-long"></i> Go back</a>
             </div>
             <br>
             <div class="row">
@@ -50,7 +50,8 @@
                                             <label class="form-label">Name</label>
                                             <div class="row gx-2">
                                                 <input placeholder="Enter name" type="text" class="form-control"
-                                                    name="name" required="">
+                                                    name="name" required="" id="user-name" onkeyup="validateName()">
+                                                <span id="name-error"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -58,14 +59,17 @@
                                         <div class="mb-4">
                                             <label class="form-label">Mobile</label>
                                             <input placeholder="Mobile" type="tel" class="form-control" name="mobile"
-                                                required="">
+                                                required="" id="user-phone" onkeyup="validatePhone()">
+                                            <span id="phone-error"></span>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">PIN</label>
-                                            <input placeholder="PIN code" type="number" class="form-control" name="pincode"
-                                                required="">
+                                            <input placeholder="PIN code" type="number" class="form-control"
+                                                name="pincode" required="" id="user-pin-code"
+                                                onkeyup="validatePinCode()">
+                                            <span id="pin-code-error"></span>
                                         </div>
                                     </div>
                                     <div class="mb-4">
@@ -95,7 +99,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-md rounded font-sm hover-up">Submit</button>
+                                    <button type="submit" class="btn btn-md rounded font-sm hover-up" onclick="return validateAddress()">Submit</button>
+                                    <span id="submit-error"></span>
                                 </div>
                             </form>
                         </div>

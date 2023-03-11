@@ -153,33 +153,44 @@ module.exports = {
         }
     },
     // placing order
-placeOrder: (order, products, totalPrice) => {
-        return new Promise(async (resolve, reject) => {
+    placeOrder: (order, products, totalPrice) => {
+        // function to generate a unique id for order
+        const generateRandomString = () => {
+            const length = 12;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));   
+            }
+            return result;
+        };
+        return new Promise(async (resolve, reject) => {     
             try {
                 let deliveryAddress = await address.findOne({ _id: ObjectId(order.deliveryAddress) });
-                let paymentStatus = order.payment_option === 'COD' ? 'placed' : 'pending';
+                let paymentStatus = order.payment_option === 'COD' ? 'pending' : 'processing';
                 let deliveryDetails = {
                     mobile: deliveryAddress.mobile,
-                    locality: deliveryAddress.locality,
+                    locality: deliveryAddress.locality,  
                     area: deliveryAddress.area,
-                    district: deliveryAddress.district,
+                    district: deliveryAddress.district,    
                     pincode: deliveryAddress.pincode,
                     pincode: deliveryAddress.pincode
                 }
                 let orderData = new orders({
+                    'orderId': generateRandomString(),
                     'deliveryAddress': deliveryDetails,
                     'paymentStatus': paymentStatus,
                     'products': products,
                     'userId': order.userId,
                     'totalPrice': parseInt(totalPrice),
-                    'orderStatus': "placed"
+                    'orderStatus': "pending"
                 })
                 await orderData.save()
                 // deleting the items from the cart after placing the order
                 await cart.deleteOne({ userId: ObjectId(order.userId) });
                 resolve(orderData);
             } catch (err) {
-                reject (err);
+                reject(err);
             }
         })
     },
@@ -187,8 +198,9 @@ placeOrder: (order, products, totalPrice) => {
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
             let cartData = await cart.findOne({ userId: ObjectId(userId) });
-            resolve(cartData.products);
+            resolve(cartData.products);  
         })
     }
+    
 
 }

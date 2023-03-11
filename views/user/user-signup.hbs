@@ -7,18 +7,22 @@
                         <div class="heading_s1">
                             <h3 class="mb-30">Create an Account</h3>
                         </div>
-                        <form method="post" action="/signup">
+                        <form method="post" action="/signup" id="submit-form">
                             <div class="form-group">
-                                <input type="text" required="" name="name" placeholder="Username">
+                                <input type="text" required="" name="name" placeholder="Username" id="user-name" onkeyup="validateName()">
+                                <span id="name-error"></span>
                             </div>
                             <div class="form-group">
-                                <input type="email" required="" name="email" placeholder="Email">
+                                <input type="email" required="" name="email" placeholder="Email" id="user-email" onkeyup="validateEmail()">
+                                <span id="email-error"></span>
                             </div>
                             <div class="form-group">
-                                <input required="" type="tel" name="mobile" placeholder="Mobile">
+                                <input required="" type="tel" name="mobile" placeholder="Mobile" id="user-phone" onkeyup="validatePhone()">
+                                <span id="phone-error"></span>
                             </div>
                             <div class="form-group">
-                                <input required="" type="password" name="password" placeholder="Password">
+                                <input required="" type="password" name="password" placeholder="Password" id="user-password" onkeyup="validatePassword()">
+                                <span id="password-error"></span>
                             </div>
                             {{#if userExist}}
                             <p style="color: red;">{{userExist}}</p>
@@ -33,7 +37,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Submit &amp; Register</button>
+                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login" onclick="return validateForm()">Submit &amp; Register</button>
+                                <span id="submit-error"></span>
                             </div>
                         </form> 
                         <div class="text-muted text-center">Already have an account? <a href="login">Sign in now</a></div>

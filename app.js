@@ -28,6 +28,9 @@ app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsD
 handlebars.registerHelper('eq', function(a, b) {
   return a === b;
 });
+handlebars.registerHelper( '@index', function(index) {
+  return index + 1;
+});
 
 app.use(logger('dev'));
 app.use(express.json());

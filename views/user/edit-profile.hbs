@@ -4,7 +4,7 @@
         <div class="main-body">
             <br>
             <div>
-               <a href="/profile/{{user.userData._id}}"><i class="fa-solid fa-arrow-left-long"></i>  Go back</a>
+                <a href="/profile?id={{user.userData._id}}"><i class="fa-solid fa-arrow-left-long"></i> Go back</a>
             </div>
             <br>
             <h3>Edit profile</h3>
@@ -20,7 +20,9 @@
                                         <h6 class="mb-0">Full Name</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input value="{{user.userData.name}}" name="name" type="text">
+                                        <input value="{{user.userData.name}}" name="name" type="text" id="user-name"
+                                            onkeyup="validateName()">
+                                        <span id="name-error"></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -29,7 +31,9 @@
                                         <h6 class="mb-0">Email</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input value="{{user.userData.email}}" name="email" type="text">
+                                        <input value="{{user.userData.email}}" name="email" type="text" id="user-email"
+                                            onkeyup="validateEmail()">
+                                        <span id="email-error"></span>
                                     </div>
                                 </div>
                                 <hr>
@@ -48,13 +52,17 @@
                                         <h6 class="mb-0">Mobile</h6>
                                     </div>
                                     <div class="col-sm-9 text-secondary">
-                                        <input value="{{user.userData.mobile}}" name="mobile" type="tel">
+                                        <input value="{{user.userData.mobile}}" name="mobile" type="tel" id="user-phone"
+                                            onkeyup="validatePhone()">
+                                        <span id="phone-error"></span>
                                     </div>
                                 </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <button type="submit" class="btn btn-md rounded font-sm hover-up">Save</button>
+                                        <button type="submit" class="btn btn-md rounded font-sm hover-up"
+                                            onclick="return validateProfileUpdate()">Save</button>
+                                        <span id="submit-error"></span>
                                     </div>
                                 </div>
                             </div>

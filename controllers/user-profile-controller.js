@@ -4,7 +4,7 @@ const { user } = require('../models/connection');
 
 module.exports = {
     getProfile: (req, res) => {
-        let id = req.params.id;
+        let id = req.query.id;
         req.session.id = req.params.id;
         userProfileHelpers.userProfile(id)
             .then((profile) => {
@@ -25,7 +25,7 @@ module.exports = {
         userProfileHelpers.postAddress(req.body, user.response._id)
             .then((response) => {
                 if (!req.body.newAddress) {
-                    res.redirect(`/profile/${user.response._id}`)
+                    res.redirect(`/profile?id=${user.response._id}`)
                 } else {
                     res.redirect('/checkout')
                 }
@@ -50,12 +50,11 @@ module.exports = {
             {
                 user,
                 'invalid': req.session.invalidPassword,
-                'updated': req.session.updated,
                 'notMatch': req.session.notMatch
             });
         req.session.invalidPassword = false;
-        req.session.updated = false;
         req.session.notMatch = false;
+        // req.session.updated = false;
     },
     putPassword: (req, res) => {
         const data = req.session.user;
@@ -70,8 +69,8 @@ module.exports = {
                 req.session.notMatch = "password doesn't match !";
                 res.redirect('/change-password');
             } else if (changed === false) {
-                req.session.updated = "Your password has been updated...";
-                res.redirect('/change-password');
+                // req.session.updated = "Your password has been updated...";
+                res.redirect('/profile');
             }
         })
             .catch((err) => {
@@ -95,11 +94,11 @@ module.exports = {
         let id = req.params.id;
         let user = req.body;
         userProfileHelpers.postProfile(id, user).then((data) => {
-            res.redirect(`/profile/${id}`);
+            res.redirect(`/profile?id=${id}`);
         })
-        .catch((err) =>{
-            console.log(err);
-        })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
 } 

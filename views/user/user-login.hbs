@@ -10,31 +10,39 @@
                         </div>
                         <form method="post" action="/login">
                             <div class="form-group">
-                                <input type="email" required="" name="email" placeholder="Your Email">
+                                <input type="email" required="" name="email" placeholder="Your Email" id="user-email"
+                                    onkeyup="validateEmail()">
+                                <span id="email-error"></span>
                             </div>
                             <div class="form-group">
-                                <input required="" type="password" name="password" placeholder="Password">
+                                <input required="" type="password" name="password" placeholder="Password"
+                                    id="user-password" onkeyup="validatePassword()">
+                                <span id="password-error"></span>
                             </div>
                             <div>
                                 {{#if loginErr}}
                                 <p style="color: red;">{{loginErr}}</p>
                                 {{/if}}
 
-                                 {{#if statusErr}}
+                                {{#if statusErr}}
                                 <p style="color: red;">{{statusErr}}</p>
                                 {{/if}}
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-fill-out btn-block hover-up" name="login">Login</button>
+                                <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                    name="login" onclick="return validateLogin()">Login</button>
+                                <span id="submit-error"></span>
                             </div>
                             <div class="divider-text-center mt-15 mb-15">
                                 <span> or</span>
                             </div>
                             <div class="text-center mt-15 mb-15">
-                               <a href="/otp-login"><button type="button" class="btn btn-fill-out btn-block hover-up" name="otpLogin" >OTP login</button></a>
+                                <a href="/otp-login"><button type="button" class="btn btn-fill-out btn-block hover-up"
+                                        name="otpLogin">OTP login</button></a>
                             </div>
                             <div class="login_footer form-group">
-                                <div class="text-muted text-center">Don't have an account? <a href="/signup">Sign up now</a></div>
+                                <div class="text-muted text-center">Don't have an account? <a href="/signup">Sign up
+                                        now</a></div>
                             </div>
                         </form>
                     </div>

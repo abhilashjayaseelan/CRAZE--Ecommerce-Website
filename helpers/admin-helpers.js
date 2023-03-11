@@ -65,6 +65,18 @@ module.exports = {
             }
         })
     },
+    //search orders
+    searchOrder: (orderId) =>{
+        return new Promise(async(resolve, reject) =>{
+            try {
+                await orders.find({orderId: orderId}).then((allOrders)=>{
+                    resolve(allOrders);
+                })
+            } catch (err) {
+                reject(err);     
+            }
+        })
+    },
     // order details
     orderDetails: (orderId) => {
         return new Promise(async (resolve, reject) => {

@@ -1,18 +1,22 @@
 const { json } = require('express');
 const adminHelper = require('../helpers/admin-helpers');
-const userHelpers = require('../helpers/user-helpers');
+const reportHelpers = require('../helpers/report-helpers')
 
 module.exports = {
     adminDashboard: (req, res) => {
-        res.render('admin/admin-dashboard', { admin: true });
+        reportHelpers.getMonthlySales().then((monthlySales)=>{
+            console.log(monthlySales);
+            let totalSales = monthlySales[0].totalSales;
+            res.render('admin/admin-dashboard', { admin: true, totalSales});
+        });
     },
     // admin login
     getAdminLogin: (req, res) => {
         res.render('admin/admin-login', { 'emailErr': req.session.emailErr, 'pswdErr': req.session.pswdErr });
         req.session.emailErr = false;
         req.session.pswdErr = false;
-    },
-    postAdminLogin: (req, res) => {
+    },  
+    postAdminLogin: (req, res) => {  
         adminHelper.adminLogin(req.body).then((response) => {
             if (response.status) {
                 req.session.adminLoggedIn = true;
@@ -25,7 +29,7 @@ module.exports = {
                 req.session.pswdErr = "Invalid Password";
                 res.redirect('/admin');
             }
-        })
+        }) 
     },
     // admin logout
     getAdminLogout: (req, res) => {
@@ -40,34 +44,43 @@ module.exports = {
         })
     },
     // getting user orders
-    getuserOrders: (req, res) =>{
-        adminHelper.getOrders().then((allOrders) =>{
+    getuserOrders: (req, res) => {
+        adminHelper.getOrders().then((allOrders) => {
             allOrders = JSON.parse(JSON.stringify(allOrders))
-            res.render('admin/admin-allOrders', {admin: true, allOrders}); 
+            res.render('admin/admin-allOrders', { admin: true, allOrders });
+        })
+
+    },
+    // search orders
+    searchOrders: (req, res) => {
+        const orderId = req.body.orderId;
+        adminHelper.searchOrder(orderId).then((allOrders) => {
+            allOrders = JSON.parse(JSON.stringify(allOrders))
+            res.render('admin/admin-allOrders', { admin: true, allOrders });
         })
     },
     // order details
-    getOrderDetails: async(req, res) =>{
+    getOrderDetails: async (req, res) => {
         let productId = req.params.id;
         let status = JSON.parse(JSON.stringify(req.query.status));
         console.log(status);
         let singleDetails = await adminHelper.singleOrder(productId);
-        adminHelper.orderDetails(productId).then((details) =>{
+        adminHelper.orderDetails(productId).then((details) => {
             details = JSON.parse(JSON.stringify(details));
-            res.render('admin/order-details', {admin: true, details, singleDetails, status});
+            res.render('admin/order-details', { admin: true, details, singleDetails, status });
         })
-        .catch((err)=> {
-            console.log(err);
-        })
+            .catch((err) => {
+                console.log(err);
+            })
     },
     // change order status 
     changeOrderStatus: (req, res) => {
         adminHelper.changeStatus(req.body).then((result) => {
-            res.json({status: true});
+            res.json({ status: true });
         })
-        .catch((err) => {
-            console.log(err);
-        })
+            .catch((err) => {
+                console.log(err);
+            })
     }
-    
+
 }     

@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html class="no-js" lang="en">
 
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->
-
-<head>
-    <meta charset="utf-8">
-    <title>Evara - eCommerce HTML Template</title>
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta property="og:title" content="">
-    <meta property="og:type" content="">
-    <meta property="og:url" content="">
-    <meta property="og:image" content="">
-    <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
-    <!-- Template CSS -->
-    <link rel="stylesheet" href="assets/css/main.css">
-</head>
-
-<body>
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
@@ -111,13 +89,19 @@
                             <div>
                                 <form action="/add-address" method="post" enctype="multipart/form-data">
                                     <div class="form-group">
-                                        <input type="text" required="" name="name" placeholder="Name *">
+                                        <input type="text" required="" name="name" placeholder="Name *" id="user-name"
+                                            onkeyup="validateName()">
+                                        <span id="name-error"></span>
                                     </div>
                                     <div class="form-group">
-                                        <input required="" type="tel" name="mobile" placeholder="Mobile *">
+                                        <input required="" type="tel" name="mobile" placeholder="Mobile *"
+                                            id="user-phone" onkeyup="validatePhone()">
+                                        <span id="phone-error"></span>
                                     </div>
                                     <div class="form-group">
-                                        <input required="" type="text" name="pincode" placeholder="Postcode *">
+                                        <input required="" type="text" name="pincode" placeholder="Postcode *"
+                                            id="user-pin-code" onkeyup="validatePinCode()">
+                                        <span id="pin-code-error"></span>
                                     </div>
                                     <div class="form-group">
                                         <input type="text" name="area" required="" placeholder="Address *">
@@ -142,7 +126,9 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-primary"
+                                            onclick="return validateAddress()">Save</button>
+                                        <span id="submit-error"></span>
                                     </div>
                                 </form>
                             </div>
@@ -242,17 +228,17 @@
                                             <label class="form-check-label" for="exampleRadios3"
                                                 data-bs-toggle="collapse" data-target="#"
                                                 aria-controls="bankTranfer">COD</label>
-                                        </div> 
-                                        <div class="custome-radio">
-                                            <input class="form-check-input" required="" type="radio"
-                                                name="payment_option" id="exampleRadios4" checked="" value="bank">
-                                            <label class="form-check-label" for="exampleRadios4"
-                                                data-bs-toggle="collapse" data-target="#"
-                                                aria-controls="checkPayment">Bank transfer</label>
                                         </div>
                                         <div class="custome-radio">
                                             <input class="form-check-input" required="" type="radio"
-                                                name="payment_option" id="exampleRadios5" checked="" value="paypal">
+                                                name="payment_option" id="exampleRadios4" checked="" value="Razorpay">
+                                            <label class="form-check-label" for="exampleRadios4"
+                                                data-bs-toggle="collapse" data-target="#"
+                                                aria-controls="checkPayment">RazorPay</label>
+                                        </div>
+                                        <div class="custome-radio">
+                                            <input class="form-check-input" required="" type="radio"
+                                                name="payment_option" id="exampleRadios5" checked="" value="Paypal">
                                             <label class="form-check-label" for="exampleRadios5"
                                                 data-bs-toggle="collapse" data-target="#"
                                                 aria-controls="paypal">Paypal</label>
@@ -383,45 +369,6 @@
                 </div>
             </div>
         </div>
-    </footer>
-    {{!-- <!-- Preloader Start -->
-    <div id="preloader-active">
-        <div class="preloader d-flex align-items-center justify-content-center">
-            <div class="preloader-inner position-relative">
-                <div class="text-center">
-                    <h5 class="mb-5">Now Loading</h5>
-                    <div class="loader">
-                        <div class="bar bar1"></div>
-                        <div class="bar bar2"></div>
-                        <div class="bar bar3"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    <!-- Vendor JS-->
-    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
-    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/plugins/slick.js"></script>
-    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
-    <script src="assets/js/plugins/wow.js"></script>
-    <script src="assets/js/plugins/jquery-ui.js"></script>
-    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
-    <script src="assets/js/plugins/magnific-popup.js"></script>
-    <script src="assets/js/plugins/select2.min.js"></script>
-    <script src="assets/js/plugins/waypoints.js"></script>
-    <script src="assets/js/plugins/counterup.js"></script>
-    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
-    <script src="assets/js/plugins/images-loaded.js"></script>
-    <script src="assets/js/plugins/isotope.js"></script>
-    <script src="assets/js/plugins/scrollup.js"></script>
-    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
-    <!-- Template  JS -->
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/shop.js"></script>
-</body>
 
 <script>
     $("#checkout-form").submit((e) => {
@@ -431,17 +378,26 @@
             url: ('/place-order'),
             data: $('#checkout-form').serialize(),
             success: (response) => {
-                location.replace('/orders');
+                switch (response.status) {
+                    case 'cod':
+                        swal(
+                            "Successfull !",
+                            "Order Placed Successfully !",
+                            "success"
+                        ).then(() => {
+                            location.replace('/orders');
+                        });
+                    case 'razorpay':
+                        razorPayPayment(response)
+                        
+                }
             },
             error: (response, stat, err) => {
                 console.log(response);
             }
-            
+
         })
     })
+
 </script>
-
-
-<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->
-
-</html>
+{{!-- function (order) --}}

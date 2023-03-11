@@ -67,22 +67,23 @@ module.exports = {
    },
    postOtpLogin: (req, res) => {
       userHelpers.otpLogin(req.body.mobile).then((user) => {
-         // console.log(user);
-         // console.log(user.blocked);
-         if (user.blocked) {
-            req.session.statusErr = "Access has been denied";
-            res.redirect('/otp-login')
-         } else if (user !== null) {
-            sendOtp.send_otp(user.mobile).then((response) => {
-               console.log(response);
+         req.session.user = user;
+         console.log(user);
+
+         if (user.response !== null) {
+            sendOtp.send_otp(user.response.mobile).then((response) => {
+               // console.log(response);
                // res.send(`otp sented to ${user.mobile}`);
                req.session.mobile = req.body.mobile;
                res.redirect('/otp-varification')
             })
-         } else {
+         } else if (user.response === null) {
             req.session.accountErr = "No account found with the entered number";
             res.redirect('/otp-login');
 
+         } else if (user.respose.blocked !== false) {
+            req.session.statusErr = "Access has been denied";
+            res.redirect('/otp-login')
          }
       })
    },
@@ -97,12 +98,11 @@ module.exports = {
          console.log(mobile);
          let otp = req.body.otp;
          sendOtp.verifying_otp(mobile, otp).then((varification) => {
-            console.log(varification.status);
+            // console.log(varification.status);
             if (varification.status === 'approved') {
-               req.session.user = true;
                res.redirect('/');
             } else {
-               req.session.otpErr = "Invalid Otp";
+               req.session.otpErr = "Invalid OTP";
                res.redirect('/otp-varification');
             }
          })
@@ -110,11 +110,25 @@ module.exports = {
          console.log(`error: ${err}`);
       }
    },
+   // varify payment 
+   varifyPayment: (req, res) => {
+      console.log(req.body);
+      userHelpers.varifyingPayment(req.body).then(() => {
+         console.log('its here');
+         userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() =>{
+            res.json({status: true});
+         })
+      })
+      .catch((err) =>{
+         console.log(err+ 'errorrrrr');
+         res.json({status: false});
+      })
+   },
+
    showOrders: async (req, res) => {
       let user = req.session.user;
-      let order = await userHelpers.getStatus(user.response._id);
       userHelpers.getOrders(user.response._id).then((orderList) => {
-         res.render('user/orders', { user, itsUser: true, orderList})
+         res.render('user/orders', { user, itsUser: true, orderList })
       })
          .catch((err) => {
             console.log(err);
@@ -124,12 +138,12 @@ module.exports = {
    // cancel order
    cancelOrder: (req, res) => {
       let newStatus = "cancelled"
-      userHelpers.cancelOrder(req.body.orderId, newStatus).then((result) =>{
-         res.json({res: true});
+      userHelpers.cancelOrder(req.body.orderId, newStatus).then((result) => {
+         res.json({ res: true });
       })
-      .catch((err) =>{
-         console.log(err);
-      })
+         .catch((err) => {
+            console.log(err);
+         })
    }
 
 }            

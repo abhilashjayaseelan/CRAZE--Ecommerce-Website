@@ -26,7 +26,7 @@ router.get('/dashboard',
     sessionHandler.checkingAdmin,
     adminController.adminDashboard);
 
-// Product Category handling
+// Product Category handling 
 router.route('/add-productCategory')
     .get(sessionHandler.checkingAdmin,
         categoryController.getProductCategory)
@@ -82,11 +82,17 @@ router.patch('/unblock-user/:id', (req, res) => {
 // user orders
 router.get('/user-orders',
     sessionHandler.checkingAdmin,
-    adminController.getuserOrders)
- 
+    adminController.getuserOrders);
+
+// order details
 router.get('/user-orderDetails/:id',
 sessionHandler.checkingAdmin,
-adminController.getOrderDetails)
+adminController.getOrderDetails);
+
+// search order
+router.post('/search-order',
+sessionHandler.checkingAdmin,
+adminController.searchOrders);
 
 // change order status
 router.post('/change-status',

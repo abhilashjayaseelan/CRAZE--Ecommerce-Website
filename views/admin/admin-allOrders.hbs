@@ -6,30 +6,33 @@
                 {{!-- <p>Lorem ipsum dolor sit amet.</p> --}}
             </div>
             <div>
-                <input type="text" placeholder="Search order ID" class="form-control bg-white">
+                <form action="/admin/search-order" method="post">
+                <input type="text" placeholder="Search order ID" class="form-control bg-white" name="orderId">
+                <button type="submit" class="btn btn-md rounded font-sm">Search</button>
+                </form>
             </div>
         </div>
         <div class="card mb-4">
             <header class="card-header">
                 <div class="row gx-3">
-                    <div class="col-lg-4 col-md-6 me-auto">
+                    {{!-- <div class="col-lg-4 col-md-6 me-auto">
                         <input type="text" placeholder="Search..." class="form-control">
-                    </div>
+                    </div> --}}
                     <div class="col-lg-2 col-6 col-md-3">
                         <select class="form-select">
-                            <option>Status</option>
-                            <option>Active</option>
-                            <option>Disabled</option>
-                            <option>Show all</option>
+                            <option>Placed</option>
+                            <option>Pending</option>
+                            <option>Cancelled</option>
+                            <option>Delivered</option>
                         </select>
                     </div>
-                    <div class="col-lg-2 col-6 col-md-3">
+                    {{!-- <div class="col-lg-2 col-6 col-md-3">
                         <select class="form-select">
                             <option>Show 20</option>
                             <option>Show 30</option>
                             <option>Show 40</option>
                         </select>
-                    </div>
+                    </div> --}}
                 </div>
             </header> <!-- card-header end// -->
             <div class="card-body">
@@ -52,7 +55,7 @@
                                     {{userId}}
                                 </td>
 
-                                <td>{{_id}}</td>
+                                <td>{{orderId}}</td>
                                 <td>₹{{totalPrice}}</td>
                                 <td>{{createdAt}}</td>
 
@@ -90,4 +93,4 @@
             </nav>
         </div>
     </section> <!-- content-main end// -->
-    {{>admin-footer}}
+   

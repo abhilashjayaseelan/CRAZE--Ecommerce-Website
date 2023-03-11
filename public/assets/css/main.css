@@ -882,17 +882,17 @@ button.submit, button[type='submit'] {
   padding: 12px 40px;
   color: #ffffff;
   border: none;
-  background-color: #f0c928;
-  border: 1px solid #f0c928;
+  background-color: #088178;
+  border: 1px solid #088178;
   border-radius: 5px;
 }
 
 button.submit:hover, button[type='submit']:hover {
-  background-color: #f0c928!important;
+  background-color: #046963!important;
 }
 
 .btn-brand:hover {
-  background-color: #f0c928 !important;
+  background-color: #046963!important;
 }
 
 .btn-login {
@@ -9926,3 +9926,87 @@ span.fi-rs-apps {
 .zoomWindow{ z-index: 9999;}
 /*# sourceMappingURL=main.css.map */
 
+
+
+
+#name-error i {
+  color: seagreen;
+}
+
+#name-error {
+  font-size: 14px;
+  color: red;
+}
+
+#phone-error {
+  font-size: 14px;
+  color: red;
+}
+
+#phone-error i {
+  color: seagreen;
+}
+
+#email-error {
+  font-size: 14px;
+  color: red;
+}
+
+#email-error i {
+  color: seagreen;
+}
+
+#password-error {
+  font-size: 14px;
+  color: red;
+}
+
+#password-error i {
+  color: seagreen;
+}
+
+#new-password-error {
+  font-size: 14px;
+  color: red;
+}
+
+#new-password-error i {
+  color: seagreen;
+}
+
+#submit-error {
+  font-size: 14px;
+  color: red;
+}
+
+#pin-code-error i {
+  color: seagreen;
+}
+
+#pin-code-error {
+  font-size: 14px;
+  color: red;
+}
+
+#confirm-password-error i {
+  color: seagreen;
+}
+
+#confirm-password-error {
+  font-size: 14px;
+  color: red;
+}
+
+/* cart table */
+
+/* 
+#outerDivWrapper, #outerDiv {
+  height: 80%;
+  margin: 0em;
+}
+
+#scrollableContent {
+  height: 80%;
+  margin: 0em;
+  overflow-y: auto;
+} */

@@ -12,7 +12,9 @@
                             </div>
                             <form method="post" action="/admin/admin-login">
                                 <div class="form-group">
-                                    <input type="email" required="" name="email" placeholder="Email">
+                                    <input type="email" required="" name="email" placeholder="Email" id="user-email"
+                                        onkeyup="validateEmail()">
+                                    <span id="email-error"></span>
                                 </div>
                                 <div>
                                     {{#if emailErr}}
@@ -20,7 +22,9 @@
                                     {{/if}}
                                 </div>
                                 <div class="form-group">
-                                    <input required="" type="password" name="password" placeholder="Password">
+                                    <input required="" type="password" name="password" placeholder="Password"
+                                        id="user-password" onkeyup="validatePassword()">
+                                        <span id="password-error"></span>
                                 </div>
                                 <div>
                                     {{#if pswdErr}}
@@ -29,7 +33,8 @@
                                 </div>
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-fill-out btn-block hover-up"
-                                        name="login">Login</button>
+                                        name="login" onclick="return validateLogin()">Login</button>
+                                        <span id="submit-error"></span>
                                 </div>
                             </form>
                         </div>
@@ -38,4 +43,4 @@
             </div>
         </div>
     </section>
-    {{>admin-footer}}
+   

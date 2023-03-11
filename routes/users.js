@@ -1,5 +1,4 @@
 const express = require('express');
-const userController = require('../controllers/user-controller');
 const router = express.Router();
 const userControllers = require('../controllers/user-controller')
 const productControllers = require('../controllers/product-controller')
@@ -9,7 +8,7 @@ const userProfileController = require('../controllers/user-profile-controller');
 const cartController = require('../controllers/cart-controllers');
 
 // user home page
-router.get('/', userController.getHomePage);
+router.get('/', userControllers.getHomePage);
 
 // user login & logout
 router.route('/login')
@@ -26,7 +25,7 @@ router.route('/otp-login')
 // otp varification
 router.route('/otp-varification')
     .get(userControllers.getOtpVarification)
-    .post(userController.postOtpVarification);
+    .post(userControllers.postOtpVarification);
 
 // user signup
 router.route('/signup')
@@ -42,7 +41,7 @@ router.get('/view-sigleProduct/:id',
     productControllers.getProduct);
 
 // getting the user profile page
-router.get('/profile/:id',
+router.get('/profile',
     sessionHandler.checkingUser,
     profileControllers.getProfile);
 
@@ -62,9 +61,6 @@ router.route('/change-password')
     .get(sessionHandler.checkingUser,
         profileControllers.getPassword)
     .post(profileControllers.putPassword);
-
-
-
 
 // add to cart
 router.get('/add-to-cart/:id',
@@ -90,20 +86,28 @@ router.get('/delete-from-cart/:id',
 router.get('/checkout',
     sessionHandler.checkingUser,
     cartController.getCheckout);
- 
-router.post('/place-order', cartController.placeOrder);
+
+// place order
+router.post('/place-order',
+    cartController.placeOrder);
+
+// varify payment
+router.post('/varify-payment',
+    userControllers.varifyPayment);
 
 // go to the order page
-router.get('/orders', userControllers.showOrders);
+router.get('/orders',
+    userControllers.showOrders);
 
 // edit profile
 router.route('/edit-profile/:id')
-    .get(sessionHandler.checkingUser,  
+    .get(sessionHandler.checkingUser,
         profileControllers.editProfile)
     .post(profileControllers.postEditProfile);
 
 // cancel order
-router.post('/cancel-order', userController.cancelOrder);
+router.post('/cancel-order',
+    userControllers.cancelOrder);
 
 
 // router.get('/wishlist', userControllers.showWishlist);

@@ -148,6 +148,11 @@ const cartSchema = new Schema({
 })
 
 const ordersSchema = new Schema({
+  orderId: {
+    type: String,
+    required: true,
+    unique: true
+  },
   deliveryAddress: {
     type: Object,
     required: true

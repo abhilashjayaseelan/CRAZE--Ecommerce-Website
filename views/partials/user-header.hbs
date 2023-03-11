@@ -39,7 +39,7 @@
                                     <a href="#">
                                         <img class="svgInject" alt="Evara"
                                             src="/assets/imgs/theme/icons/icon-heart.svg">
-                                        <span class="pro-count blue">4</span>
+                                        <span class="pro-count blue">0</span>
                                     </a>
                                 </div>
                                 <div class="header-action-icon-2">
@@ -67,7 +67,7 @@
                                             <div class="dropdown-menu dropdown-menu-end"
                                                 aria-labelledby="dropdownAccount">
                                                 {{#if user}}
-                                                <a class="dropdown-item text-dark" href="/profile/{{user.response._id}}"><i
+                                                <a class="dropdown-item text-dark" href="/profile?id={{user.response._id}}"><i
                                                         class="material-icons md-exit_to_app"></i>Profile</a>
                                                 <div class="dropdown-divider"></div>
                                                 {{/if}}
