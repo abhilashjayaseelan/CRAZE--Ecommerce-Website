@@ -66,7 +66,9 @@
                                 {{else if (eq orderStatus "cancelled")}}
                                 <td><span class="badge rounded-pill alert-danger">Cancelled</span></td>
                                 {{else if (eq orderStatus "recieved")}}
-                                <td><span class="badge rounded-pill alert-success">Recieved</span></td>
+                                <td><span class="badge rounded-pill alert-success">Delivered</span></td>
+                                {{else if (eq orderStatus "return")}}
+                                <td><span class="badge rounded-pill alert-danger">Return</span></td>
                                 {{/if}}
 
                                 <td class="text-end">

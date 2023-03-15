@@ -180,8 +180,41 @@ const ordersSchema = new Schema({
   orderStatus: {
     type: String,
     required: true
+  },
+  paymentMothod: {
+    type: String,
+    required: true
   }
 })
+
+const wishlistSchema = new Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user'
+  },
+  products: {
+    type:Array,
+    required: true
+  }
+})
+
+const walletSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true
+  },
+  balance: {
+    type: Number,
+    required: true
+  },
+  transactions: {
+    type: [Object],
+    default: []
+  }
+})
+
+
 
 module.exports.user = mongoose.model('user', userSchema);
 module.exports.admin = mongoose.model('admin', adminSchema);
@@ -190,3 +223,5 @@ module.exports.products = mongoose.model('products', productSchema);
 module.exports.address = mongoose.model('address', addressSchema);
 module.exports.cart = mongoose.model('cart', cartSchema);
 module.exports.orders = mongoose.model('orders', ordersSchema);
+module.exports.wishlist = mongoose.model('whishlist', wishlistSchema);
+module.exports.wallet = mongoose.model('wallet', walletSchema);

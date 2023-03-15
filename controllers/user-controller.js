@@ -5,7 +5,6 @@ const sendOtp = require('../middlewares/twilio');
 const { Enqueue } = require('twilio/lib/twiml/VoiceResponse');
 
 
-
 module.exports = {
    // home page
    getHomePage: async (req, res) => {
@@ -110,21 +109,21 @@ module.exports = {
          console.log(`error: ${err}`);
       }
    },
-   // varify payment 
-   varifyPayment: (req, res) => {
+   // verify payment 
+   verifyPayment: (req, res) => {
       console.log(req.body);
-      userHelpers.varifyingPayment(req.body).then(() => {
+      userHelpers.verifyingPayment(req.body).then(() => {
          console.log('its here');
-         userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() =>{
-            res.json({status: true});
+         userHelpers.changePaymentStatus(req.body['order[receipt]']).then(() => {
+            res.json({ status: true });
          })
       })
-      .catch((err) =>{
-         console.log(err+ 'errorrrrr');
-         res.json({status: false});
-      })
+         .catch((err) => {
+            console.log(err + 'errorrrrr');
+            res.json({ status: false });
+         })
    },
-
+   // show user orders
    showOrders: async (req, res) => {
       let user = req.session.user;
       userHelpers.getOrders(user.response._id).then((orderList) => {
@@ -135,11 +134,88 @@ module.exports = {
          })
 
    },
+   // get order details
+   orderDetails: (req, res) => {
+      const user = req.session.user;
+      const orderId = req.query.orderId;
+      userHelpers.getOrderDetails(orderId).then((details) => {
+         const orderDetail = JSON.parse(JSON.stringify(details));
+         const status = orderDetail.orderStatus;
+         userHelpers.getOderProducts(orderId).then((products) => {
+            const product = JSON.parse(JSON.stringify(products));
+            res.render('user/order-details', { user, itsUser: true, orderDetail, product, status });
+         })
+      })
+   },
    // cancel order
    cancelOrder: (req, res) => {
       let newStatus = "cancelled"
+      let userId = req.session.user.response._id;
       userHelpers.cancelOrder(req.body.orderId, newStatus).then((result) => {
+         if (result.paymentMothod !== 'COD') {
+            userHelpers.initiateRefund(result, userId).then((response) => {
+               console.log('Refund initiated for online payment');
+               res.json({ res: true });
+            })
+               .catch((err) => {
+                  // console.log('Error initiating refund:', err);  
+                  res.json({ res: false });
+               });
+         } else {
+            res.json({ res: true });
+         }
+      })
+         .catch((err) => {
+            console.log('Error cancelling order:', err);
+            res.json({ res: false });
+         })
+   },
+   // return order
+   returnOrder: (req, res) => {
+      let newStatus = "return";
+      userHelpers.returnOrder(req.body.orderId, newStatus).then(() => {
          res.json({ res: true });
+      })
+   },
+
+   // get wish-list
+   showWishlist: (req, res) => {
+      const user = req.session.user;
+      userHelpers.getWishlist(user.response._id).then((wishlist) => {
+         const product = JSON.parse(JSON.stringify(wishlist));
+         res.render('user/user-wishlist', { user, itsUser: true, product });
+      })
+   },
+   // add to wish-list
+   addToWishlist: (req, res) => {
+      const userId = req.session.user.response._id;
+      const productId = req.query.productId;
+      userHelpers.addToWishlist(userId, productId).then((result) => {
+         if (result) {
+            res.json({ status: true });
+         } else {
+            res.json({ status: false });
+         }
+      })
+
+   },
+   // remove from wish-list
+   removeWish: (req, res) => {
+      const userId = req.session.user.response._id;
+      const productId = req.query.productId;
+      userHelpers.removeWish(userId, productId).then(() => {
+         res.json({ status: true });
+      })
+         .catch((err) => {
+            console.log(err);
+         })
+   },
+
+   // user wallet
+   getWallet: (req, res) => {
+      const userId = req.session.user.response._id;
+      userHelpers.getWallet(userId).then((response) => {
+         res.json({ response });
       })
          .catch((err) => {
             console.log(err);

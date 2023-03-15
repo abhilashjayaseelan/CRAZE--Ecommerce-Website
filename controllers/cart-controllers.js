@@ -18,7 +18,7 @@ module.exports = {
         })
     },
     // get cart items
-    getCart: (req, res) => {
+    getCart: (req, res) => { 
         const user = req.session.user;
         cartHelper.getCartItems(user.response._id).then((data) => {
             let products = JSON.parse(JSON.stringify(data))

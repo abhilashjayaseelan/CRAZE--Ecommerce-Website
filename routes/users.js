@@ -6,6 +6,7 @@ const sessionHandler = require('../middlewares/session-handling');
 const profileControllers = require('../controllers/user-profile-controller');
 const userProfileController = require('../controllers/user-profile-controller');
 const cartController = require('../controllers/cart-controllers');
+const sessionHandling = require('../middlewares/session-handling');
 
 // user home page
 router.get('/', userControllers.getHomePage);
@@ -32,7 +33,7 @@ router.route('/signup')
     .get(userControllers.getSignup)
     .post(userControllers.postSignup);
 
-// product view
+// product view  
 router.get('/view-products',
     userControllers.getHomePage);
 
@@ -92,12 +93,25 @@ router.post('/place-order',
     cartController.placeOrder);
 
 // varify payment
-router.post('/varify-payment',
-    userControllers.varifyPayment);
+router.post('/verify-payment',
+    userControllers.verifyPayment);
 
 // go to the order page
 router.get('/orders',
     userControllers.showOrders);
+
+// view order details
+router.get('/order-details',
+    sessionHandling.checkingUser,
+    userControllers.orderDetails);
+
+// cancel order
+router.post('/cancel-order',
+    userControllers.cancelOrder);
+
+// return order
+router.post('/return-order',
+    userControllers.returnOrder);
 
 // edit profile
 router.route('/edit-profile/:id')
@@ -105,12 +119,25 @@ router.route('/edit-profile/:id')
         profileControllers.editProfile)
     .post(profileControllers.postEditProfile);
 
-// cancel order
-router.post('/cancel-order',
-    userControllers.cancelOrder);
+// add to wish-list
+router.get('/add-wishlist',
+    sessionHandler.checkingUser,
+    userControllers.addToWishlist);
+
+// go to wish-list 
+router.get('/wishlist',
+    sessionHandler.checkingUser,
+    userControllers.showWishlist);
+
+// remove product from wish-list
+router.get('/remove-from-wishlist',
+    sessionHandler.checkingUser,
+    userControllers.removeWish);
+
+// user wallet
+router.get('/user-wallet',
+    sessionHandler.checkingUser,
+    userControllers.getWallet);
 
 
-// router.get('/wishlist', userControllers.showWishlist);
-
-
-module.exports = router; 
+module.exports = router;  

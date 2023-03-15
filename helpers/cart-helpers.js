@@ -37,7 +37,7 @@ module.exports = {
                     resolve({ status: true });
                 }
             } catch (error) {
-                console.log('got rejected');
+                console.log('error while adding to cart'+ error);
                 reject(error);
             }
         })
@@ -102,11 +102,12 @@ module.exports = {
                     if (response) {
                         resolve({ removed: true })
                     } else {
-                        reject(error)
+                        reject()
                     }
                 })
                 .catch((err) => {
                     console.log(err);
+                    reject(err);
                 })
         })
     },
@@ -183,7 +184,8 @@ module.exports = {
                     'products': products,
                     'userId': order.userId,
                     'totalPrice': parseInt(totalPrice),
-                    'orderStatus': "pending"
+                    'orderStatus': "pending",
+                    'paymentMothod': order.payment_option
                 })
                 await orderData.save()
                 // deleting the items from the cart after placing the order

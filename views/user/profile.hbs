@@ -16,7 +16,8 @@
                   {{!-- <p class="text-secondary mb-1">Full Stack Developer</p>
                   <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p> --}}
                   {{!-- <button class="btn btn-primary">Logout</button> --}}
-                  <a href="/edit-profile/{{user.userData._id}}"><button class="btn btn-outline-primary">Edit profile</button></a>
+                  <a href="/edit-profile/{{user.userData._id}}"><button class="btn btn-outline-primary">Edit
+                      profile</button></a>
                 </div>
               </div>
             </div>
@@ -39,6 +40,14 @@
                   </div>
                 </div>
 
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#walletModal" data-bs-whatever="@mdo"
+                  id="walletButton"><i class="fa-solid fa-wallet"></i>
+                  Wallet</a>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                <a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
               </li>
             </ul>
           </div>
@@ -113,7 +122,91 @@
           </div>
         </div>
       </div>
-
     </div>
+
+
+    {{!-- modal for the wallet --}}
+    <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="exampleModalLabel" style="color: #088178;">Wallet</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div>
+            <div>
+              <p class="p-3" style="color: black;"> Balance Amount: <span id="balanceAmount"></span></p>
+            </div>
+            <div>
+              <h5 class="p-3">Transaction History</h5>
+              <table class="table shopping-summery text-center">
+                <thead>
+                  <tr class="main-heading">
+                    <th>Date</th>
+                    <th>Transaction Id</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+
+                <tbody id="transactionHistoryBody">
+
+                </tbody>
+
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </section>
+
+<script>
+  $(document).ready(function () {
+    // This function will be called when the user clicks on the "Wallet" button
+    $('#walletButton').on('click', function () {
+      console.log('vannuuu')
+      console.log('ivide vannu')
+      $.ajax({
+        url: '/user-wallet',
+        method: 'get',
+        success: function (response) {
+          // console.log(response)
+          // Populate the modal with the wallet data
+          let balance = response.response.balance || 0;
+          $('#balanceAmount').text(' ₹ ' + balance);
+          let transactionHistory = '';
+          if (response.response.transactions) {
+            $.each(response.response.transactions, function (date, transaction) {
+
+              const isoDateString = transaction.date;
+              const dateObj = new Date(isoDateString);
+
+              const day = dateObj.getDate();
+              const month = dateObj.getMonth() + 1;  
+              const year = dateObj.getFullYear();
+              const hours = dateObj.getHours();
+              const minutes = dateObj.getMinutes();
+              const seconds = dateObj.getSeconds();
+
+              const formattedDate = `${day}/${month}/${year}`;
+            
+              transactionHistory += '<tr><td>' + formattedDate + '</td><td>' + transaction.orderId + '</td><td>' + transaction.amount + '</td></tr>';
+            });
+          }
+          $('#transactionHistoryBody').html(transactionHistory);
+          $('#walletModal').modal('show');
+        },
+        error: function (error) {
+          console.log(error);
+        }
+      })
+    })
+  });
+</script>

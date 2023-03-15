@@ -5,9 +5,14 @@ const reportHelpers = require('../helpers/report-helpers')
 module.exports = {
     adminDashboard: (req, res) => {
         reportHelpers.getMonthlySales().then((monthlySales)=>{
-            console.log(monthlySales);
-            let totalSales = monthlySales[0].totalSales;
-            res.render('admin/admin-dashboard', { admin: true, totalSales});
+            console.log(monthlySales+ 'sales');
+            if(monthlySales[0]){
+                let totalSales = monthlySales[0].totalSales;
+                res.render('admin/admin-dashboard', { admin: true, totalSales});
+            } else {
+                let totalSales = 0;
+                res.render('admin/admin-dashboard', { admin: true, totalSales});
+            }
         });
     },
     // admin login

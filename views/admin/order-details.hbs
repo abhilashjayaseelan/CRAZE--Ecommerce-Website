@@ -35,7 +35,7 @@
                                     style="border: none;" class="dropdown-item">Cancell</button>
                                 <button id="block-btn"
                                     onclick="changeOrderStatus('{{details._id}}','{{deatails.orderStatus}}','recieved')"
-                                    style="border: none;" class="dropdown-item">Reiceved</button>
+                                    style="border: none;" class="dropdown-item">Delivered</button>
                             </div>
 
                         </div>
@@ -144,9 +144,11 @@
                                                     {{else if (eq status "pending")}}
                                                     <span class="badge rounded-pill alert-warning">Pending</span>
                                                     {{else if (eq status "recieved")}}
-                                                    <span class="badge rounded-pill alert-success">Recieved</span>
+                                                    <span class="badge rounded-pill alert-success">Delivered</span>
                                                     {{else if (eq status "cancelled")}}
                                                     <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                                    {{else if (eq status "return")}}
+                                                    <span class="badge rounded-pill alert-danger">return</span>
                                                     {{/if}}
                                                 </dd>
                                             </dl>

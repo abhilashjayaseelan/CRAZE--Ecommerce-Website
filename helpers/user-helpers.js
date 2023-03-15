@@ -1,6 +1,8 @@
-const { user, products, orders } = require("../models/connection");
+const { user, products, orders, wishlist, wallet } = require("../models/connection");
 const bcrypt = require('bcrypt');
 const { response } = require("../app");
+const { error } = require("console");
+const { resolve } = require("path");
 const objectId = require('mongodb').ObjectId
 
 module.exports = {
@@ -88,7 +90,7 @@ module.exports = {
       const orderItems = await orders.aggregate([
         {
           $match: { userId: objectId(userId) }
-        }, 
+        },
         {
           $project: {
             id: '$orderId',
@@ -98,7 +100,7 @@ module.exports = {
         },
         {
           $project: {
-            status: 1, totalPrice: 1, id: 1, item: 1, quantity: 1 
+            status: 1, totalPrice: 1, id: 1, item: 1, quantity: 1
           }
         }
       ]);
@@ -108,6 +110,55 @@ module.exports = {
       throw error;
     }
   },
+  // get oder details 
+  getOrderDetails: (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await orders.findOne({ orderId: orderId }).then((result) => {
+          resolve(result);
+        })
+      } catch (err) {
+        reject(err);
+      }
+    })
+  },
+  // get order products
+  getOderProducts: async (orderId) => {
+    try {
+      const orderDetails = await orders.aggregate([
+        {
+          $match: { orderId: orderId }
+        },
+        {
+          $unwind: '$products'
+        },
+        {
+          $project: {
+            item: '$products.item',
+            quantity: '$products.quantity'
+          }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'item',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $project: {
+            item: 1,
+            quantity: 1,
+            product: { $arrayElemAt: ['$product', 0] }
+          }
+        }
+      ]);
+      return orderDetails;
+    } catch (err) {
+      return [];
+    }
+  },
 
   // getting the order status
   getStatus: async (userId) => {
@@ -115,8 +166,8 @@ module.exports = {
     return (order);
   },
 
-  // varify payment
-  varifyingPayment: (details) => {
+  // verify payment
+  verifyingPayment: (details) => {
     return new Promise((resolve, reject) => {
       const crypto = require('crypto');
       let hmac = crypto.createHmac('sha256', 'VTe4tcPjxXRWHLbvpysPjnMJ');
@@ -138,7 +189,7 @@ module.exports = {
         await orders.updateOne({ orderId: orderId },
           {
             $set: { paymentStatus: 'completed' }
-          })  
+          })
         resolve();
 
       } catch (err) {
@@ -150,16 +201,165 @@ module.exports = {
 
   // cancel order
   cancelOrder: (orderId, newStatus) => {
+    return orders.findOne({ orderId: orderId })
+      .then((order) => {
+        if (order) {
+          return orders.updateOne({ orderId: orderId }, { $set: { orderStatus: newStatus } })
+            .then(() => {
+              return order;
+            })
+        } else {
+          throw new Error('Order not found.');
+        }
+      })
+      .catch((err) => {
+        throw new Error('Error cancelling order.');
+      });
+  },
+
+  // return order
+  returnOrder: (orderId, newStatus) => {
+    return orders.findOne({ orderId: orderId })
+      .then((order) => {
+        if (order) {
+          return orders.updateOne({ orderId: orderId }, { $set: { orderStatus: newStatus } })
+            .then(() => {
+              return order;
+            })
+        } else {
+          throw new Error('Order not found.');
+        }
+      })
+      .catch((err) => {
+        throw new Error('Error cancelling order.');
+      });
+  },   
+
+  // add to wish-list
+  addToWishlist: (userId, productId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        await orders.updateOne({ orderId: orderId },
-          {
-            $set: { orderStatus: newStatus }
+        const userWishlist = await wishlist.findOne({ userId: objectId(userId) });
+        if (userWishlist) {
+          if (userWishlist.products.includes(objectId(productId))) {
+            console.log('product already in the wishlist');
+            resolve({ status: true });
+          } else {
+            await wishlist.updateOne({ userId: objectId(userId) }, { $push: { products: objectId(productId) } });
+            resolve({ status: true });
+          }
+        } else {
+          const newWishlist = new wishlist({
+            userId: objectId(userId),
+            products: [objectId(productId)]
           })
-        resolve();
+          await newWishlist.save();
+          resolve({ status: true });
+        }
       } catch (err) {
         reject(err);
       }
     })
+  },
+  // get user wish-list
+  getWishlist: async (userId) => {
+    try {
+      const wishlistItems = await wishlist.aggregate([
+        {
+          $match: { userId: objectId(userId) }
+        },
+        {
+          $unwind: '$products'
+        },
+        {
+          $project: {
+            item: '$products'
+          }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: 'item',
+            foreignField: '_id',
+            as: 'product'
+          }
+        },
+        {
+          $project: {
+            item: 1,
+            product: { $arrayElemAt: ['$product', 0] }
+          }
+        }
+      ]);
+      return wishlistItems;
+    } catch (err) {
+      console.log(err);
+      return [];
+    }
+  },
+  // remove from wish-list
+  removeWish: (userId, productId) => {
+    return new Promise((resolve, reject) => {
+      try {
+        wishlist.findOneAndUpdate({ userId: objectId(userId) },
+          {
+            $pull: { products: objectId(productId) }
+          })
+          .then((response) => {
+            if (response) {
+              resolve(response);
+            } else {
+              reject()
+            }
+          })
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    })
+  },
+
+  // giving refund to the cancelled orders
+  initiateRefund: async (order, userId) => {
+    // console.log(order, userId + '!!!!!!!!!');
+    try {
+      const amount = parseInt(order.totalPrice);
+      const tranObj = {
+        orderId: order.orderId,
+        amount: amount,
+        date: new Date()
+      }
+      const existingWallet = await wallet.findOne({ userId: objectId(userId) });
+      if (existingWallet) {
+        existingWallet.balance += amount;
+        existingWallet.transactions.push(tranObj); // Add new transaction to array
+        await existingWallet.save();
+        return existingWallet;
+      } else {
+        const newWallet = new wallet({
+          userId: objectId(userId),
+          balance: amount,
+          transactions: [tranObj] // Create new array with the new transaction
+        })
+        await newWallet.save();
+        return newWallet;
+      }
+    } catch (err) {
+      throw new Error('Error adding funds to wallet: ' + err.message);
+    }
+  },
+
+  // user wallet
+  getWallet: (userId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await wallet.findOne({ userId: objectId(userId) }).then((response) => {
+          resolve(response);
+        })
+      } catch (err) {
+        reject(err) ; 
+      }
+    })
   }
+
 }

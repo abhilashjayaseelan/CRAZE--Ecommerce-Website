@@ -28,8 +28,8 @@ app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsD
 handlebars.registerHelper('eq', function(a, b) {
   return a === b;
 });
-handlebars.registerHelper( '@index', function(index) {
-  return index + 1;
+handlebars.registerHelper( 'stock', function(quantity) {
+  return quantity > 0;
 });
 
 app.use(logger('dev'));

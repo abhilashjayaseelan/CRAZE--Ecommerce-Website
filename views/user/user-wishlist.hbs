@@ -1,0 +1,68 @@
+<header class="header-area header-style-1 header-height-2">
+
+    <main class="main">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="index.html" rel="nofollow">Home</a>
+                    <span></span> Shop
+                    <span></span> Wishlist
+                </div>
+            </div>
+        </div>
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive">
+                            <table class="table shopping-summery text-center">
+                                <thead>
+                                    <tr class="main-heading">
+                                        <th scope="col" colspan="2">Product</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Availability</th>
+                                        <th scope="col">Action</th>
+                                        <th scope="col">Remove</th>
+                                    </tr>
+                                </thead>
+                                {{#each product}}
+                                <tbody>
+                                    <tr>
+                                        <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg"
+                                                alt="#"></td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a href="">{{product.name}}</a></h5>
+                                            <p class="font-xs">{{product.description}}
+                                            </p>
+                                        </td>
+                                        <td class="price" data-title="Price"><span>₹{{product.price}}</span></td>
+                                        <td class="text-center" data-title="Stock">
+                                            {{#if (stock product.totalQty)}}
+                                            <span class="text-success font-weight-bold">In Stock</span>
+                                            {{else}}
+                                            <span class="text-danger font-weight-bold">Out of stock</span>
+                                            {{/if}}
+                                        </td>
+                                        <td class="text-right" data-title="Cart">
+                                            <button class="btn btn-sm" onclick="addToCart('{{product._id}}')"><i
+                                                    class="fi-rs-shopping-bag mr-5"></i>Add to
+                                                cart</button>
+                                        </td>
+                                        <td class="action" data-title="Remove"><a
+                                                onclick="removeFromWishlist('{{product._id}}')"><i
+                                                    class="fi-rs-trash"></i></a></td>
+                                    </tr>
+                                </tbody>
+                                {{/each}}
+                                {{#if product.name}}
+                                {{else}}
+                                <h5>Wishlist is empty</h5>
+                                <br>
+                                {{/if}}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>

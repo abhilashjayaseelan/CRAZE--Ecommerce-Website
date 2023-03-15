@@ -1,0 +1,287 @@
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="" rel="nofollow">Home</a>
+                <span></span> Shop
+                <span></span> Orders
+                <span></span> Order details
+            </div>
+        </div>
+    </div>
+    <section class="mt-50 mb-50 ml-120 mr-120">
+        <div class="conatainer">
+
+            <div class="content-header">
+                <div>
+                    <h4 class="content-title card-title">Order detais</h4>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b></b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: {{orderDetail.orderId}}</small>
+                        </div>
+
+
+                        <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                            {{#if (eq status "placed")}}
+                            <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal"
+                                data-bs-whatever="@mdo">Cancel</button>
+                            {{else if (eq status "pending")}}
+                            <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal"
+                                data-bs-whatever="@mdo">Cancel</button>
+                            {{else if (eq status "recieved")}}
+                            <button class="btn btn-sm" onclick="" data-bs-toggle="modal" data-bs-target="#returnModal"
+                                data-bs-whatever="@mdo">Return</button>
+                            {{/if}}
+                        </div>
+
+
+                    </div>
+                </header> <!-- card-header end// -->
+
+                {{!-- modal for returning order --}}
+                <div class="modal fade" id="returnModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reason for return</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="ml-10">
+                                {{!-- reasons for returning --}}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Don't want the product anymore
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Quality of the product is not as expected
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Recieved wrong item
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Don't like the size/fit of the product
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Recieved a broken/damaged item
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Product is missing in the package
+                                    </label>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button onclick="returnOrder('{{orderDetail.orderId}}')" class="btn btn-primary">Continue</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {{!-- modal for cancelling the order --}}
+                <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reason for cancel</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="ml-10">
+                                {{!-- reasons for returning --}}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        I want to change the address for the order
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        I have purchased the product elsewhere
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Need different size or color
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        I have changed my mind  
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault1">
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        Price for the product has decreased
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                        id="flexRadioDefault2" checked>
+                                    <label class="form-check-label" for="flexRadioDefault2">
+                                        Expected delivery time is very long
+                                    </label>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button onclick="cancelOrder('{{orderDetail.orderId}}')" class="btn btn-primary">Continue</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        {{!-- <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order Id</h6>
+                                    <p class="mb-1">
+                                        {{details.userId}} <br>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// --> --}}
+                        {{!-- <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Fargo express <br> Pay method: card <br> Status: new
+                                    </p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// --> --}}
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                        Locality: {{orderDetail.deliveryAddress.locality}},
+                                        {{orderDetail.deliveryAddress.area}}
+                                        <br>District: {{orderDetail.deliveryAddress.district}} <br> Pin:
+                                        {{orderDetail.deliveryAddress.pincode}}
+                                    </p>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%">Quantity</th>
+                                            {{!-- <th width="20%" class="text-end">Total</th> --}}
+                                        </tr>
+                                    </thead>
+                                    {{#each product}}
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="/images/{{product._id}}.jpg" width="40" height="40"
+                                                            class="img-xs" alt="Item">
+                                                    </div>
+                                                    <div class="info">{{product.name}}</div>
+                                                </a>
+                                            </td>
+                                            <td> {{product.price}} </td>
+                                            <td> {{quantity}} </td>
+                                            {{!-- <td class="text-end"> $99.50 </td> --}}
+                                        </tr>
+                                    </tbody>
+                                    {{/each}}
+                                    <tr>
+                                        <td colspan="4">
+                                            <article class="float-end">
+                                                <dl class="dlist">
+                                                    <dt>Grand total:</dt>
+                                                    <dd> <b class="h5">₹{{orderDetail.totalPrice}}</b> </dd>
+                                                </dl>
+                                                <dl class="dlist">
+                                                    <dt class="text-muted">Status:</dt>
+                                                    <dd>
+                                                        <span>{{orderDetail.orderStatus}}</span>
+                                                    </dd>
+                                                </dl>
+                                            </article>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div> <!-- table-responsive// -->
+                        </div> <!-- col// -->
+                        <div class="col-lg-1"></div>
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </div>
+    </section> <!-- content-main end// -->
