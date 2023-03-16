@@ -322,12 +322,18 @@
                                     <h2><a href="#">{{name}}</a></h2>
                                     <div class="rating-result" title="90%">
                                         <span>
-                                            <span>90%</span>
+                                            {{#if discount}}
+                                            <span>{{discount}}%</span>
+                                            {{else}}
+                                            {{/if}}
                                         </span>
                                     </div>
                                     <div class="product-price">
-                                        <span>₹{{price}}</span>
-                                        <span class="old-price"></span>
+                                        {{#if (oldprice discountedPrice)}}
+                                        <span  style="text-decoration: line-through;" class="text-muted">₹{{price}}</span>
+                                        {{/if}}
+                                        <br>
+                                        <span>₹{{prices price discountedPrice}}</span>
                                     </div>
                                     <div class="product-action-1 show">
                                         <a aria-label="Add To Cart" class="action-btn hover-up"

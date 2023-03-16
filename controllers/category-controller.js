@@ -18,5 +18,15 @@ module.exports = {
             //     res.send('category already exists');
             // }
         })
+    },
+
+    // geting subcategories
+    getSubCategories: (req, res) =>{
+        categoryHelper.getSubCategory(req.body).then((category) =>{
+            res.json(category);
+        })
+        .catch((err) =>{
+            console.log(err);
+        })
     }
 }

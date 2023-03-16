@@ -25,12 +25,29 @@ app.use(nocache());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts', partialsDir: __dirname + '/views/partials' }))
+
+// helper functions for the hbs files
 handlebars.registerHelper('eq', function(a, b) {
   return a === b;
 });
 handlebars.registerHelper( 'stock', function(quantity) {
   return quantity > 0;
+});  
+handlebars.registerHelper( 'index', function(index) {
+  return index+1;
 });
+handlebars.registerHelper('prices', function(actual, discount) {
+  if(!discount || discount === 0 ) {
+    return actual;
+  } else {
+    return discount;
+  }
+});
+handlebars.registerHelper('oldprice', function(discount) {
+  
+    return discount > 0;
+  
+})
 
 app.use(logger('dev'));
 app.use(express.json());

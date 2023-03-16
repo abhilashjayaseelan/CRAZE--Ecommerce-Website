@@ -32,6 +32,10 @@ router.route('/add-productCategory')
         categoryController.getProductCategory)
     .post(categoryController.addProductCategory);
 
+// get subcategories for adding product
+router.post('/get-subcategories',
+    categoryController.getSubCategories);
+
 // router.get('/edit-productCategory/:id', adminController.editProductCategory);
 
 // router.patch('/edit-productCategory/:id', adminController.editProductCategory);
@@ -86,17 +90,27 @@ router.get('/user-orders',
 
 // order details
 router.get('/user-orderDetails/:id',
-sessionHandler.checkingAdmin,
-adminController.getOrderDetails);
+    sessionHandler.checkingAdmin,
+    adminController.getOrderDetails);
 
 // search order
 router.post('/search-order',
-sessionHandler.checkingAdmin,
-adminController.searchOrders);
+    sessionHandler.checkingAdmin,
+    adminController.searchOrders);
 
 // change order status
 router.post('/change-status',
-adminController.changeOrderStatus);
+    adminController.changeOrderStatus);
 
+// offers
+router.route('/offers')
+    .get(sessionHandler.checkingAdmin,
+        productController.getOffers)
+    .post(sessionHandler.checkingAdmin,
+        productController.postOffer);
+
+// creating report 
+router.post('/create-report',
+    adminController.makeReport);
 
 module.exports = router;

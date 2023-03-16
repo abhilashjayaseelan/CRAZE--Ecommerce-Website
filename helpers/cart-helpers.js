@@ -37,7 +37,7 @@ module.exports = {
                     resolve({ status: true });
                 }
             } catch (error) {
-                console.log('error while adding to cart'+ error);
+                console.log('error while adding to cart' + error);
                 reject(error);
             }
         })
@@ -143,7 +143,15 @@ module.exports = {
                 {
                     $group: {
                         _id: null,
-                        total: { $sum: { $multiply: ['$quantity', '$product.price'] } }
+                        total: {
+                            $sum: {
+                                $cond: [
+                                    { $gt: ['$product.discountedPrice', 0] },
+                                    { $multiply: ['$quantity', '$product.discountedPrice'] },
+                                    { $multiply: ['$quantity', '$product.price'] }
+                                ]
+                            }
+                        }
                     }
                 }
             ]);
@@ -161,19 +169,19 @@ module.exports = {
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let result = '';
             for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));   
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
             }
             return result;
         };
-        return new Promise(async (resolve, reject) => {     
+        return new Promise(async (resolve, reject) => {
             try {
                 let deliveryAddress = await address.findOne({ _id: ObjectId(order.deliveryAddress) });
                 let paymentStatus = order.payment_option === 'COD' ? 'pending' : 'processing';
                 let deliveryDetails = {
                     mobile: deliveryAddress.mobile,
-                    locality: deliveryAddress.locality,  
+                    locality: deliveryAddress.locality,
                     area: deliveryAddress.area,
-                    district: deliveryAddress.district,    
+                    district: deliveryAddress.district,
                     pincode: deliveryAddress.pincode,
                     pincode: deliveryAddress.pincode
                 }
@@ -199,10 +207,47 @@ module.exports = {
     // getting product details of cart products
     getCartProductList: (userId) => {
         return new Promise(async (resolve, reject) => {
-            let cartData = await cart.findOne({ userId: ObjectId(userId) });
-            resolve(cartData.products);  
+            try {
+                const products = await cart.aggregate([
+                    {
+                        $match: { userId: ObjectId(userId) }
+                    },
+                    {
+                        $unwind: '$products'
+                    },
+                    {
+                        $lookup: {
+                            from: 'products',
+                            localField: 'products.item',
+                            foreignField: '_id',
+                            as: 'product'
+                        }
+                    },
+                    {
+                        $unwind: '$product'
+                    },
+                    {
+                        $project: {
+                            _id:0,
+                            item: "$product._id",
+                            quantity: "$products.quantity",
+                            price: {
+                                $cond: {
+                                    if: { $eq: ["$product.discountedPrice", 0] },
+                                    then: "$product.price",
+                                    else: "$product.discountedPrice"
+                                }
+                            }
+                        }
+                    }
+                ])
+                resolve(products);
+            } catch (err) {
+                console.log(err);
+                reject(err)
+            }
         })
     }
-    
+
 
 }

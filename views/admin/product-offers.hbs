@@ -1,0 +1,71 @@
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Offer Details</h2>
+            </div>
+        </div>
+        <form method="POST" action="/admin/offers" style="width: 50%;">
+            <label for="category">Category:</label>
+            <select class="form-select" name="category" id="main-category">
+                <option>Select</option>
+                <option>Men's Clothing</option>
+                <option>Women's Clothing</option>
+                <option>Kid's Clothing</option>
+            </select>
+
+            <label for="subCategory">Subcategory:</label>
+            <select id="sub-category" class="form-select" name="subCategory" required="">
+                <!-- Subcategories will be loaded dynamically -->
+            </select>
+
+            <label for="discountPercentage">Discount Percentage:</label>
+            <input class="form-control" type="number" name="discountPercentage" id="discountPercentage" min="0"
+                max="100">
+
+            <label for="startDate">Start Date:</label>
+            <input class="form-control" type="date" name="startDate" id="startDate" required>
+
+            <label for="endDate">End Date:</label>
+            <input class="form-control" type="date" name="endDate" id="endDate" required>
+
+            <hr>
+            <button type="submit">Create Discount</button>
+        </form>
+
+    </section> <!-- content-main end// -->
+
+    <script>
+        $(document).ready(function () {
+            // Listen for the change event on the main category select element
+            $('#main-category').change(function () {
+                // Get the selected value of the main category select element
+                var mainCategory = $('#main-category').val();
+
+                // Send an AJAX request to your server with the selected main category value
+                $.ajax({
+                    url: '/admin/get-subcategories',
+                    type: 'POST',
+                    data: { mainCategory: mainCategory },
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        // Parse the JSON object and use it to populate the subcategory select element
+                        var subCategories = response.subCategory;
+                        var options = '<option value="">Select a subcategory</option>';
+                        for (var i = 0; i < subCategories.length; i++) {
+                            options += '<option value="' + subCategories[i] + '">' + subCategories[i] + '</option>';
+                        }
+                        $('#sub-category').html(options);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr);
+                        console.error(status);  
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>

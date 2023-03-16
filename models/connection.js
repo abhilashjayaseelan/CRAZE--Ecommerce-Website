@@ -52,9 +52,9 @@ const categorySchema = new Schema({
     required: true
   },
   subCategory: {
-    type: String,
+    type: [String],
     required: true
-  }
+  },
 })
 
 const productSchema = new Schema({
@@ -73,7 +73,7 @@ const productSchema = new Schema({
   brand: {
     type: String,
     require: true
-  },
+  }, 
   color: {
     type: String,
     require: true
@@ -94,11 +94,43 @@ const productSchema = new Schema({
     type: Number,
     required: true
   },
-  // images: {
-  //   type: Buffer,
-  //   required: true
-  // }
+  discount: {
+    type: Number,
+    required: false
+  },
+  discountedPrice: {
+    type: Number,
+    default: 0,
+    required: false
+  },
+  discountTil: {
+    type: Date,
+    required: false
+  }
 })
+
+const discountSchema = new Schema({
+  category: {
+    type: String,
+    required: true
+  },
+  subCategory: {
+    type: String
+  },
+  discountPercentage: {
+    type: Number,
+    min: 0,
+    max: 100
+  },
+  startDate: {
+    type: Date,
+    required: true
+  },
+  endDate: {
+    type: Date,
+    required: true
+  }
+}, { timestamps: true });
 
 const addressSchema = new Schema({
   name: {
@@ -225,3 +257,4 @@ module.exports.cart = mongoose.model('cart', cartSchema);
 module.exports.orders = mongoose.model('orders', ordersSchema);
 module.exports.wishlist = mongoose.model('whishlist', wishlistSchema);
 module.exports.wallet = mongoose.model('wallet', walletSchema);
+module.exports.discount = mongoose.model('discount', discountSchema);

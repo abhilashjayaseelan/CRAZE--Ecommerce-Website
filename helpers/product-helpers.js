@@ -1,4 +1,4 @@
-const { products, category } = require("../models/connection");
+const { products, category, discount } = require("../models/connection");
 
 module.exports = {
     addProduct: (productData) => {
@@ -41,15 +41,15 @@ module.exports = {
     },
     getEditProduct: (id) => {
         return Promise.all([
-            products.findOne({_id: id}),
+            products.findOne({ _id: id }),
             category.find()
-        ]).then(([product, categories]) =>{
-            return {product, categories}
+        ]).then(([product, categories]) => {
+            return { product, categories }
         })
-        .catch((err)=>{
-            console.log(err);
-        })
-       
+            .catch((err) => {
+                console.log(err);
+            })
+
     },
     postEditProduct: (productId, productData) => {
 
@@ -79,5 +79,38 @@ module.exports = {
                 resolve(result);
             })
         })
+    },
+    // new offer
+    newOffer: (data) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const newDiscount = new discount({
+                    'category': data.category,
+                    'subCategory': data.subCategory,
+                    'discountPercentage': data.discountPercentage,
+                    'startDate': data.startDate,
+                    'endDate': data.endDate
+                })
+                await newDiscount.save();
+
+                const productsToUpdate = await products.find({ category: newDiscount.category, subCategory: newDiscount.subCategory });
+                // Update discounted price of each product if offer is active
+                // console.log('its here'+ productsToUpdate);
+                productsToUpdate.forEach(async (product) => {
+                    if (newDiscount.startDate <= Date.now() && newDiscount.endDate >= Date.now()) {
+                        const discountedPrice = Math.floor(product.price * (1 - newDiscount.discountPercentage / 100));
+                        product.discount = newDiscount.discountPercentage;  
+                        product.discountedPrice = discountedPrice;
+                        product.discountTil = newDiscount.endDate;
+                        await product.save();
+                    }
+                });
+                resolve();
+            } catch (err) {
+                console.log(err);
+                reject();
+            }
+        })
     }
 }
+

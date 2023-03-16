@@ -11,6 +11,7 @@ module.exports = {
       userHelpers.homePage().then((data) => {
          let user = req.session.user;
          products = JSON.parse(JSON.stringify(data));
+         console.log(products);
          res.render('user/view-products', { user, products, itsUser: true });
       })
    },

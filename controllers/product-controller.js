@@ -23,17 +23,14 @@ module.exports = {
     },
     // product adding 
     getAddProduct: (req, res) => {
-        categoryHelpers.getCategory().then((category) => {
-            let categories = JSON.parse(JSON.stringify(category));
-            res.render('admin/add-products', { admin: true, categories, 'addProductSuccess': req.session.addProductSuccess });
-            req.session.addProductSuccess = false;
-        })
+        res.render('admin/add-products', { admin: true, 'addProductSuccess': req.session.addProductSuccess });
+        req.session.addProductSuccess = false;
     },
     postAddProduct: (req, res) => {
-        console.log(req.body);
+        // console.log(req.body);
         productHelpers.addProduct(req.body).then((data) => {
-            let image = req.files.image
-            let objId = data.id
+            let image = req.files.images;
+            let objId = data.id;
             image.mv('./public/images/' + objId + '.jpg', err => {
                 if (!err) {
                     req.session.addProductSuccess = "Prouct Added successfully"
@@ -52,7 +49,7 @@ module.exports = {
     getEditProduct: (req, res) => {
         productHelpers.getEditProduct(req.params.id).then((products) => {
             let data = JSON.parse(JSON.stringify(products))
-            console.log(data);
+            // console.log(data);
             res.render('admin/edit-product', { admin: true, data });
         })
     },
@@ -71,7 +68,20 @@ module.exports = {
         productHelpers.deleteProduct(req.params.id).then(() => {
             res.redirect('/admin/view-products');
         })
+    },
+
+    // get product offers page
+    getOffers: (req, res) => {
+        res.render('admin/product-offers', { admin: true, });
+    },
+
+    // creating product offer
+    postOffer: (req, res) => {
+        productHelpers.newOffer(req.body).then(() => {
+            res.redirect('/admin/offers');
+        })
     }
+
 
 }
 

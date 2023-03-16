@@ -225,6 +225,9 @@
                                         <br>District: {{orderDetail.deliveryAddress.district}} <br> Pin:
                                         {{orderDetail.deliveryAddress.pincode}}
                                     </p>
+                                    <br>
+                                    <br>
+                                    <h6 class="mb-1">Payment Method:- {{orderDetail.paymentMothod}}</h6>
                                 </div>
                             </article>
                         </div> <!-- col// -->
@@ -241,19 +244,21 @@
                                             {{!-- <th width="20%" class="text-end">Total</th> --}}
                                         </tr>
                                     </thead>
-                                    {{#each product}}
+                                    {{#each  orderDetail.products}}
                                     <tbody>
                                         <tr>
                                             <td>
                                                 <a class="itemside" href="#">
                                                     <div class="left">
-                                                        <img src="/images/{{product._id}}.jpg" width="40" height="40"
+                                                        <img src="/images/{{item}}.jpg" width="40" height="40"
                                                             class="img-xs" alt="Item">
                                                     </div>
-                                                    <div class="info">{{product.name}}</div>
+                                                    <div class="info">{{name}}</div>
                                                 </a>
                                             </td>
-                                            <td> {{product.price}} </td>
+                                            
+                                            <td> {{price}} </td>
+                                          
                                             <td> {{quantity}} </td>
                                             {{!-- <td class="text-end"> $99.50 </td> --}}
                                         </tr>

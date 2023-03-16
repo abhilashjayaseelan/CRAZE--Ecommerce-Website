@@ -17,6 +17,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="/admin-assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link href="/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 </head>
 
 <body>
@@ -24,11 +27,11 @@
 <header class="main-header navbar">
             <div class="col-search " style="margin-left: 21em;">
                 <form class="searchform">
-                    <div class="input-group">
+                    {{!-- <div class="input-group">
                         <input list="search_terms" type="text" class="form-control" placeholder="Search term">
                         <button class="btn btn-light bg" type="button"> <i
                                 class="material-icons md-search"></i></button>
-                    </div>
+                    </div> --}}
                     <datalist id="search_terms">
                         <option value="Products">
                         <option value="New orders">

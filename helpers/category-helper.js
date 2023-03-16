@@ -1,28 +1,47 @@
-const {category} = require('../models/connection');
+const { category } = require('../models/connection');
 
 module.exports = {
     addCategory: (categoryData) => {
         let response = {}
         return new Promise(async (resolve, reject) => {
-            let category1 = categoryData.name;
-            existingCategory = await category.findOne({ name: category1 });
-            response = { status: false }
-            resolve(response);
-            let data = new category({
-                'name': categoryData.name,
-                'subCategory': categoryData.subCategory
-            })
-            await data.save().then((data) => {
-                resolve({ data, status: true });
-            })
+            let name = categoryData.name;
+            let subCategory = categoryData.subCategory;
+            const existingCategory = await category.findOne({ name: name });
+            if (existingCategory) {
+                existingCategory.subCategory.push(subCategory);
+                existingCategory.save();
+                resolve(existingCategory);
+            } else {
+                const newCategory = new category({
+                    'name': categoryData.name,
+                    'subCategory': categoryData.subCategory
+                })
+                await newCategory.save();
+                resolve(newCategory);
+            }
         })
     },
-    getCategory: () => {
+    // for adding product finding sub categories
+    getSubCategory: (data) => {
         return new Promise(async (resolve, reject) => {
-            await category.find().then((categories) => {
+            try {
+                const categories = await category.findOne({name: data.mainCategory});
                 resolve(categories);
-            })
+            } catch(err) {
+                console.log(err);
+                reject(err);
+            }
         })
     },
+
+    // get all categories
+    getCategory: () =>{
+        return new Promise( async(resolve, reject) =>{
+            category.find().then((result) =>{
+                resolve(result);
+            })
+        })
+    }
+
 
 }   

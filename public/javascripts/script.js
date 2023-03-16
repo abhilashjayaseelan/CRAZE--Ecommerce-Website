@@ -1,4 +1,3 @@
-const { response } = require("../../app");
 
 // add product to cart
 function addToCart(productId) {
