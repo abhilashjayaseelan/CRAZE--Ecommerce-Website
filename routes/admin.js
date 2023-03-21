@@ -1,18 +1,18 @@
 const express = require('express');
-const { response } = require('../app');
 const router = express.Router();
 const adminController = require('../controllers/admin-controller');
 const productController = require('../controllers/product-controller');
 const categoryController = require('../controllers/category-controller');
 const adminHelper = require('../helpers/admin-helpers');
 const sessionHandler = require('../middlewares/session-handling');
+const upload = require("../middlewares/multer-cloudinary");
 
 // home
 router.get('/',
     sessionHandler.checkingAdmin,
     adminController.adminDashboard);
 
-// Admin login and logut
+// Admin login and logout
 router.route('/admin-login')
     .get(sessionHandler.adminAuthenticationCheck,
         adminController.getAdminLogin)
@@ -48,11 +48,11 @@ router.get('/view-products',
     sessionHandler.checkingAdmin,
     productController.viewProducts);
 
-// add prioduct
+// add product
 router.route('/add-product')
     .get(sessionHandler.checkingAdmin,
         productController.getAddProduct)
-    .post(productController.postAddProduct);
+    .post(upload,productController.postAddProduct);
 
 // edit product
 router.route('/edit-product/:id')
@@ -60,7 +60,7 @@ router.route('/edit-product/:id')
         productController.getEditProduct)
     .post(productController.postEditProduct);
 
-// delete procuct
+// delete product
 router.get('/delete-product/:id',
     productController.getDeleteProduct);
 
@@ -89,7 +89,7 @@ router.get('/user-orders',
     adminController.getuserOrders);
 
 // order details
-router.get('/user-orderDetails/:id',
+router.get('/user-orderDetails/:id',  
     sessionHandler.checkingAdmin,
     adminController.getOrderDetails);
 
@@ -99,7 +99,7 @@ router.post('/search-order',
     adminController.searchOrders);
 
 // change order status
-router.post('/change-status',
+router.post('/change-status',  
     adminController.changeOrderStatus);
 
 // offers
@@ -111,6 +111,12 @@ router.route('/offers')
 
 // creating report 
 router.post('/create-report',
-    adminController.makeReport);
+    adminController.makeReport); 
+
+// creating coupons
+router.route('/coupons')
+    .get(sessionHandler.checkingAdmin,
+        adminController.getCoupon)
+    .post(adminController.postCoupon);   
 
 module.exports = router;

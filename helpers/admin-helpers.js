@@ -1,57 +1,55 @@
-const { admin, user, orders } = require('../models/connection');
+const { admin, user, orders, coupon } = require('../models/connection');
 const bcrypt = require('bcrypt');
-const { response } = require('../app');
-const { calculateObjectSize } = require('bson');
 objectId = require('mongodb').ObjectId;
 
 module.exports = {
     // admin login
-    adminLogin: (adminData) => {
-        return new Promise(async (resolve, reject) => {
-            let response = {}
-            let admin1 = await admin.findOne({ email: adminData.email });
-            if (admin1) {
-                await bcrypt.compare(adminData.password, admin1.password).then((status) => {
-                    if (status) {
-                        response.admin = admin1;
-                        response.status = true;
-                        resolve(response)
-                    } else {
-                        // console.log(status);
-                        resolve({ status: false });
-                    }
-                })
-            } else {
-                resolve({ notExist: true });
+    adminLogin: async (adminData) => {
+        try {
+            const admin1 = await admin.findOne({ email: adminData.email });
+            if (!admin1) {
+                return { notExist: true };
             }
-        })
+            const status = await bcrypt.compare(adminData.password, admin1.password);
+            if (!status) {
+                return { status: false };
+            }
+            return { admin: admin1, status: true };
+        } catch (err) {
+            throw new Error(err);
+        }
     },
     // get users
-    getUsers: () => {
-        return new Promise(async (resolve, reject) => {
-            await user.find().then((users) => {
-                userDatas = users;
-            })
-            resolve(userDatas);
-        })
+    getUsers: async () => {
+        try {
+            const users = await user.find();
+            return users;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     },
     // block user
-    blockUser: (userId) => {
-        return new Promise(async (resolve, reject) => {
-            await user.updateOne({ _id: userId }, { $set: { blocked: true } }).then((result) => {
-                console.log('user blocked');
-                resolve(result);
-            })
-        })
+    blockUser: async (userId) => {
+        try {
+            const result = await user.updateOne({ _id: userId }, { $set: { blocked: true } });
+            console.log('user blocked');
+            return result;
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
     },
     // unblock user
-    unblockUser: (userId) => {
-        return new Promise(async (resolve, reject) => {
-            await user.updateOne({ _id: userId }, { $set: { blocked: false } }).then((result) => {
-                console.log('user unblocked');
-                resolve(result);
-            })
-        })
+    unblockUser: async (userId) => {
+        try {
+            const result = await user.updateOne({ _id: userId }, { $set: { blocked: false } });
+            console.log('user unblocked');
+            return result;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     },
     // get user orders
     getOrders: () => {
@@ -66,14 +64,14 @@ module.exports = {
         })
     },
     //search orders
-    searchOrder: (orderId) =>{
-        return new Promise(async(resolve, reject) =>{
+    searchOrder: (orderId) => {
+        return new Promise(async (resolve, reject) => {
             try {
-                await orders.find({orderId: orderId}).then((allOrders)=>{
+                await orders.find({ orderId: orderId }).then((allOrders) => {
                     resolve(allOrders);
                 })
             } catch (err) {
-                reject(err);     
+                reject(err);
             }
         })
     },
@@ -126,9 +124,9 @@ module.exports = {
         }
     },
     //change order status
-    changeStatus: (orderDetails) => { 
-        console.log(orderDetails);
-        return new Promise(async(resolve, reject) => {
+    changeStatus: (orderDetails) => {
+        // console.log(orderDetails);
+        return new Promise(async (resolve, reject) => {
             try {
                 await orders.updateOne({ _id: objectId(orderDetails.orderId) },
                     {
@@ -139,7 +137,25 @@ module.exports = {
                 resolve();
             } catch (err) {
                 reject(err);
-            }   
+            }
         })
+    },
+    // create new coupon 
+    createCoupon: async(details) =>{ 
+        try {
+            const newCoupon = new coupon({
+                'code' : details.code,
+                'discountPercentage' : details.discountPercentage,
+                'maxDiscountAmount' : details.maxDiscountAmount,
+                'minAmount' : details.minAmount,
+                'startDate' : details.startDate,
+                'endDate': details.endDate
+            })
+            await newCoupon.save();
+            return newCoupon;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 }

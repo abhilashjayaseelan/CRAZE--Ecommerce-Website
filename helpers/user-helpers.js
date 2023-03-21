@@ -1,8 +1,5 @@
 const { user, products, orders, wishlist, wallet } = require("../models/connection");
 const bcrypt = require('bcrypt');
-const { response } = require("../app");
-const { error } = require("console");
-const { resolve } = require("path");
 const objectId = require('mongodb').ObjectId
 
 module.exports = {

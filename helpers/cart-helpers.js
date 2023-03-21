@@ -1,6 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
-const { ReturnDocument } = require('mongodb');
-const { cart, user, orders, address } = require('../models/connection');
+const { cart, orders, address } = require('../models/connection');
 
 module.exports = {
     toCart: (productId, userId) => {
@@ -92,7 +91,6 @@ module.exports = {
     removeProduct: (uId, pId) => {
         const userId = ObjectId(uId);
         const productId = ObjectId(pId);
-
         return new Promise(async (resolve, reject) => {
             cart.findOneAndUpdate({ userId: userId },
                 {
@@ -125,7 +123,6 @@ module.exports = {
                         item: '$products.item',
                         quantity: '$products.quantity'
                     }
-
                 },
                 {
                     $lookup: {
@@ -213,7 +210,7 @@ module.exports = {
                         $match: { userId: ObjectId(userId) }
                     },
                     {
-                        $unwind: '$products'
+                        $unwind: '$products' 
                     },
                     {
                         $lookup: {
@@ -228,9 +225,11 @@ module.exports = {
                     },
                     {
                         $project: {
-                            _id:0,
+                            _id: 0,
                             item: "$product._id",
                             quantity: "$products.quantity",
+                            name: "$product.name",
+                            images: "$product.images",
                             price: {
                                 $cond: {
                                     if: { $eq: ["$product.discountedPrice", 0] },
@@ -248,6 +247,4 @@ module.exports = {
             }
         })
     }
-
-
 }

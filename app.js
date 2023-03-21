@@ -3,7 +3,6 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const fileUpload = require('express-fileupload');
 const handlebars = require('handlebars');
 
 // environment file setup
@@ -15,7 +14,7 @@ const usersRouter = require('./routes/users');
 const productRouter = require('./routes/products');
 const hbs = require('express-handlebars');
 const session = require('express-session');
- 
+
 const app = express();
 const nocache = require('nocache');
 
@@ -27,33 +26,32 @@ app.set('view engine', 'hbs');
 app.engine('hbs', hbs.engine({ extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts', partialsDir: __dirname + '/views/partials' }))
 
 // helper functions for the hbs files
-handlebars.registerHelper('eq', function(a, b) {
-  return a === b;
+handlebars.registerHelper('eq', function (a, b) {
+  return a === b;
 });
-handlebars.registerHelper( 'stock', function(quantity) {
+handlebars.registerHelper('stock', function (quantity) {
   return quantity > 0;
-});  
-handlebars.registerHelper( 'index', function(index) {
-  return index+1;
 });
-handlebars.registerHelper('prices', function(actual, discount) {
-  if(!discount || discount === 0 ) {
+handlebars.registerHelper('index', function (index) {
+  return index + 1;
+});
+handlebars.registerHelper('prices', function (actual, discount) {
+  if (!discount || discount === 0) {
     return actual;
   } else {
     return discount;
   }
 });
-handlebars.registerHelper('oldprice', function(discount) {
-  
-    return discount > 0;
-  
+handlebars.registerHelper('oldprice', function (discount) {
+
+  return discount > 0;
+
 })
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: "#Key", cookie: { maxAge: 600000 } }));
 

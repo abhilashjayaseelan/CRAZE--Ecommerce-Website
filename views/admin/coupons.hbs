@@ -5,40 +5,40 @@
     <section class="content-main">
         <div class="content-header">
             <div>
-                <h2 class="content-title card-title">Offers </h2>
-                <p>Add and manage offers</p>
+                <h2 class="content-title card-title">Coupons </h2>
+                <p>Add and manage coupons</p>
             </div>
         </div>
         <div class="card">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <form method="POST" action="/admin/offers">
-                            <label for="category">Category:</label>
-                            <select class="form-select" name="category" id="main-category">
-                                <option>Select</option>
-                                <option>Men's Clothing</option>
-                                <option>Women's Clothing</option>
-                                <option>Kid's Clothing</option>
-                            </select>
+                        <form id="create-coupon-form">
+                            <label for="coupon-code">Coupon Code:</label>
+                            <input class="form-control" type="text" id="coupon-code" name="code" required>
 
-                            <label for="subCategory">Subcategory:</label>
-                            <select id="sub-category" class="form-select" name="subCategory" required="">
-                                <!-- Subcategories will be loaded dynamically -->
-                            </select>
+                            <label for="discount-percentage">Discount Percentage:</label>
+                            <input class="form-control" type="number" id="discount-percentage" name="discountPercentage"
+                                required min="0" max="100">
 
-                            <label for="discountPercentage">Discount Percentage:</label>
-                            <input class="form-control" type="number" name="discountPercentage" id="discountPercentage"
-                                min="0" max="100">
+                            <label for="max-discount-amount">Max Discount Amount:</label>
+                            <input class="form-control" type="number" id="max-discount-amount" name="maxDiscountAmount"
+                                required min="0">
 
-                            <label for="startDate">Start Date:</label>
-                            <input class="form-control" type="date" name="startDate" id="startDate" required>
+                            <label for="minimum-purchase-amount">Minimum Purchase Amount:</label>
+                            <input class="form-control" type="number" id="minimum-purchase-amount" name="minAmount"
+                                required min="0">
 
-                            <label for="endDate">End Date:</label>
-                            <input class="form-control" type="date" name="endDate" id="endDate" required>
+                            <label for="start-date">Start Date:</label>
+                            <input class="form-control" type="date" name="startDate" id="start-date" required>
+
+                            <label for="expiration-date">Expiration Date:</label>
+                            <input class="form-control" type="date" id="expiration-date" name="endDate" required>
 
                             <hr>
-                            <button type="submit">Create Discount</button>
+                            <div>
+                                <button class="btn btn-primary">Create Coupon</button>
+                            </div>
                         </form>
                     </div>
                     <div class="col-md-9">
@@ -87,37 +87,38 @@
             </div> <!-- card body .// -->
         </div> <!-- card .// -->
     </section> <!-- content-main end// -->
-
     <script>
         $(document).ready(function () {
-            // Listen for the change event on the main category select element
-            $('#main-category').change(function () {
-                // Get the selected value of the main category select element
-                var mainCategory = $('#main-category').val();
+            $('#create-coupon-form').submit(function (event) {
+                // Prevent the default form submission behavior
+                event.preventDefault();
 
-                // Send an AJAX request to your server with the selected main category value
+                // Send an Ajax POST request to create a new coupon
                 $.ajax({
-                    url: '/admin/get-subcategories',
+                    url: '/admin/coupons',
                     type: 'POST',
-                    data: { mainCategory: mainCategory },
+                    data: $('#create-coupon-form').serialize(),
                     dataType: 'json',
                     success: function (response) {
-                        console.log(response);
-                        // Parse the JSON object and use it to populate the subcategory select element
-                        var subCategories = response.subCategory;
-                        var options = '<option value="">Select a subcategory</option>';
-                        for (var i = 0; i < subCategories.length; i++) {
-                            options += '<option value="' + subCategories[i] + '">' + subCategories[i] + '</option>';
+                        if (response.status) {
+                            // Display a success notification if the coupon was created successfully
+                            swal({
+                                title: "Coupon created!",
+                                text: "Your new coupon has been created.",
+                                icon: "success",
+                                button: "OK",
+                            });
+                            $('#create-coupon-form')[0].reset();
+                        } else {
+                            // Display an error message if the server-side validation failed
+                            alert(response.message);
                         }
-                        $('#sub-category').html(options);
                     },
-                    error: function (xhr, status, error) {
-                        console.error(xhr);
-                        console.error(status);
-                        console.error(error);
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        // Display an error message if the server encountered an error
+                        alert('Error creating coupon: ' + textStatus);
                     }
                 });
             });
         });
-
     </script>

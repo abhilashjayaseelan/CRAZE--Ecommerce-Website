@@ -1,23 +1,23 @@
-const { json } = require('express');
 const adminHelper = require('../helpers/admin-helpers');
 const reportHelpers = require('../helpers/report-helpers');
 const generateReport = require('../public/javascripts/generate-report');
 const fs = require('fs');
 
 module.exports = {
-    adminDashboard: async(req, res) => {
-        const monthlySales = await reportHelpers.getMonthlySales();
-        const revenue = await reportHelpers.calculateTotalRevenue();
-        const orders = await reportHelpers.calculateTotalOrders();
-        const products = await reportHelpers.calculateTotalNumberOfProducts();
-            if (monthlySales[0]) {
-                let totalSales = monthlySales[0].totalSales;
-                res.render('admin/admin-dashboard', { admin: true, totalSales, revenue, orders, products });
-            } else {
-                let totalSales = 0;
-                res.render('admin/admin-dashboard', { admin: true, totalSales, revenue, orders, products });
-            }
-        
+    adminDashboard: async (req, res) => {
+        try {
+            const [monthlySales, revenue, orders, products] = await Promise.all([
+                reportHelpers.getMonthlySales(),
+                reportHelpers.calculateTotalRevenue(),
+                reportHelpers.calculateTotalOrders(),
+                reportHelpers.calculateTotalNumberOfProducts()
+            ]);
+            const totalSales = monthlySales[0] ? monthlySales[0].totalSales : 0;
+            res.render('admin/admin-dashboard', { admin: true, totalSales, revenue, orders, products });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     },
     // admin login
     getAdminLogin: (req, res) => {
@@ -25,20 +25,24 @@ module.exports = {
         req.session.emailErr = false;
         req.session.pswdErr = false;
     },
-    postAdminLogin: (req, res) => {
-        adminHelper.adminLogin(req.body).then((response) => {
+    postAdminLogin: async (req, res) => {
+        try {
+            const response = await adminHelper.adminLogin(req.body);
             if (response.status) {
                 req.session.adminLoggedIn = true;
                 req.session.admin = response.admin;
                 res.redirect('/admin/dashboard');
-            } else if (response.noMatch) {
-                req.session.emailErr = "Invalid Email"
+            } else if (response.notExist) {
+                req.session.emailErr = "Invalid Email";
                 res.redirect('/admin');
             } else {
                 req.session.pswdErr = "Invalid Password";
                 res.redirect('/admin');
             }
-        })
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     },
     // admin logout
     getAdminLogout: (req, res) => {
@@ -46,50 +50,66 @@ module.exports = {
         res.redirect('/admin');
     },
     // view users
-    viewUsers: (req, res) => {
-        adminHelper.getUsers().then((user) => {
-            user = JSON.parse(JSON.stringify(user))
-            res.render('admin/admin-allUsers', { user, admin: true });
-        })
+    viewUsers: async (req, res) => {
+        try {
+            const users = await adminHelper.getUsers();
+            const parsedUsers = JSON.parse(JSON.stringify(users));
+            res.render('admin/admin-allUsers', { user: parsedUsers, admin: true });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Internal Server Error");
+        }
     },
     // getting user orders
     getuserOrders: (req, res) => {
-        adminHelper.getOrders().then((allOrders) => {
-            allOrders = JSON.parse(JSON.stringify(allOrders))
-            res.render('admin/admin-allOrders', { admin: true, allOrders });
-        })
+        try {
+            adminHelper.getOrders().then((orderDetails) => {
+                allOrders = JSON.parse(JSON.stringify(orderDetails))
+                res.render('admin/admin-allOrders', { admin: true, allOrders });
+            })
 
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal server error');
+        }
     },
     // search orders
     searchOrders: (req, res) => {
-        const orderId = req.body.orderId;
-        adminHelper.searchOrder(orderId).then((allOrders) => {
-            allOrders = JSON.parse(JSON.stringify(allOrders))
-            res.render('admin/admin-allOrders', { admin: true, allOrders });
-        })
+        try {
+            const orderId = req.body.orderId;
+            adminHelper.searchOrder(orderId).then((allOrders) => {
+                allOrders = JSON.parse(JSON.stringify(allOrders))
+                res.render('admin/admin-allOrders', { admin: true, allOrders });
+            })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal server error');
+        }
     },
     // order details
     getOrderDetails: async (req, res) => {
-        let productId = req.params.id;
-        let status = JSON.parse(JSON.stringify(req.query.status));
-        console.log(status);
-        let singleDetails = await adminHelper.singleOrder(productId);
-        adminHelper.orderDetails(productId).then((details) => {
-            details = JSON.parse(JSON.stringify(details));
-            res.render('admin/order-details', { admin: true, details, singleDetails, status });
-        })
-            .catch((err) => {
-                console.log(err);
+        try {
+            let productId = req.params.id;
+            let status = JSON.parse(JSON.stringify(req.query.status));
+            // console.log(status);
+            let singleDetails = await adminHelper.singleOrder(productId);
+            adminHelper.orderDetails(productId).then((details) => {
+                details = JSON.parse(JSON.stringify(details));
+                res.render('admin/order-details', { admin: true, details, singleDetails, status });
             })
+        } catch (err) {
+            console.log(err);
+        }
     },
     // change order status 
-    changeOrderStatus: (req, res) => {
-        adminHelper.changeStatus(req.body).then((result) => {
+    changeOrderStatus: async (req, res) => {
+        try {
+            await adminHelper.changeStatus(req.body);
             res.json({ status: true });
-        })
-            .catch((err) => {
-                console.log(err);
-            })
+        } catch (err) {
+            console.log(err);
+            res.json({ status: false });
+        }
     },
     // making reports
     makeReport: async (req, res) => {
@@ -145,6 +165,20 @@ module.exports = {
             return res.status(500).send('Error generating report');
         }
 
+    },
+    // get coupon creation page
+    getCoupon: (req, res) => {
+        res.render('admin/coupons', { admin: true });
+    },
+    // create new coupon 
+    postCoupon: async (req, res) => {
+        try {
+            adminHelper.createCoupon(req.body).then(() =>{
+                res.json({status : true});
+            })
+        } catch (err) {
+            console.log(err);
+            res.status('500').send('internal error');
+        }
     }
-
 }     

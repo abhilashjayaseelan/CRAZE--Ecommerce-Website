@@ -73,7 +73,7 @@ const productSchema = new Schema({
   brand: {
     type: String,
     require: true
-  }, 
+  },
   color: {
     type: String,
     require: true
@@ -89,6 +89,10 @@ const productSchema = new Schema({
   price: {
     type: Number,
     require: true
+  },
+  images: {
+    type: Object,
+    required: true
   },
   totalQty: {
     type: Number,
@@ -207,7 +211,7 @@ const ordersSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now 
+    default: Date.now
   },
   orderStatus: {
     type: String,
@@ -225,7 +229,7 @@ const wishlistSchema = new Schema({
     ref: 'user'
   },
   products: {
-    type:Array,
+    type: Array,
     required: true
   }
 })
@@ -246,6 +250,39 @@ const walletSchema = new mongoose.Schema({
   }
 })
 
+const couponSchema = new mongoose.Schema({
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  discountPercentage: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 100,
+  },
+  maxDiscountAmount: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  startDate: {
+    type: Date,
+    required: true,
+  },
+  endDate: {
+    type: Date,
+    required: true,
+  },
+  minAmount: {
+    type: Number,
+    required: true,
+    min: 0,
+  }
+});
+
+
 
 
 module.exports.user = mongoose.model('user', userSchema);
@@ -255,6 +292,7 @@ module.exports.products = mongoose.model('products', productSchema);
 module.exports.address = mongoose.model('address', addressSchema);
 module.exports.cart = mongoose.model('cart', cartSchema);
 module.exports.orders = mongoose.model('orders', ordersSchema);
-module.exports.wishlist = mongoose.model('whishlist', wishlistSchema);
+module.exports.wishlist = mongoose.model('wishlist', wishlistSchema);
 module.exports.wallet = mongoose.model('wallet', walletSchema);
 module.exports.discount = mongoose.model('discount', discountSchema);
+module.exports.coupon = mongoose.model('coupon', couponSchema);

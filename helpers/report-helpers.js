@@ -38,7 +38,8 @@ module.exports = {
             { $match: { orderStatus: "recieved" } },
             { $group: { _id: null, totalRevenue: { $sum: "$totalPrice" } } }
         ])
-        return totalRevenue[0].totalRevenue;
+        const totalrev = totalRevenue[0] ? totalRevenue[0].totalRevenue : 0;
+        return totalrev;
 
     },
     // total orders
@@ -47,7 +48,8 @@ module.exports = {
             { $match: { orderStatus: "recieved" } },
             { $count: "totalOrders" }
         ])
-        return totalOrders[0].totalOrders;
+        const totalOrd = totalOrders[0] ? totalOrders[0].totalOrders : 0;
+        return totalOrd;
     },
     // total number of products
     calculateTotalNumberOfProducts: async () => {
@@ -59,7 +61,8 @@ module.exports = {
                 }
             }
         ])
-        return totalProducts[0].totalProducts;
+        const totalProd = totalProducts[0] ? totalProducts[0].totalProducts : 0;
+        return totalProd;
     }
 
 }

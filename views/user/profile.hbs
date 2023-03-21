@@ -47,6 +47,9 @@
                   Wallet</a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                <a href="#"><i class="fa-sharp fa-solid fa-ticket"></i> Coupons</a>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                 <a href="/logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
               </li>
             </ul>
@@ -189,14 +192,14 @@
               const dateObj = new Date(isoDateString);
 
               const day = dateObj.getDate();
-              const month = dateObj.getMonth() + 1;  
+              const month = dateObj.getMonth() + 1;
               const year = dateObj.getFullYear();
               const hours = dateObj.getHours();
               const minutes = dateObj.getMinutes();
               const seconds = dateObj.getSeconds();
 
               const formattedDate = `${day}/${month}/${year}`;
-            
+
               transactionHistory += '<tr><td>' + formattedDate + '</td><td>' + transaction.orderId + '</td><td>' + transaction.amount + '</td></tr>';
             });
           }

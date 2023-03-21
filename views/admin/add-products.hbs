@@ -75,6 +75,7 @@
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label">Main Category</label>
                                         <select id="main-category" class="form-select" name="category" required="">
+                                            <option> Select</option>
                                             <option> Men's Clothing </option>
                                             <option> Women's Clothing </option>
                                             <option> Kid's Clothing </option>
@@ -93,7 +94,7 @@
                                         <div class="input-upload">
                                             <img src="" alt="" id="imgView">
                                             <input class="form-control" type="file" value="upload" name="images"
-                                                onchange="viewImage(event)" required="">
+                                                onchange="viewImage(event)" required="" multiple>
                                         </div>
                                     </div>
                                 </div> <!-- row.// -->

@@ -71,17 +71,19 @@
                                 <div class="row gx-1">
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label">Main Category</label>
-                                        <select class="form-select" name="category" value="{{data.product.category}}">
+                                        <select id="main-category" class="form-select" name="category" required="">
+                                            <option> {{data.product.category}}</option>
                                             <option> Men's Clothing </option>
-                                            <option> Woomen's Clothing </option>
+                                            <option> Women's Clothing </option>
                                             <option> Kid's Clothing </option>
                                         </select>
                                     </div>
                                     <div class="col-sm-6 mb-3">
                                         <label class="form-label">Sub-category</label>
-                                        <select class="form-select" name="subCategory">
+                                        <select id="sub-category" class="form-select" name="subCategory" required="">
+                                            <!-- Subcategories will be loaded dynamically -->
                                             {{#each data.categories}}
-                                            <option> {{subCategory}} </option>
+                                            <option> {{subCategory}}</option>
                                             {{/each}}
                                         </select>
                                     </div>
@@ -113,4 +115,37 @@
             document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
-  
+
+    <script>
+        $(document).ready(function () {
+            // Listen for the change event on the main category select element
+            $('#main-category').change(function () {
+                // Get the selected value of the main category select element
+                var mainCategory = $('#main-category').val();
+
+                // Send an AJAX request to your server with the selected main category value
+                $.ajax({
+                    url: '/admin/get-subcategories',
+                    type: 'POST',
+                    data: { mainCategory: mainCategory },
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                        // Parse the JSON object and use it to populate the subcategory select element
+                        var subCategories = response.subCategory;
+                        var options = '<option value="">Select a subcategory</option>';
+                        for (var i = 0; i < subCategories.length; i++) {
+                            options += '<option value="' + subCategories[i] + '">' + subCategories[i] + '</option>';
+                        }
+                        $('#sub-category').html(options);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr);
+                        console.error(status);
+                        console.error(error);
+                    }
+                });
+            });
+        });
+
+    </script>

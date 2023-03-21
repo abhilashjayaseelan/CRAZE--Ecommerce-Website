@@ -1,9 +1,5 @@
-const { response } = require('../app');
 const userHelpers = require('../helpers/user-helpers');
-const twilio = require('twilio');
 const sendOtp = require('../middlewares/twilio');
-const { Enqueue } = require('twilio/lib/twiml/VoiceResponse');
-
 
 module.exports = {
    // home page
@@ -11,7 +7,7 @@ module.exports = {
       userHelpers.homePage().then((data) => {
          let user = req.session.user;
          products = JSON.parse(JSON.stringify(data));
-         console.log(products);
+         // console.log(products);
          res.render('user/view-products', { user, products, itsUser: true });
       })
    },
@@ -98,7 +94,7 @@ module.exports = {
          console.log(mobile);
          let otp = req.body.otp;
          sendOtp.verifying_otp(mobile, otp).then((varification) => {
-            // console.log(varification.status);
+            // console.log(verification.status);
             if (varification.status === 'approved') {
                res.redirect('/');
             } else {

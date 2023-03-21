@@ -500,11 +500,12 @@
             // Show a SweetAlert popup with options for PDF and Excel
             Swal.fire({
                 title: 'Select a file format',
-                text: 'Please choose the format in which you want to generate the sales report',
+                text: 'Please choose the file format of sales report',
                 showCancelButton: true,
                 confirmButtonText: '<i class="fas fa-file-pdf"></i> PDF',
                 cancelButtonText: '<i class="fas fa-file-excel"></i> Excel',
-                cancelButtonColor: '#d33',
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#076905',
                 reverseButtons: true,
                 focusConfirm: true,
                 focusCancel: false,
@@ -613,5 +614,5 @@
             })
         }
 
-       // nfirmButtonColor: '#3085d6',
+    
     </script>

@@ -11,6 +11,10 @@ const sessionHandling = require('../middlewares/session-handling');
 // user home page
 router.get('/', userControllers.getHomePage);
 
+// category wise filter
+router.get('/category-wise-filter',
+productControllers.categoryWise);
+
 // user login & logout
 router.route('/login')
     .get(userControllers.getLogin)
@@ -23,7 +27,7 @@ router.route('/otp-login')
     .get(userControllers.getOtpLogin)
     .post(userControllers.postOtpLogin);
 
-// otp varification
+// otp verification
 router.route('/otp-varification')
     .get(userControllers.getOtpVarification)
     .post(userControllers.postOtpVarification);
@@ -37,8 +41,8 @@ router.route('/signup')
 router.get('/view-products',
     userControllers.getHomePage);
 
-// sigle product view
-router.get('/view-sigleProduct/:id',
+// single product view
+router.get('/view-singleProduct/:id',
     productControllers.getProduct);
 
 // getting the user profile page
@@ -92,12 +96,13 @@ router.get('/checkout',
 router.post('/place-order',
     cartController.placeOrder);
 
-// varify payment
+// verify payment
 router.post('/verify-payment',
     userControllers.verifyPayment);
 
 // go to the order page
 router.get('/orders',
+    sessionHandling.checkingUser,
     userControllers.showOrders);
 
 // view order details

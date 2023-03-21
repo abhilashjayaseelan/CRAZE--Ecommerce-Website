@@ -1,403 +1,340 @@
-
-    <main class="main">
-        <div class="page-header breadcrumb-wrap">
-            <div class="container">
-                <div class="breadcrumb">
-                    <a href="/" rel="nofollow">Home</a>
-                    <span></span> Shop
-                    <span></span> Checkout
-                </div>
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Shop
+                <span></span> Checkout
             </div>
         </div>
-        <section class="mt-50 mb-50">
-            <div class="container">
-                {{!-- <div class="row">
-                    <div class="col-lg-6 mb-sm-15">
-                        <div class="toggle_info">
-                            <span><i class="fi-rs-user mr-10"></i><span class="text-muted">Already have an
-                                    account?</span> <a href="#loginform" data-bs-toggle="collapse" class="collapsed"
-                                    aria-expanded="false">Click here to login</a></span>
-                        </div>
-                        <div class="panel-collapse collapse login_form" id="loginform">
-                            <div class="panel-body">
-                                <p class="mb-30 font-sm">If you have shopped with us before, please enter your details
-                                    below. If you are a new customer, please proceed to the Billing &amp; Shipping
-                                    section.</p>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" name="email" placeholder="Username Or Email">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="password" name="password" placeholder="Password">
-                                    </div>
-                                    <div class="login_footer form-group">
-                                        <div class="chek-form">
-                                            <div class="custome-checkbox">
-                                                <input class="form-check-input" type="checkbox" name="checkbox"
-                                                    id="remember" value="">
-                                                <label class="form-check-label" for="remember"><span>Remember
-                                                        me</span></label>
-                                            </div>
-                                        </div>
-                                        <a href="#">Forgot password?</a>
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn btn-md" name="login">Log in</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="toggle_info">
-                            <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a
-                                    href="#coupon" data-bs-toggle="collapse" class="collapsed"
-                                    aria-expanded="false">Click here to enter your code</a></span>
-                        </div>
-                        <div class="panel-collapse collapse coupon_form " id="coupon">
-                            <div class="panel-body">
-                                <p class="mb-30 font-sm">If you have a coupon code, please apply it below.</p>
-                                <form method="post">
-                                    <div class="form-group">
-                                        <input type="text" placeholder="Enter Coupon Code...">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn  btn-md" name="login">Apply Coupon</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-                <div class="row">
-                    <h3>Checkout</h3>
-                    <div class="col-12">
-                        <div class="divider mt-50 mb-50"></div>
-                    </div>
-                </div>
+    </div>
+    <section class="mt-50 mb-50">
+        <div class="container">
 
-                {{!-- modal for adding new address --}}
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">New address</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div>
-                                <form action="/add-address" method="post" enctype="multipart/form-data">
-                                    <div class="form-group">
-                                        <input type="text" required="" name="name" placeholder="Name *" id="user-name"
-                                            onkeyup="validateName()">
-                                        <span id="name-error"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input required="" type="tel" name="mobile" placeholder="Mobile *"
-                                            id="user-phone" onkeyup="validatePhone()">
-                                        <span id="phone-error"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input required="" type="text" name="pincode" placeholder="Postcode *"
-                                            id="user-pin-code" onkeyup="validatePinCode()">
-                                        <span id="pin-code-error"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="area" required="" placeholder="Address *">
-                                    </div>
-                                    <div class="form-group">
-                                        <input required="" type="text" name="locality" placeholder="Locality *">
-                                    </div>
-                                    <div class="form-group">
-                                        <input required="" type="text" name="district" placeholder="District *">
-                                        <input type="text" name="newAddress" hidden value="true">
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom_select">
-                                            <select class="form-control select-active" name="state"
-                                                style="width: 140px;">
-                                                <option>Kerala</option>
-                                                <option>Tamil Nadu</option>
-                                                <option>Andrapradesh</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary"
-                                            onclick="return validateAddress()">Save</button>
-                                        <span id="submit-error"></span>
-                                    </div>
-                                </form>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                {{!-- address and payment method selection to chechout --}}
-                <form id="checkout-form">
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <input type="text" hidden name="userId" value="{{user.response._id}}">
-                            <div class="mb-25">
-                                <h4>Select Address</h4>
-                            </div>
-                            <div class="payment_option">
-                                {{#each address}}
-                                <div class="order_review">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="deliveryAddress"
-                                            id="flexRadioDefault1" value="{{_id}}" required>
-                                        <label class="form-check-label" for="flexRadioDefault1">
-                                            <ul>
-                                                <li>Name: {{name}}</li>
-                                                <li>Mobile: {{mobile}}</li>
-                                                <li>Pincode: {{pincode}}</li>
-                                                <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
-                                                <br>
-                                            </ul>
-                                        </label>
-                                    </div>
-
-                                </div>
-                                <br>
-                                {{/each}}
-                            </div>
-
-
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add new address</button>
-
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="order_review">
-                                <div class="mb-20">
-                                    <h4>Your Orders</h4>
-                                </div>
-                                <div class="table-responsive order_table text-center">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">Product</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{#each products}}
-                                            <tr>
-                                                <td class="image product-thumbnail"><img
-                                                        src="/images/{{product._id}}.jpg" alt="#"></td>
-                                                <td>
-                                                    <h5><a href="#">{{product.name}}</a></h5>
-                                                    <span class="product-qty">x {{quantity}}</span>
-                                                </td>
-                                                <td>₹{{prices product.price product.discountedPrice}}</td>
-                                            </tr>
-                                            {{/each}}
-
-                                            <tr>
-                                                <th>SubTotal</th>
-                                                <td class="product-subtotal" colspan="2">₹{{total}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Shipping</th>
-                                                <td colspan="2"><em>Free Shipping</em></td>
-                                            </tr>
-                                            <tr>
-                                                <th>Total</th>
-                                                <td colspan="2" class="product-subtotal"><span
-                                                        class="font-xl text-brand fw-900">₹{{total}}</span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="bt-1 border-color-1 mt-30 mb-30"></div>
-                                <div class="payment_method">
-                                    <div class="mb-25">
-                                        <h5>Payment</h5>
-                                    </div>
-                                    <div class="payment_option">
-                                        <div class="custome-radio">
-                                            <input class="form-check-input" required="" type="radio"
-                                                name="payment_option" id="exampleRadios3" checked="" value="COD">
-                                            <label class="form-check-label" for="exampleRadios3"
-                                                data-bs-toggle="collapse" data-target="#"
-                                                aria-controls="bankTranfer">COD</label>
-                                        </div>
-                                        <div class="custome-radio">
-                                            <input class="form-check-input" required="" type="radio"
-                                                name="payment_option" id="exampleRadios4" checked="" value="Razorpay">
-                                            <label class="form-check-label" for="exampleRadios4"
-                                                data-bs-toggle="collapse" data-target="#"
-                                                aria-controls="checkPayment">RazorPay</label>
-                                        </div>
-                                        <div class="custome-radio">
-                                            <input class="form-check-input" required="" type="radio"
-                                                name="payment_option" id="exampleRadios5" checked="" value="Paypal">
-                                            <label class="form-check-label" for="exampleRadios5"
-                                                data-bs-toggle="collapse" data-target="#"
-                                                aria-controls="paypal">Paypal</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button class="btn btn-fill-out btn-block mt-30">Place Order</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-            </div>
-        </section>
-    </main>
-    <footer class="main">
-        <section class="newsletter p-30 text-white wow fadeIn animated">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-7 mb-md-3 mb-lg-0">
-                        <div class="row align-items-center">
-                            <div class="col flex-horizontal-center">
-                                <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
-                                <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
-                            </div>
-                            <div class="col my-4 my-md-0 des">
-                                <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first
-                                        shopping.</strong></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <!-- Subscribe Form -->
-                        <form class="form-subcriber d-flex wow fadeIn animated">
-                            <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
-                            <button class="btn bg-dark text-white" type="submit">Subscribe</button>
-                        </form>
-                        <!-- End Subscribe Form -->
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="section-padding footer-mid">
-            <div class="container pt-15 pb-20">
-                <div class="row">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="widget-about font-md mb-md-5 mb-lg-0">
-                            <div class="logo logo-width-1 wow fadeIn animated">
-                                <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
-                            </div>
-                            <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
-                            <p class="wow fadeIn animated">
-                                <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
-                            </p>
-                            <p class="wow fadeIn animated">
-                                <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
-                            </p>
-                            <p class="wow fadeIn animated">
-                                <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
-                            </p>
-                            <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
-                            <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
-                                <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2 col-md-3">
-                        <h5 class="widget-title wow fadeIn animated">About</h5>
-                        <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Delivery Information</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms &amp; Conditions</a></li>
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Support Center</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-2  col-md-3">
-                        <h5 class="widget-title wow fadeIn animated">My Account</h5>
-                        <ul class="footer-list wow fadeIn animated">
-                            <li><a href="#">Sign In</a></li>
-                            <li><a href="#">View Cart</a></li>
-                            <li><a href="#">My Wishlist</a></li>
-                            <li><a href="#">Track My Order</a></li>
-                            <li><a href="#">Help</a></li>
-                            <li><a href="#">Order</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-4">
-                        <h5 class="widget-title wow fadeIn animated">Install App</h5>
-                        <div class="row">
-                            <div class="col-md-8 col-lg-12">
-                                <p class="wow fadeIn animated">From App Store or Google Play</p>
-                                <div class="download-app wow fadeIn animated">
-                                    <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
-                                            src="assets/imgs/theme/app-store.jpg" alt=""></a>
-                                    <a href="#" class="hover-up"><img src="assets/imgs/theme/google-play.jpg"
-                                            alt=""></a>
-                                </div>
-                            </div>
-                            <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
-                                <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
-                                <img class="wow fadeIn animated" src="assets/imgs/theme/payment-method.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <div class="container pb-20 wow fadeIn animated">
             <div class="row">
-                <div class="col-12 mb-20">
-                    <div class="footer-bottom"></div>
+                <h3>Checkout</h3>
+                <div class="col-12">
+                    <div class="divider mt-50 mb-50"></div>
                 </div>
-                <div class="col-lg-6">
-                    <p class="float-md-left font-sm text-muted mb-0">&copy; 2021, <strong
-                            class="text-brand">Evara</strong> - HTML Ecommerce Template </p>
+            </div>
+
+            {{!-- modal for adding new address --}}
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">New address</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div>
+                            <form action="/add-address" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input type="text" required="" name="name" placeholder="Name *" id="user-name"
+                                        onkeyup="validateName()">
+                                    <span id="name-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="tel" name="mobile" placeholder="Mobile *" id="user-phone"
+                                        onkeyup="validatePhone()">
+                                    <span id="phone-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="text" name="pincode" placeholder="Postcode *"
+                                        id="user-pin-code" onkeyup="validatePinCode()">
+                                    <span id="pin-code-error"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="area" required="" placeholder="Address *">
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="text" name="locality" placeholder="Locality *">
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="text" name="district" placeholder="District *">
+                                    <input type="text" name="newAddress" hidden value="true">
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom_select">
+                                        <select class="form-control select-active" name="state" style="width: 140px;">
+                                            <option>Kerala</option>
+                                            <option>Tamil Nadu</option>
+                                            <option>Andrapradesh</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary"
+                                        onclick="return validateAddress()">Save</button>
+                                    <span id="submit-error"></span>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <p class="text-lg-end text-start font-sm text-muted mb-0">
-                        Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
-                        reserved
-                    </p>
+            </div>
+
+            {{!-- address and payment method selection to chechout --}}
+            <form id="checkout-form">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" hidden name="userId" value="{{user.response._id}}">
+                        <div class="mb-25">
+                            <h4>Select Address</h4>
+                        </div>
+                        <div class="payment_option">
+                            {{#each address}}
+                            <div class="order_review">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="deliveryAddress"
+                                        id="flexRadioDefault1" value="{{_id}}" required>
+                                    <label class="form-check-label" for="flexRadioDefault1">
+                                        <ul>
+                                            <li>Name: {{name}}</li>
+                                            <li>Mobile: {{mobile}}</li>
+                                            <li>Pincode: {{pincode}}</li>
+                                            <li>Address: {{locality}}, {{area}}, {{district}}, {{state}}</li>
+                                            <br>
+                                        </ul>
+                                    </label>
+                                </div>
+
+                            </div>
+                            <br>
+                            {{/each}}
+                        </div>
+
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add new address</button>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="order_review">
+                            <div class="mb-20">
+                                <h4>Your Orders</h4>
+                            </div>
+                            <div class="table-responsive order_table text-center">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each products}}
+                                        <tr>
+                                            <td class="image product-thumbnail"><img src="{{product.images.image1}}"
+                                                    alt="#"></td>
+                                            <td>
+                                                <h5><a href="#">{{product.name}}</a></h5>
+                                                <span class="product-qty">x {{quantity}}</span>
+                                            </td>
+                                            <td>₹{{prices product.price product.discountedPrice}}</td>
+                                        </tr>
+                                        {{/each}}
+
+                                        <tr>
+                                            <th>SubTotal</th>
+                                            <td class="product-subtotal" colspan="2">₹{{total}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Shipping</th>
+                                            <td colspan="2"><em>Free Shipping</em></td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total</th>
+                                            <td colspan="2" class="product-subtotal"><span
+                                                    class="font-xl text-brand fw-900">₹{{total}}</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            
+                            <div class="payment_method">
+                                <div class="mb-25">
+                                    <h5>Payment</h5>
+                                </div>
+                                <div class="payment_option">
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios3" checked="" value="COD">
+                                        <label class="form-check-label" for="exampleRadios3" data-bs-toggle="collapse"
+                                            data-target="#" aria-controls="bankTranfer">COD</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios4" checked="" value="Razorpay">
+                                        <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
+                                            data-target="#" aria-controls="checkPayment">RazorPay</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios5" checked="" value="Paypal">
+                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
+                                            data-target="#" aria-controls="paypal">Paypal</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn btn-fill-out btn-block mt-30">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </section>
+</main>
+<footer class="main">
+    <section class="newsletter p-30 text-white wow fadeIn animated">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 mb-md-3 mb-lg-0">
+                    <div class="row align-items-center">
+                        <div class="col flex-horizontal-center">
+                            <img class="icon-email" src="assets/imgs/theme/icons/icon-email.svg" alt="">
+                            <h4 class="font-size-20 mb-0 ml-3">Sign up to Newsletter</h4>
+                        </div>
+                        <div class="col my-4 my-md-0 des">
+                            <h5 class="font-size-15 ml-4 mb-0">...and receive <strong>$25 coupon for first
+                                    shopping.</strong></h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <!-- Subscribe Form -->
+                    <form class="form-subcriber d-flex wow fadeIn animated">
+                        <input type="email" class="form-control bg-white font-small" placeholder="Enter your email">
+                        <button class="btn bg-dark text-white" type="submit">Subscribe</button>
+                    </form>
+                    <!-- End Subscribe Form -->
                 </div>
             </div>
         </div>
+    </section>
+    <section class="section-padding footer-mid">
+        <div class="container pt-15 pb-20">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="widget-about font-md mb-md-5 mb-lg-0">
+                        <div class="logo logo-width-1 wow fadeIn animated">
+                            <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
+                        </div>
+                        <h5 class="mt-20 mb-10 fw-600 text-grey-4 wow fadeIn animated">Contact</h5>
+                        <p class="wow fadeIn animated">
+                            <strong>Address: </strong>562 Wellington Road, Street 32, San Francisco
+                        </p>
+                        <p class="wow fadeIn animated">
+                            <strong>Phone: </strong>+01 2222 365 /(+91) 01 2345 6789
+                        </p>
+                        <p class="wow fadeIn animated">
+                            <strong>Hours: </strong>10:00 - 18:00, Mon - Sat
+                        </p>
+                        <h5 class="mb-10 mt-30 fw-600 text-grey-4 wow fadeIn animated">Follow Us</h5>
+                        <div class="mobile-social-icon wow fadeIn animated mb-sm-5 mb-md-0">
+                            <a href="#"><img src="assets/imgs/theme/icons/icon-facebook.svg" alt=""></a>
+                            <a href="#"><img src="assets/imgs/theme/icons/icon-twitter.svg" alt=""></a>
+                            <a href="#"><img src="assets/imgs/theme/icons/icon-instagram.svg" alt=""></a>
+                            <a href="#"><img src="assets/imgs/theme/icons/icon-pinterest.svg" alt=""></a>
+                            <a href="#"><img src="assets/imgs/theme/icons/icon-youtube.svg" alt=""></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3">
+                    <h5 class="widget-title wow fadeIn animated">About</h5>
+                    <ul class="footer-list wow fadeIn animated mb-sm-5 mb-md-0">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Delivery Information</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms &amp; Conditions</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Support Center</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2  col-md-3">
+                    <h5 class="widget-title wow fadeIn animated">My Account</h5>
+                    <ul class="footer-list wow fadeIn animated">
+                        <li><a href="#">Sign In</a></li>
+                        <li><a href="#">View Cart</a></li>
+                        <li><a href="#">My Wishlist</a></li>
+                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">Order</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="widget-title wow fadeIn animated">Install App</h5>
+                    <div class="row">
+                        <div class="col-md-8 col-lg-12">
+                            <p class="wow fadeIn animated">From App Store or Google Play</p>
+                            <div class="download-app wow fadeIn animated">
+                                <a href="#" class="hover-up mb-sm-4 mb-lg-0"><img class="active"
+                                        src="assets/imgs/theme/app-store.jpg" alt=""></a>
+                                <a href="#" class="hover-up"><img src="assets/imgs/theme/google-play.jpg" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-12 mt-md-3 mt-lg-0">
+                            <p class="mb-20 wow fadeIn animated">Secured Payment Gateways</p>
+                            <img class="wow fadeIn animated" src="assets/imgs/theme/payment-method.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container pb-20 wow fadeIn animated">
+        <div class="row">
+            <div class="col-12 mb-20">
+                <div class="footer-bottom"></div>
+            </div>
+            <div class="col-lg-6">
+                <p class="float-md-left font-sm text-muted mb-0">&copy; 2021, <strong class="text-brand">Evara</strong>
+                    - HTML Ecommerce Template </p>
+            </div>
+            <div class="col-lg-6">
+                <p class="text-lg-end text-start font-sm text-muted mb-0">
+                    Designed by <a href="http://alithemes.com/" target="_blank">Alithemes.com</a>. All rights
+                    reserved
+                </p>
+            </div>
+        </div>
+    </div>
 
-<script>
-    $("#checkout-form").submit((e) => {
-        e.preventDefault();
-        $.ajax({
-            method: 'POST',
-            url: ('/place-order'),
-            data: $('#checkout-form').serialize(),
-            success: (response) => {
-                switch (response.status) {
-                    case 'cod':
-                        swal(
-                            "Successfull !",
-                            "Order Placed Successfully !",
-                            "success"
-                        ).then(() => {
-                            location.replace('/orders');
-                        });
-                    case 'razorpay':
-                        razorPayPayment(response)
-                        
+    <script>
+        $("#checkout-form").submit((e) => {
+            e.preventDefault();
+            $.ajax({
+                method: 'POST',
+                url: ('/place-order'),
+                data: $('#checkout-form').serialize(),
+                success: (response) => {
+                    switch (response.status) {
+                        case 'cod':
+                            swal(
+                                "Successfull !",
+                                "Order Placed Successfully !",
+                                "success"
+                            ).then(() => {
+                                location.replace('/orders');
+                            });
+                        case 'razorpay':
+                            razorPayPayment(response)
+
+                    }
+                },
+                error: (response, stat, err) => {
+                    console.log(response);
                 }
-            },
-            error: (response, stat, err) => {
-                console.log(response);
-            }
 
+            })
         })
-    })
 
-</script>
-{{!-- function (order) --}}
+    </script>
+    {{!-- function (order) --}}

@@ -31,14 +31,15 @@
                             {{#each products}}
                             <tbody>
                                 <tr>
-                                    <td class="image product-thumbnail"><img src="/images/{{product._id}}.jpg" alt="#">
+                                    <td class="image product-thumbnail"><img src="{{product.images.image1}}" alt="#">
                                     </td>
                                     <td class="product-des product-name">
                                         <h5 class="product-name"><a href="#">{{product.name}}</a></h5>
                                         <p class="font-xs">{{product.description}}
                                         </p>
                                     </td>
-                                    <td class="price" data-title="Price"><span>₹{{prices product.price product.discountedPrice}}</span>
+                                    <td class="price" data-title="Price"><span>₹{{prices product.price
+                                            product.discountedPrice}}</span>
                                     </td>
                                     {{!-- <td class="text-right" data-title="Cart">
                                         <span>₹{{product.price}}</span>
@@ -98,6 +99,34 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                {{!-- coupon section --}}
+                                <div class="mb-30 mt-50">
+                                    <div class="heading_s1 mb-3">
+                                        <h4>Apply Coupon</h4>
+                                    </div>
+                                    <div class="total-amount">
+                                        <div class="left">
+                                            <div class="coupon">
+                                                <form action="#" target="_blank">
+                                                    <div class="form-row row justify-content-center">
+                                                        <div class="form-group col-lg-6">
+                                                            <input class="font-medium" name="Coupon"
+                                                                placeholder="Enter Your Coupon">
+                                                        </div>
+                                                        <div class="form-group col-lg-6">
+                                                            <button class="btn  btn-sm"><i
+                                                                    class="fi-rs-label mr-10"></i>Apply</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h5>Amount need to pay: ₹ {{total}}</h5>
+                                </div>
+
+
                                 <a href="/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To
                                     CheckOut</a>
                             </div>
@@ -105,6 +134,8 @@
                     </div>
                     {{/if}}
                 </div>
+
+
                 {{!-- <div class="cart-action text-end">
                     <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
                     <a class="btn " href="/"><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
