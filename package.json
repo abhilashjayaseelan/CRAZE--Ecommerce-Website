@@ -20,6 +20,7 @@
     "handlebars": "^4.7.7",
     "hbs": "^4.2.0",
     "http-errors": "~1.6.3",
+    "moment": "^2.29.4",
     "mongodb": "^4.13.0",
     "mongoose": "^6.8.2",
     "morgan": "~1.9.1",
@@ -29,6 +30,7 @@
     "nodemon": "^2.0.20",
     "pdfkit": "^0.13.0",
     "razorpay": "^2.8.6",
+    "shortid": "^2.2.16",
     "sweetalert2": "^11.7.3",
     "twilio": "^3.84.0"
   }

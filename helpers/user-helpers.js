@@ -1,6 +1,9 @@
-const { user, products, orders, wishlist, wallet } = require("../models/connection");
+const { user, products, orders, wishlist, wallet, userCouponSchema, couponTemplateSchema } = require("../models/connection");
 const bcrypt = require('bcrypt');
 const objectId = require('mongodb').ObjectId
+const moment = require('moment');
+const shortid = require('shortid');
+
 
 module.exports = {
   doSignup: (userData) => {
@@ -230,7 +233,7 @@ module.exports = {
       .catch((err) => {
         throw new Error('Error cancelling order.');
       });
-  },   
+  },
 
   // add to wish-list
   addToWishlist: (userId, productId) => {
@@ -354,9 +357,40 @@ module.exports = {
           resolve(response);
         })
       } catch (err) {
-        reject(err) ; 
+        reject(err);
       }
     })
+  },
+
+  // generating coupon
+  generateCoupon: async (totalPrice, order, userId) => {
+    try {
+      if (totalPrice > 1000 || order.length > 1) {
+        // Generate random coupon
+        let couponTemplate = await couponTemplateSchema.aggregate([{ $sample: { size: 1 } }]);
+        let code = shortid.generate();
+        let endDate = moment().add(1, 'months');
+
+        // Save the coupon in the userCoupon collection
+        let userCoupon = new userCouponSchema({
+          userId: userId,
+          couponTemplate: couponTemplate[0]._id,
+          code: code,
+          endDate: endDate,
+          maxDiscountAmount: couponTemplate[0].maxDiscountAmount,
+          discountPercentage: couponTemplate[0].discountPercentage,
+          minAmount: couponTemplate[0].minAmount,
+          category: couponTemplate[0].category,
+          description: couponTemplate[0].description
+        });
+        await userCoupon.save();
+      }
+      console.log('coupon generated');
+      return;
+    } catch (err) {
+      console.log("coupon error", err);
+      return;
+    }
   }
 
 }

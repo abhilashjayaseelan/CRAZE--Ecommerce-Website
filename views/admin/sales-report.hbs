@@ -1,0 +1,159 @@
+<div class="screen-overlay"></div>
+
+<main class="main-wrap">
+
+    <section class="content-main">
+        <div class="card mb-4">
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <form action="/admin/date-wise-report" method="post">
+                        <span style="float: left;">From</span>
+                        <div class="col-md-2 col-6" style="float: left;">
+                            <input type="date" value="" class="form-control" name="fromDate" required>
+                        </div>
+                        <span style="float: left;">To</span>
+                        <div class="col-md-2 col-6" style="float: left;">
+                            <input type="date" value="" class="form-control" name="toDate" required>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-md rounded font-sm">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </header>
+            <div>
+                <div class="card-body" id="sales-report">
+                    <h4 class="card-title">Sales summery</h4>
+                    <div class="table-responsive">
+                        <div class="table-responsive">
+                            <table  id="sales-table" class="table align-middle table-nowrap mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center" scope="col">Sl No</th>
+                                        <th class="text-center" scope="col">Date</th>
+                                        <th class="text-center" scope="col">Number of orders</th>
+                                        <th class="text-center" scope="col">Total revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each dateWise}}
+                                    <tr>
+                                        <td class="text-center">
+                                            {{index @index}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{_id.date}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{totalOrders}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{totalRevenue}}
+                                        </td>
+                                    </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div> <!-- table-responsive end// -->
+
+                    <br>
+                    <br>
+                    <div class="table-responsive col-4">
+                        <table class="table align-middle table-nowrap mb-0">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="">Total users</a>
+                                    </td>
+                                    <td>
+                                        <P>{{users}}</P>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="">Total Products</a>
+                                    </td>
+                                    <td>
+                                        <p>{{products}}</p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="">Total orders</a>
+                                    </td>
+                                    <td>
+                                        <p>{{orders}}</p>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <a href="">Monthly revenue</a>
+                                    </td>
+                                    <td>
+                                        <p>₹ {{totalSales}}</p>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="float: right;">
+                    {{!-- <button class="btn btn-primary" id=""><i
+                            class="text-muted material-icons md-post_add"></i>Download Excel</button> --}}
+
+                    <button class="btn btn-primary" id="pdf"><i
+                            class="text-muted material-icons md-post_add"></i>Download Pdf</button>
+                </div>
+            </div>
+        </div>
+    </section> <!-- content-main end// -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.8/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#pdf').click(function (e) {
+                event.preventDefault();
+                var element = document.getElementById('sales-report');
+                let randomNumber = Math.floor(Math.random() * (10000000000 - 1)) + 1;
+                var opt = {
+                    margin: 0,
+                    filename: 'SalesReport' + randomNumber + '.pdf',
+                    html2canvas: { scale: 10 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                html2pdf().set(opt).from(element).save();
+            })
+        })
+        $(document).ready(function () {
+            $('#xlsheet').on('click', function () {
+                const rows = $('#sales-table tr');
+                const data = [];
+                // Loop through rows and cells to build the data array
+                rows.each(function (index, row) {
+                    const rowData = [];
+                    $(row).find('th, td').each(function (index, cell) {
+                        rowData.push($(cell).text());
+                    });
+                    data.push(rowData);
+                });
+                // Convert the data array to a SheetJS workbook and sheet
+                const ws = XLSX.utils.aoa_to_sheet(data);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                // Save the workbook as an Excel file
+                XLSX.writeFile(wb, 'sales-table.xlsx');
+            });
+        });
+    </script>

@@ -13,9 +13,9 @@ router.get('/', userControllers.getHomePage);
 
 // category wise filter
 router.get('/category-wise-filter',
-productControllers.categoryWise);
+    productControllers.categoryWise);
 
-// user login & logout
+// user login & logout 
 router.route('/login')
     .get(userControllers.getLogin)
     .post(userControllers.postLogin);
@@ -143,6 +143,16 @@ router.get('/remove-from-wishlist',
 router.get('/user-wallet',
     sessionHandler.checkingUser,
     userControllers.getWallet);
+
+// coupon page
+router.get('/my-coupons',
+    sessionHandler.checkingUser,
+    userProfileController.getCoupons);
+
+// applying coupon
+router.post('/apply-coupon',
+    sessionHandler.checkingUser,
+    userControllers.applyCoupon);
 
 
 module.exports = router;  

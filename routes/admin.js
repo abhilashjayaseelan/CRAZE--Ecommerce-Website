@@ -52,7 +52,7 @@ router.get('/view-products',
 router.route('/add-product')
     .get(sessionHandler.checkingAdmin,
         productController.getAddProduct)
-    .post(upload,productController.postAddProduct);
+    .post(upload, productController.postAddProduct);
 
 // edit product
 router.route('/edit-product/:id')
@@ -89,7 +89,7 @@ router.get('/user-orders',
     adminController.getuserOrders);
 
 // order details
-router.get('/user-orderDetails/:id',  
+router.get('/user-orderDetails/:id',
     sessionHandler.checkingAdmin,
     adminController.getOrderDetails);
 
@@ -99,7 +99,7 @@ router.post('/search-order',
     adminController.searchOrders);
 
 // change order status
-router.post('/change-status',  
+router.post('/change-status',
     adminController.changeOrderStatus);
 
 // offers
@@ -110,13 +110,19 @@ router.route('/offers')
         productController.postOffer);
 
 // creating report 
-router.post('/create-report',
-    adminController.makeReport); 
+router.route('/create-report')
+    .get(sessionHandler.checkingAdmin,
+        adminController.getReport)
+    .post(adminController.makeReport);
+
+// date wise report
+router.post('/date-wise-report',
+    adminController.dateWiseReport);
 
 // creating coupons
 router.route('/coupons')
     .get(sessionHandler.checkingAdmin,
         adminController.getCoupon)
-    .post(adminController.postCoupon);   
+    .post(adminController.postCoupon);
 
 module.exports = router;

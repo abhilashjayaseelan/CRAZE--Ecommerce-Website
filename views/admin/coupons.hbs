@@ -14,8 +14,6 @@
                 <div class="row">
                     <div class="col-md-3">
                         <form id="create-coupon-form">
-                            <label for="coupon-code">Coupon Code:</label>
-                            <input class="form-control" type="text" id="coupon-code" name="code" required>
 
                             <label for="discount-percentage">Discount Percentage:</label>
                             <input class="form-control" type="number" id="discount-percentage" name="discountPercentage"
@@ -29,58 +27,70 @@
                             <input class="form-control" type="number" id="minimum-purchase-amount" name="minAmount"
                                 required min="0">
 
-                            <label for="start-date">Start Date:</label>
-                            <input class="form-control" type="date" name="startDate" id="start-date" required>
+                            <label for="category">Category:</label>
+                            <select class="form-select" name="category" id="main-category">
+                                <option></option>
+                                <option>Men's Clothing</option>
+                                <option>Women's Clothing</option>
+                                <option>Kid's Clothing</option>
+                            </select>
 
-                            <label for="expiration-date">Expiration Date:</label>
-                            <input class="form-control" type="date" id="expiration-date" name="endDate" required>
-
+                            <label for="minimum-purchase-amount">Coupon Description:</label>
+                            <input class="form-control" type="text" id="coupon-description" name="description" required
+                                min="0">
                             <hr>
+
+
+
                             <div>
                                 <button class="btn btn-primary">Create Coupon</button>
                             </div>
                         </form>
                     </div>
                     <div class="col-md-9">
+                        {{!-- <label for="minimum-purchase-amount">Coupon Description:</label> --}}
                         <div class="table-responsive">
                             <table class="table table-hover" style="overflow: hidden;">
                                 <thead>
-                                    <tr>
-                                        <th>Sl No.</th>
-                                        <th>Main Category</th>
-                                        <th>Sub-category</th>
-                                        <th class="text-end">Action</th>
+                                    <tr style="background-color: rgb(199, 210, 206);">
+                                        <th class="text-center">Sl No.</th>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Offer Percentage</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {{#each categories}}
+                                <tbody id="ordersContainer">
+                                    {{#each coupons}}
                                     <tr>
-                                        {{!-- <td class="text-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" />
-                                            </div>
-                                        </td> --}}
-                                        <td><b>{{name}}</b></td>
-                                        <td>{{subCategory}}</td>
-                                        <td class="text-end">
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown"
-                                                    class="btn btn-light rounded btn-sm font-sm"> <i
-                                                        class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item"
-                                                        href="/admin/editProdutCategory/{{_id}}">Edit info</a>
-                                                    {{!-- <a class="dropdown-item text-danger"
-                                                        href="/admin/deleteProductCategory/{{_id}}">Delete</a> --}}
-                                                </div>
-                                            </div> <!-- dropdown //end -->
+                                        <td class="text-center">
+                                            {{index @index}}
                                         </td>
+                                        <td class="text-center">
+                                            {{_id}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{discountPercentage}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{description}}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-sm btn-light font-sm rounded">Delete</a>
+                                        </td>
+
                                     </tr>
                                     {{/each}}
 
                                 </tbody>
                             </table>
+                            <div class="pagination-area mt-15 mb-50">
+                                <nav aria-label="Page navigation example">
+                                    <ul id="paginationContainer" class="pagination justify-content-start">
+                                    </ul>
+                                </nav>
+                                        
+                            </div>
                         </div>
                     </div> <!-- .col// -->
                 </div> <!-- .row // -->
@@ -108,7 +118,8 @@
                                 icon: "success",
                                 button: "OK",
                             });
-                            $('#create-coupon-form')[0].reset();
+                            location.reload();
+                            // $('#create-coupon-form')[0].reset();
                         } else {
                             // Display an error message if the server-side validation failed
                             alert(response.message);
@@ -121,4 +132,30 @@
                 });
             });
         });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 5;
+            const numItems = $('#ordersContainer').children().length;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+
+            // Create pagination links
+            for (let i = 1; i <= numPages; i++) {
+                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+            }
+
+            // Bind click event to pagination links
+            $('.page-link').click(function (e) {
+                const currentPage = $(this).data('page');
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+                return false;
+            })
+            // Show first page by default
+            $('.page-link:first').addClass('active');
+            $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
+        })
     </script>

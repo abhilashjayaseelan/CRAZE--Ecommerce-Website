@@ -42,9 +42,9 @@
 
             <table class="table align-middle mb-0 bg-white">
                 <thead class="bg-light">
-                    <tr>
-                        <th>Product name $ Brand</th>
-                        <th>category $ sub category</th>
+                    <tr style="background-color: rgb(199, 210, 206);">
+                        <th>Product name & Brand</th>
+                        <th>category & sub category</th>
                         <th>Description</th>
                         <th>Color</th>
                         <th>Price</th>
@@ -52,8 +52,8 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                {{#each products}}
-                <tbody>
+                <tbody id="ordersContainer">
+                    {{#each products}}
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -81,29 +81,49 @@
                         </td>
                         <td>
                             <a href="/admin/edit-product/{{_id}}" class="btn btn-sm font-sm rounded btn-brand">
-                                <i class="material-icons md-edit"></i> Edit
+                                <i class="material-icons md-edit"></i>
                             </a>
                             <a href="/admin/delete-product/{{_id}}" class="btn btn-sm font-sm btn-light rounded"
                                 onclick=" return confirm('Want to delete {{name}} ??')">
-                                <i class="material-icons md-delete_forever"></i> Delete
+                                <i class="material-icons md-delete_forever"></i>
                             </a>
                         </td>
                     </tr>
+                    {{/each}}
                 </tbody>
-                {{/each}}
             </table>
 
-            {{!-- <div class="pagination-area mt-30 mb-50">
+            <div class="pagination-area mt-15 mb-50">
                 <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i
-                                    class="material-icons md-chevron_right"></i></a></li>
+                    <ul id="paginationContainer" class="pagination justify-content-start">
                     </ul>
                 </nav>
-            </div> --}}
+                        
+            </div>
     </section> <!-- content-main end// -->
+
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 5;
+            const numItems = $('#ordersContainer').children().length;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+
+            // Create pagination links
+            for (let i = 1; i <= numPages; i++) {
+                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+            }
+
+            // Bind click event to pagination links
+            $('.page-link').click(function (e) {
+                const currentPage = $(this).data('page');
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+                return false;
+            })
+            // Show first page by default
+            $('.page-link:first').addClass('active');
+            $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
+        })
+    </script>

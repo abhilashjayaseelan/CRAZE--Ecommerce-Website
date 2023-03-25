@@ -4,18 +4,36 @@
 
     <section class="content-main">
         <div class="content-header">
+            {{!-- for chart --}}
+            <span id="sales-data" style="display:none">{{monthlyOrdersArray}}</span>
+            <span id="category-data" style="display:none">{{cateWise}}</span>
             <div>
                 <h2 class="content-title card-title">Dashboard </h2>
-                <p>Welocome back...</p>
+                <p>Welcome back...</p>
             </div>
             <div>
-                <button class="btn btn-primary" id="generate-report-button"><i
-                        class="text-muted material-icons md-post_add"></i>Create
-                    report</button>
+                <a href="/admin/create-report"><button class="btn btn-primary"><i
+                            class="text-muted material-icons md-post_add"></i>Reports</button></a>
             </div>
+
         </div>
         <div class="row">
 
+            <div class="col-lg-3">
+                <div class="card card-body mb-4">
+                    <article class="icontext">
+                        <span class="icon icon-sm rounded-circle bg-info-light"><i
+                                class="text-info material-icons md-person"></i></span>
+                        <div class="text">
+                            <h6 class="mb-1 card-title">Total users</h6><span>
+                                <span>{{users}}</span>
+                                <span class="text-sm">
+                                    Basedlocal time.
+                                </span>
+                        </div>
+                    </article>
+                </div>
+            </div>
             <div class="col-lg-3">
                 <div class="card card-body mb-4">
                     <article class="icontext">
@@ -55,21 +73,6 @@
                             <span class="text-sm">
                                 Shipping fees are not included
                             </span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card card-body mb-4">
-                    <article class="icontext">
-                        <span class="icon icon-sm rounded-circle bg-info-light"><i
-                                class="text-info material-icons md-shopping_basket"></i></span>
-                        <div class="text">
-                            <h6 class="mb-1 card-title">Total revenue</h6><span>
-                                <span>₹{{revenue}}</span>
-                                <span class="text-sm">
-                                    Basedlocal time.
-                                </span>
                         </div>
                     </article>
                 </div>
@@ -230,7 +233,7 @@
             <div class="col-xl-4 col-lg-12" style="float: left;">
                 <div class="card mb-4">
                     <article class="card-body">
-                        <h5 class="card-title">Revenue Base on Area</h5>
+                        <h5 class="card-title">Products based category</h5>
                         <canvas id="myChart2" height="217"></canvas>
                     </article>
                 </div>
@@ -496,7 +499,7 @@
         const generateReportButton = document.getElementById('generate-report-button');
         // Add a click event listener to the button
         generateReportButton.addEventListener('click', function () {
-        console.log('its here')
+           // console.log('its here')
             // Show a SweetAlert popup with options for PDF and Excel
             Swal.fire({
                 title: 'Select a file format',
@@ -613,6 +616,4 @@
                 }
             })
         }
-
-    
     </script>

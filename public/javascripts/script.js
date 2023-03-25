@@ -125,7 +125,7 @@ function razorPayPayment(orderDetails) {
     rzp1.open();
 }
 
-// razorpay payment varification
+// razorpay payment verification
 function verifyPayment(payment, order) {
     // console.log('payment');
     $.ajax({

@@ -11,8 +11,7 @@
             <div class="col-lg-6">
                 <div class="card mb-4">
                     <div class="card-body">
-                        <form action="/admin/edit-product/{{data.product._id}}" method="post"
-                            enctype="multipart/form-data">
+                        <form action="/admin/edit-product/{{data.product._id}}" method="post">
                             <div class="mb-4">
                                 <label for="product_name" class="form-label">Product Name</label>
                                 <input type="text" value="{{data.product.name}}" class="form-control" id="product_name"

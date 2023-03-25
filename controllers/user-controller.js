@@ -65,7 +65,6 @@ module.exports = {
       userHelpers.otpLogin(req.body.mobile).then((user) => {
          req.session.user = user;
          console.log(user);
-
          if (user.response !== null) {
             sendOtp.send_otp(user.response.mobile).then((response) => {
                // console.log(response);
@@ -76,7 +75,6 @@ module.exports = {
          } else if (user.response === null) {
             req.session.accountErr = "No account found with the entered number";
             res.redirect('/otp-login');
-
          } else if (user.respose.blocked !== false) {
             req.session.statusErr = "Access has been denied";
             res.redirect('/otp-login')
@@ -116,7 +114,7 @@ module.exports = {
          })
       })
          .catch((err) => {
-            console.log(err + 'errorrrrr');
+            console.log(err + 'payment error');
             res.json({ status: false });
          })
    },
@@ -217,6 +215,11 @@ module.exports = {
          .catch((err) => {
             console.log(err);
          })
+   },
+
+   // apply coupon code
+   applyCoupon: (req, res) =>{
+      
    }
 
 }            

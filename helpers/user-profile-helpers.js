@@ -1,5 +1,4 @@
-const { response } = require('../app');
-const { user, address, cart } = require('../models/connection')
+const { user, address, userCouponSchema } = require('../models/connection')
 const bcrypt = require('bcrypt');
 const objectId = require('mongodb').ObjectId
 
@@ -16,7 +15,7 @@ module.exports = {
             })
     },
     postAddress: (addressData, id) => {
-        // console.log(addressData);
+        console.log("address", addressData);
         return new Promise(async (resolve, reject) => {
             let data = new address({
                 'name': addressData.name,
@@ -101,6 +100,19 @@ module.exports = {
             }
 
         })
+    },
+
+    // get user coupons
+    getCoupons: async (userId) => {
+        console.log("userId: ", userId);
+        try {
+            const coupons = await userCouponSchema.find({userId: objectId(userId)}).lean();
+            // console.log("coupon", coupons);
+            return coupons;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     }
 
 }

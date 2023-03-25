@@ -43,15 +43,15 @@
                 <div class="col-lg-9">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="/add-address" method="post" enctype="multipart/form-data">
+                            <form action="/add-address" method="post" >
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">Name</label>
                                             <div class="row gx-2">
                                                 <input placeholder="Enter name" type="text" class="form-control"
-                                                    name="name" required="" id="user-name" onkeyup="validateName()">
-                                                <span id="name-error"></span>
+                                                    name="name" required id="user-name">
+
                                             </div>
                                         </div>
                                     </div>
@@ -59,39 +59,39 @@
                                         <div class="mb-4">
                                             <label class="form-label">Mobile</label>
                                             <input placeholder="Mobile" type="tel" class="form-control" name="mobile"
-                                                required="" id="user-phone" onkeyup="validatePhone()">
-                                            <span id="phone-error"></span>
+                                                required id="user-phone">
+
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">PIN</label>
                                             <input placeholder="PIN code" type="number" class="form-control"
-                                                name="pincode" required="" id="user-pin-code"
-                                                onkeyup="validatePinCode()">
-                                            <span id="pin-code-error"></span>
+                                                name="pincode" required id="user-pin-code">
+
                                         </div>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Locality</label>
                                         <input type="text" placeholder="Locality" class="form-control" id=""
-                                            name="locality" required="">
+                                            name="locality" required>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Full Address</label>
                                         <input type="text" placeholder="Address" class="form-control" id="" name="area"
-                                            required="">
+                                            required >
                                     </div>
                                     <div class="col-lg-4">
                                         <div class="mb-4">
                                             <label class="form-label">District</label>
                                             <input placeholder="District" type="text" class="form-control"
-                                                name="district" required="">
+                                                name="district" required>
                                         </div>
                                     </div>
                                     <div class="col-lg-4">
                                         <label class="form-label">State</label>
-                                        <select class="form-select" name="state" required="">
+                                        <select class="form-select" name="state" required>
+                                            <option value="">Select</option>
                                             <option> Kerala </option>
                                             <option> Tamil Nadu </option>
                                             <option> Andrapradesh </option>
@@ -99,9 +99,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button type="submit" class="btn btn-md rounded font-sm hover-up"
-                                        onclick="return validateAddress()">Submit</button>
-                                    <span id="submit-error"></span>
+                                    <button type="submit" class="btn btn-md rounded font-sm hover-up">Submit</button>
+
                                 </div>
                             </form>
                         </div>

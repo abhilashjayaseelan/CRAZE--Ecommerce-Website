@@ -16,9 +16,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="table-responsive">
-                        <table class="table shopping-summery text-center">
+                        <table class="table table-hover text-center">
                             <thead>
-                                <tr class="main-heading">
+                                <tr class="main-heading" style="background-color: rgb(199, 210, 206);">
                                     <th scope="col">Sl No.</th>
                                     <th scope="col">OrderId</th>
                                     <th scope="col">Total Price</th>
@@ -26,13 +26,12 @@
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            {{#each orderList}}
                             <tbody>
+                                {{#each orderList}}
                                 <tr>
                                     <td>
                                         {{index @index}}
-                                    </td>
-
+                                    </td>   
                                     <td>
                                         {{id}}
                                     </td>
@@ -65,8 +64,8 @@
                                             class="btn btn-md rounded font-sm">View</a>
                                     </td>
                                 </tr>
+                                {{/each}}
                             </tbody>
-                            {{/each}}
                         </table>
                     </div>
                 </div>

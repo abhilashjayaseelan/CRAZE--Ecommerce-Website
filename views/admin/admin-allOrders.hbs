@@ -7,8 +7,8 @@
             </div>
             <div>
                 <form action="/admin/search-order" method="post">
-                <input type="text" placeholder="Search order ID" class="form-control bg-white" name="orderId">
-                <button type="submit" class="btn btn-md rounded font-sm">Search</button>
+                    <input type="text" placeholder="Search order ID" class="form-control bg-white" name="orderId">
+                    <button type="submit" class="btn btn-md rounded font-sm">Search</button>
                 </form>
             </div>
         </div>
@@ -39,7 +39,8 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
+                            <tr style="background-color: rgb(199, 210, 206);">
+                                <th>Sl No</th>
                                 <th scope="col">UserId</th>
                                 <th scope="col">OrderId</th>
                                 <th scope="col">Total</th>
@@ -48,9 +49,12 @@
                                 <th scope="col" class="text-end"> Action </th>
                             </tr>
                         </thead>
-                        {{#each allOrders}}
-                        <tbody>
+                        <tbody id="ordersContainer">
+                            {{#each allOrders}}
                             <tr>
+                                <td>
+                                    {{index @index}}
+                                </td>
                                 <td>
                                     {{userId}}
                                 </td>
@@ -72,27 +76,46 @@
                                 {{/if}}
 
                                 <td class="text-end">
-                                    <a href="/admin/user-orderDetails/{{_id}}?status={{orderStatus}}" class="btn btn-md rounded font-sm">Details</a>
+                                    <a href="/admin/user-orderDetails/{{_id}}?status={{orderStatus}}"
+                                        class="btn btn-md rounded font-sm">Details</a>
                                 </td>
                             </tr>
+                            {{/each}}
                         </tbody>
-                        {{/each}}
                     </table>
                 </div> <!-- table-responsive //end -->
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
         <div class="pagination-area mt-15 mb-50">
             <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i
-                                class="material-icons md-chevron_right"></i></a></li>
+                <ul id="paginationContainer" class="pagination justify-content-start">
                 </ul>
-            </nav>
+            </nav>                 
         </div>
     </section> <!-- content-main end// -->
-   
+
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 5;
+            const numItems = $('#ordersContainer').children().length;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+
+            // Create pagination links
+            for (let i = 1; i <= numPages; i++) {
+                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+            }
+
+            // Bind click event to pagination links
+            $('.page-link').click(function (e) {
+                const currentPage = $(this).data('page');
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+                return false;
+            })
+            // Show first page by default
+            $('.page-link:first').addClass('active');
+            $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
+        })
+    </script>

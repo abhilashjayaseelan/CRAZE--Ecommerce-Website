@@ -1,5 +1,6 @@
 const cartHelper = require('../helpers/cart-helpers');
 const userProfileHelpers = require('../helpers/user-profile-helpers');
+const userHelper = require('../helpers/user-helpers');
 const ObjectId = require('mongodb').ObjectId
 const razorPay = require('../api/razorPay');
 
@@ -64,20 +65,21 @@ module.exports = {
                     res.render('user/checkout', { user, products, total, address, itsUser: true });
                 })
             })
-        })
-
+        }) 
     },
     // place order
     placeOrder: async (req, res) => {
         let products = await cartHelper.getCartProductList(req.body.userId);
         let totalPrice = await cartHelper.cartTotal(req.body.userId);
-
         cartHelper.placeOrder(req.body, products, totalPrice).then((response) => {
+            // generating coupon if the conditions met
+            const coupon = userHelper.generateCoupon(response.totalPrice, response.products, req.body.userId);
+            console.log("hai");
             if (req.body['payment_option'] == 'COD') {
-                res.json({ status: 'cod' });
+                res.json({coupon, status: 'cod' });
             } else if (req.body['payment_option'] == 'Razorpay') {
                 razorPay.generateRazorpay(response.orderId, response.totalPrice).then((order) => {
-                    res.json({ response, order, status: 'razorpay' });
+                    res.json({coupon, response, order, status: 'razorpay' });
                 })
             }
         })

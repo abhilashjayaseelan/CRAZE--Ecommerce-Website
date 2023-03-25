@@ -6,14 +6,23 @@ const fs = require('fs');
 module.exports = {
     adminDashboard: async (req, res) => {
         try {
-            const [monthlySales, revenue, orders, products] = await Promise.all([
+            const [monthlySales, users, orders, products] = await Promise.all([
                 reportHelpers.getMonthlySales(),
-                reportHelpers.calculateTotalRevenue(),
+                reportHelpers.calculateTotalUsers(),
                 reportHelpers.calculateTotalOrders(),
                 reportHelpers.calculateTotalNumberOfProducts()
             ]);
+            // console.log(`Total products: ${products}`);
             const totalSales = monthlySales[0] ? monthlySales[0].totalSales : 0;
-            res.render('admin/admin-dashboard', { admin: true, totalSales, revenue, orders, products });
+            // getting details sales graph
+            const monthlyOrders = await reportHelpers.monthlyOrders();
+            const monthlyOrdersArray = monthlyOrders.map(obj => obj.count);
+            // getting details for pie chart
+            const categoryWise = await reportHelpers.categoryWise();
+            console.log(categoryWise);
+            const cateWise = Object.values(categoryWise);
+
+            res.render('admin/admin-dashboard', { admin: true, totalSales, users, orders, products, monthlyOrdersArray, cateWise });
         } catch (err) {
             console.error(err);
             res.status(500).send("Internal Server Error");
@@ -64,7 +73,7 @@ module.exports = {
     getuserOrders: (req, res) => {
         try {
             adminHelper.getOrders().then((orderDetails) => {
-                allOrders = JSON.parse(JSON.stringify(orderDetails))
+                const allOrders = orderDetails.reverse();
                 res.render('admin/admin-allOrders', { admin: true, allOrders });
             })
 
@@ -99,6 +108,7 @@ module.exports = {
             })
         } catch (err) {
             console.log(err);
+            res.status(500).send('internal server error');
         }
     },
     // change order status 
@@ -111,6 +121,42 @@ module.exports = {
             res.json({ status: false });
         }
     },
+    // get report page
+    getReport: async (req, res) => {
+        try {
+            const [monthlySales, users, orders, products] = await Promise.all([
+                reportHelpers.getMonthlySales(),
+                reportHelpers.calculateTotalUsers(),
+                reportHelpers.calculateTotalOrders(),
+                reportHelpers.calculateTotalNumberOfProducts()
+            ]);
+            const totalSales = monthlySales[0] ? monthlySales[0].totalSales : 0;
+            res.render('admin/sales-report', { admin: true, totalSales, users, orders, products });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal server error');
+        }
+    },
+    // date wise report
+    dateWiseReport: async (req, res) => {
+        try {
+            // getting date wise order details
+            const report = await adminHelper.dateWiseReport(req.body);
+            const dateWise = JSON.parse(JSON.stringify(report));
+            // getting other details
+            const [monthlySales, users, orders, products] = await Promise.all([
+                reportHelpers.getMonthlySales(),
+                reportHelpers.calculateTotalUsers(),
+                reportHelpers.calculateTotalOrders(),
+                reportHelpers.calculateTotalNumberOfProducts()
+            ]);
+            const totalSales = monthlySales[0] ? monthlySales[0].totalSales : 0;
+            res.render('admin/sales-report', { admin: true, dateWise, totalSales, users, orders, products });
+        } catch (err) {
+            console.log(err);
+            return res.status(400).send('inernal error');
+        }
+    },
     // making reports
     makeReport: async (req, res) => {
         const { format } = req.body;
@@ -121,7 +167,7 @@ module.exports = {
         // Generate the sales report using your e-commerce data
         const salesData = {}
         try {
-            salesData.TotalRevenue = await reportHelpers.calculateTotalRevenue();
+            salesData.TotalUsers = await reportHelpers.calculateTotalUsers();
             salesData.TotalOrders = await reportHelpers.calculateTotalOrders();
             salesData.TotalProducts = await reportHelpers.calculateTotalNumberOfProducts();
             salesData.MonthlyEarnings = await reportHelpers.getMonthlySales();
@@ -167,14 +213,21 @@ module.exports = {
 
     },
     // get coupon creation page
-    getCoupon: (req, res) => {
-        res.render('admin/coupons', { admin: true });
+    getCoupon: async(req, res) => {
+        try {
+            const data = await adminHelper.getCoupons();
+            const coupons = data.reverse();
+            res.render('admin/coupons', { admin: true, coupons });
+        } catch (err) {
+            console.log(err);
+            res.status('500').send('internal error');
+        }
     },
     // create new coupon 
     postCoupon: async (req, res) => {
         try {
-            adminHelper.createCoupon(req.body).then(() =>{
-                res.json({status : true});
+            adminHelper.createCoupon(req.body).then(() => {
+                res.json({ status: true });
             })
         } catch (err) {
             console.log(err);

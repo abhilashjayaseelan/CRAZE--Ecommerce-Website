@@ -21,6 +21,7 @@ module.exports = {
         res.render('user/address', { user })
     },
     postAddress: (req, res) => {
+        console.log(req.body);
         let user = req.session.user;
         userProfileHelpers.postAddress(req.body, user.response._id)
             .then((response) => {
@@ -99,6 +100,20 @@ module.exports = {
             .catch((err) => {
                 console.log(err);
             })
-    }
+    },
 
+    // get user coupons
+    getCoupons: async(req, res) =>{
+        try {
+            const user = req.session.user;
+            const userId = user.response._id;
+            const coupons = await userProfileHelpers.getCoupons(userId);
+            console.log(coupons);
+            // const userCoupons = JSON.parse(JSON.stringify(coupons));
+            res.render('user/myCoupons', {itsUser: true, user, coupons});
+        } catch (err) {
+            console.log(err);
+
+        }
+    }
 } 

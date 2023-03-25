@@ -63,10 +63,10 @@ module.exports = {
     },
     postEditProduct: (req, res) => {
         let id = req.params.id;
-        let user = req.body;
-        productHelpers.postEditProduct(id, user).then((data) => {
+        let product = req.body;
+        productHelpers.postEditProduct(id, product).then((data) => {
             res.redirect('/admin/view-products');
-            // NEED TO WRITE DOWN CODE FOR CHANGE THE IMAGE
+            //! NEED TO WRITE DOWN CODE FOR CHANGE THE IMAGE
         })
     },
     getDeleteProduct: (req, res) => {

@@ -73,6 +73,7 @@ module.exports = {
     },
     // saving edited details
     postEditProduct: (productId, productData) => {
+        console.log(productData);
         return new Promise(async (resolve, reject) => {
             await products.updateOne({ _id: productId }, {
                 $set: {

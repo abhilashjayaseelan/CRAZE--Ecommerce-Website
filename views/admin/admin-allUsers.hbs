@@ -5,7 +5,7 @@
         <div class="card mb-4">
             <table class="table align-middle mb-0 bg-white">
                 <thead class="bg-light">
-                    <tr>
+                    <tr style="background-color: rgb(199, 210, 206);">
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Joined date</th>
@@ -13,8 +13,8 @@
                         <th>Action</th>
                     </tr>
                 </thead>
+                <tbody id="ordersContainer">
                 {{#each user}}
-                <tbody>
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -50,22 +50,15 @@
                             </div>
                         </td>
                     </tr>
-                </tbody>
                 {{/each}}
+                </tbody>
             </table>
         </div> <!-- card end// -->
-        <div class="pagination-area mt-30 mb-50">
+        <div class="pagination-area mt-15 mb-50">
             <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-start">
-                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                    <li class="page-item"><a class="page-link" href="#">02</a></li>
-                    <li class="page-item"><a class="page-link" href="#">03</a></li>
-                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                    <li class="page-item"><a class="page-link" href="#">16</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i
-                                class="material-icons md-chevron_right"></i></a></li>
+                <ul id="paginationContainer" class="pagination justify-content-start">
                 </ul>
-            </nav>
+            </nav>             
         </div>
     </section> <!-- content-main end// -->
 
@@ -112,4 +105,30 @@
                 }
             })
         }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 5;
+            const numItems = $('#ordersContainer').children().length;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+
+            // Create pagination links
+            for (let i = 1; i <= numPages; i++) {
+                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+            }
+
+            // Bind click event to pagination links
+            $('.page-link').click(function (e) {
+                const currentPage = $(this).data('page');
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+                return false;
+            })
+            // Show first page by default
+            $('.page-link:first').addClass('active');
+            $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
+        })
     </script>

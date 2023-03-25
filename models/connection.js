@@ -32,8 +32,23 @@ const userSchema = new Schema({
   blocked: {
     type: Boolean,
     default: false
-  }
+  },
+  coupons: [{
+    coupon: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Coupon',
+      required: true,
+    },
+    used: {
+      type: Boolean,
+      default: false,
+    },
+    dateUsed: {
+      type: Date,
+    },
+  }],
 })
+
 
 const adminSchema = new Schema({
   email: {
@@ -250,12 +265,7 @@ const walletSchema = new mongoose.Schema({
   }
 })
 
-const couponSchema = new mongoose.Schema({
-  code: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+const couponTemplateSchema = new mongoose.Schema({
   discountPercentage: {
     type: Number,
     required: true,
@@ -267,9 +277,44 @@ const couponSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  minAmount: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: false
+  }
+});
+
+const userCouponSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  couponTemplate: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'CouponTemplate',
+    required: true,
+  },
+  code: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  used: {
+    type: Boolean,
+    default: false,
+  },
   startDate: {
     type: Date,
-    required: true,
+    default: Date.now,
   },
   endDate: {
     type: Date,
@@ -277,11 +322,25 @@ const couponSchema = new mongoose.Schema({
   },
   minAmount: {
     type: Number,
-    required: true,
-    min: 0,
+    required: false
+  },
+  maxDiscountAmount: {
+    type: Number,
+    required: false
+  },
+  discountPercentage: {
+    type: Number,
+    required: false
+  },
+  description: {
+    type: String,
+    required: false
+  },
+  category: {
+    type: String,
+    required: false
   }
 });
-
 
 
 
@@ -295,4 +354,5 @@ module.exports.orders = mongoose.model('orders', ordersSchema);
 module.exports.wishlist = mongoose.model('wishlist', wishlistSchema);
 module.exports.wallet = mongoose.model('wallet', walletSchema);
 module.exports.discount = mongoose.model('discount', discountSchema);
-module.exports.coupon = mongoose.model('coupon', couponSchema);
+module.exports.couponTemplateSchema = mongoose.model('couponTemplateSchema', couponTemplateSchema);
+module.exports.userCouponSchema = mongoose.model('userCouponSchema', userCouponSchema);

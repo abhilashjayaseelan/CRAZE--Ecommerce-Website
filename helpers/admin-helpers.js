@@ -1,4 +1,4 @@
-const { admin, user, orders, coupon } = require('../models/connection');
+const { admin, user, orders, couponTemplateSchema } = require('../models/connection');
 const bcrypt = require('bcrypt');
 objectId = require('mongodb').ObjectId;
 
@@ -52,16 +52,14 @@ module.exports = {
         }
     },
     // get user orders
-    getOrders: () => {
-        return new Promise(async (resolve, reject) => {
-            try {
-                await orders.find().then((allOrders) => {
-                    resolve(allOrders);
-                })
-            } catch (err) {
-                reject(err);
-            }
-        })
+    getOrders: async() => {
+        try {
+            const allOrders = await orders.find().lean();
+            return allOrders;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     //search orders
     searchOrder: (orderId) => {
@@ -86,6 +84,46 @@ module.exports = {
                 reject(err);
             }
         })
+    },
+    // getting day wise orders
+    dateWiseReport: async (details) => {
+        // console.log(details);
+        try {
+            const fromDate = new Date(details.fromDate);
+            const toDate = new Date(details.toDate);
+            toDate.setDate(toDate.getDate() + 1);
+
+            const order = await orders.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: fromDate,
+                            $lt: toDate
+                        },
+                        orderStatus: 'recieved'
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            date: {
+                                $dateToString: {
+                                    format: "%Y-%m-%d",
+                                    date: "$createdAt"
+                                }
+                            }
+                        },
+                        totalOrders: { $sum: 1 },
+                        totalRevenue: { $sum: "$totalPrice" }
+                    }
+                }
+            ]);
+            console.log("orders", order);
+            return order;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
     },
     // getting items from the orders
     singleOrder: async (orderId) => {
@@ -141,20 +179,30 @@ module.exports = {
         })
     },
     // create new coupon 
-    createCoupon: async(details) =>{ 
+    createCoupon: async (details) => {
+
         try {
-            const newCoupon = new coupon({
-                'code' : details.code,
-                'discountPercentage' : details.discountPercentage,
-                'maxDiscountAmount' : details.maxDiscountAmount,
-                'minAmount' : details.minAmount,
-                'startDate' : details.startDate,
-                'endDate': details.endDate
+            const newCoupon = new couponTemplateSchema({
+                'discountPercentage': details.discountPercentage,
+                'maxDiscountAmount': details.maxDiscountAmount,
+                'minAmount': details.minAmount,
+                'category': details.category,
+                'description': details.description
             })
             await newCoupon.save();
             return newCoupon;
         } catch (err) {
             console.log(err);
+            throw err;
+        }
+    },
+    // get coupons
+    getCoupons: async ()=>{
+        try {
+            const coupons = await couponTemplateSchema.find().lean();
+            return coupons;
+        } catch (err) {
+            clg(err);
             throw err;
         }
     }
