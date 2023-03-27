@@ -138,17 +138,33 @@
 
                                         <tr>
                                             <th>SubTotal</th>
-                                            <td class="product-subtotal" colspan="2">₹{{total}}</td>
+                                            <td class="product-subtotal" colspan="2">{{formatCurrency total}}</td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
-                                            <td colspan="2"><em>Free Shipping</em></td>
+                                            <td colspan="2"><em>0</em></td>
                                         </tr>
+                                        {{#if discountPrice}}
+                                        <tr>
+                                            <th>Discount</th>
+                                            <td colspan="2"><em>{{formatCurrency discountPrice}}</em></td>
+                                        </tr>
+                                        {{/if}}
+                                        {{#if afterDiscount}}
                                         <tr>
                                             <th>Total</th>
                                             <td colspan="2" class="product-subtotal"><span
-                                                    class="font-xl text-brand fw-900">₹{{total}}</span></td>
+                                                    class="font-xl text-brand fw-900">{{formatCurrency afterDiscount}}</span>
+                                            </td>
                                         </tr>
+                                        {{else}}
+                                        <tr>
+                                            <th>Total</th>
+                                            <td colspan="2" class="product-subtotal"><span
+                                                    class="font-xl text-brand fw-900">{{formatCurrency total}}</span>
+                                            </td>
+                                        </tr>
+                                        {{/if}}
                                     </tbody>
                                 </table>
                             </div>

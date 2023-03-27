@@ -115,7 +115,7 @@
                                                 <div class="info">{{product.name}}</div>
                                             </a>
                                         </td>
-                                        <td>₹ {{product.price}} </td>
+                                        <td>{{formatCurrency product.price}} </td>
                                         <td> {{quantity}} </td>
                                         {{!-- <td class="text-end"> $99.50 </td> --}}
                                     </tr>
@@ -126,15 +126,15 @@
                                         <article class="float-end">
                                             <dl class="dlist">
                                                 <dt>Subtotal:</dt>
-                                                <dd>₹{{details.totalPrice}}</dd>
+                                                <dd>{{formatCurrency details.totalPrice}}</dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Shipping cost:</dt>
-                                                <dd>nil</dd>
+                                                <dd>0</dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt>Grand total:</dt>
-                                                <dd> <b class="h5">₹{{details.totalPrice}}</b> </dd>
+                                                <dd> <b class="h5">{{formatCurrency details.totalPrice}}</b> </dd>
                                             </dl>
                                             <dl class="dlist">
                                                 <dt class="text-muted">Status:</dt>

@@ -1,24 +1,32 @@
-const { response } = require('../app');
 const userProfileHelpers = require('../helpers/user-profile-helpers');
-const { user } = require('../models/connection');
+const cartHelpers = require('../helpers/cart-helpers');
 
 module.exports = {
-    getProfile: (req, res) => {
-        let id = req.query.id;
-        req.session.id = req.params.id;
-        userProfileHelpers.userProfile(id)
-            .then((profile) => {
-                req.session.profile = profile;
-                let user = JSON.parse(JSON.stringify(profile));
-                res.render('user/profile', { user, itsUser: true });
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+    // getting user profile
+    getProfile: async (req, res) => {
+        try {
+            const id = req.query.id;
+            req.session.id = req.params.id;
+            const count = await cartHelpers.productCount(id);
+            const profile = await userProfileHelpers.userProfile(id);
+            req.session.profile = profile;
+            let user = JSON.parse(JSON.stringify(profile));
+            res.render('user/profile', { user, itsUser: true, count });
+        } catch (err) {
+            console.error(err);
+            res.render('error', { message: 'Error getting profile', error: err });
+        }
     },
-    getAddress: (req, res) => {
-        const user = req.session.user;
-        res.render('user/address', { user })
+    // getting address page
+    getAddress: async (req, res) => {
+        try {
+            const user = req.session.user;
+            const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+            res.render('user/address', { user, count })
+        } catch (err) {
+            console.log(err);
+            res.render('error', { message: 'error getting address', error: err });
+        }
     },
     postAddress: (req, res) => {
         console.log(req.body);
@@ -45,13 +53,15 @@ module.exports = {
                 console.log(err);
             })
     },
-    getPassword: (req, res) => {
+    getPassword: async (req, res) => {
         const user = req.session.user;
+        const count = user ? await cartHelpers.productCount(user.response._id) : 0;
         res.render('user/change-password',
             {
                 user,
                 'invalid': req.session.invalidPassword,
-                'notMatch': req.session.notMatch
+                'notMatch': req.session.notMatch,
+                count
             });
         req.session.invalidPassword = false;
         req.session.notMatch = false;
@@ -103,14 +113,14 @@ module.exports = {
     },
 
     // get user coupons
-    getCoupons: async(req, res) =>{
+    getCoupons: async (req, res) => {
         try {
             const user = req.session.user;
             const userId = user.response._id;
             const coupons = await userProfileHelpers.getCoupons(userId);
             console.log(coupons);
             // const userCoupons = JSON.parse(JSON.stringify(coupons));
-            res.render('user/myCoupons', {itsUser: true, user, coupons});
+            res.render('user/myCoupons', { itsUser: true, user, coupons });
         } catch (err) {
             console.log(err);
 

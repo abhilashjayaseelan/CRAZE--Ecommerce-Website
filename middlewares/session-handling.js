@@ -11,7 +11,7 @@ module.exports = {
         }
 
     },
-    // checking user is loged in
+    // checking user is log in
     checkingUser: (req, res, next) =>{
         if(req.session.user){
             next();

@@ -210,7 +210,7 @@ module.exports = {
                         $match: { userId: ObjectId(userId) }
                     },
                     {
-                        $unwind: '$products' 
+                        $unwind: '$products'
                     },
                     {
                         $lookup: {
@@ -246,5 +246,30 @@ module.exports = {
                 reject(err)
             }
         })
+    },
+    // number of products in cart
+    productCount: async (userId) => {
+        try {
+            const pipeline = [
+                {
+                    $match: {userId: ObjectId(userId)}
+                },
+                {
+                    $unwind: '$products'
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalQuantity: {$sum: "$products.quantity"}
+                    }
+                }
+            ];
+            const result = await cart.aggregate(pipeline);
+            return result[0].totalQuantity;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     }
+
 }

@@ -1,24 +1,30 @@
 const productHelpers = require("../helpers/product-helpers");
+const cartHelpers = require("../helpers/cart-helpers");
 
 module.exports = {
     // user side 
-    getProduct: (req, res) => {
-        const productId = req.params.id;
-        const user = req.session.user;
-        productHelpers.getProduct(productId).then((data) => {
-            const product = JSON.parse(JSON.stringify(data));
-            res.render('user/single-product', { user, product, itsUser: true });
-        })
+    getProduct: async (req, res) => {
+        try {
+            const productId = req.params.id;
+            const user = req.session.user;
+            const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+            const product = JSON.parse(JSON.stringify(await productHelpers.getProduct(productId)));
+            res.render('user/single-product', { user, product, itsUser: true, count });
+        } catch (err) {
+            console.error(err);
+            res.render('error', { message: 'Error getting product', error: err });
+        }
     },
     // filtering products based on categories
     categoryWise: async (req, res) => {
         try {
             const category = req.query.category;
             const user = req.session.user;
+            const count = user ? await cartHelpers.productCount(user.response._id) : 0;
             const result = await productHelpers.categoryFilter(category);
             const products = JSON.parse(JSON.stringify(result));
             let filter = products[0].category;
-            res.render('user/category-wise', { itsUser: true, user, products, filter})
+            res.render('user/category-wise', { itsUser: true, user, products, filter, count })
 
         } catch (err) {
             console.log(err);

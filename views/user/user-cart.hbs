@@ -18,7 +18,7 @@
                 <div class="col-12">
                     <div class="col-lg-6 col-md-12 table-responsive" style="float: left;">
                         {{#if products}}
-                        <table class="table shopping-summery text-center clean" id="cart-table">
+                        <table class="table text-center" id="cart-table">
                             <thead>
                                 <tr class="main-heading" style="background-color: rgb(199, 210, 206);">
                                     <th scope="col">Image</th>
@@ -76,19 +76,23 @@
                                         <tbody>
                                             <tr>
                                                 <td class="cart_total_label">Cart Subtotal</td>
-                                                <td class="cart_total_amount">₹<span class="font-lg fw-900 text-brand"
-                                                        id="cart-subtotal">{{total}}</span></td>
+                                                <td class="cart_total_amount"><span class="font-lg fw-900 text-brand"
+                                                        id="cart-subtotal">{{formatCurrency total}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Shipping</td>
-                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i> Free
-                                                    Shipping</td>
+                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>0</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Discount</td>
+                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i><span
+                                                        id="offer-total">0</span></td>
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Total</td>
-                                                <td class="cart_total_amount"><strong>₹<span
+                                                <td class="cart_total_amount"><strong><span
                                                             class="font-xl fw-900 text-brand"
-                                                            id="cart-total">{{total}}</span></strong>
+                                                            id="cart-total">{{formatCurrency total}}</span></strong>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -102,14 +106,18 @@
                                     <div class="total-amount">
                                         <div class="left">
                                             <div class="coupon">
-                                                <form action="#" target="_blank">
+                                                <form id="apply-coupon-form" action="#" target="_blank">
                                                     <div class="form-row row justify-content-center">
                                                         <div class="form-group col-lg-6">
-                                                            <input class="font-medium" name="Coupon"
-                                                                placeholder="Enter Your Coupon">
+                                                            <input class="font-medium" name="couponCode"
+                                                                id="coupon-code-input" placeholder="Enter Your Coupon">
+                                                            <span class="text-danger" id="coupon-error-message"></span>
+                                                            <span class="text-success"
+                                                                id="coupon-success-message"></span>
                                                         </div>
                                                         <div class="form-group col-lg-6">
-                                                            <button class="btn  btn-sm"><i
+                                                            <button type="submit" id="apply-coupon-button"
+                                                                class="btn btn-sm"><i
                                                                     class="fi-rs-label mr-10"></i>Apply</button>
                                                         </div>
                                                     </div>
@@ -118,8 +126,11 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <h5>Amount need to pay: ₹ {{total}}</h5>
+                                    <h5>Amount need to pay: <span id="amount-to-pay">{{formatCurrency total}}</span>
+                                    </h5>
                                 </div>
+
+
                                 <a href="/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To
                                     CheckOut</a>
                             </div>
@@ -275,3 +286,39 @@
             </div>
         </div>
     </div>
+
+
+    {{!-- for applying the coupon --}}
+    <script>
+        $(document).ready(function () {
+            $("#apply-coupon-form").submit(function (event) {
+                console.log('apply-coupon')
+                event.preventDefault();
+                var couponCode = $("#coupon-code-input").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/apply-coupon",
+                    data: {
+                        couponCode: couponCode
+                    },
+                    success: function (response) {
+                        if (response.error) {
+                            $("#coupon-error-message").text(response.error);
+                            $("#coupon-success-message").text("");
+                            $("#amount-to-pay").text(response.total);
+                        } else if (response.success) {
+                            $("#coupon-success-message").text(response.success);
+                            $("#coupon-error-message").text("");
+                            $("#amount-to-pay").text(response.total);
+                            $("#cart-total").text(response.total);
+                            $("#offer-total").text(response.offer);
+                            $("#apply-coupon-button").prop("disabled", true).text("Applied");
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            });
+        });
+    </script>

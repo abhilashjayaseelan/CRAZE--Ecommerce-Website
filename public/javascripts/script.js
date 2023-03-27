@@ -15,6 +15,9 @@ function addToCart(productId) {
                     icon: "success",
                     button: "Ok!",
                 })
+                .then(()=>{
+                    location.reload();
+                })
             } else {
                 window.location.href = '/login' 
             }

@@ -29,28 +29,31 @@
             </div>
             <br>
             <div class="row">
-                <div class="col-9">
+                <div class="col-12">
                     <div class="content-header">
                         <h2 class="content-title">Available coupons</h2>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    {{#each coupons}}
-                    <div class="col-6 card mb-6" style="float: left;">
-                        <div class="card-body">
-                            <ul>
-                                <li>
-                                    <h4><a href="">{{code}}</a></h4>
-                                    <button class="copy-code-btn" data-clipboard-text="{{code}}">Copy code</button>
-                                    <p>{{discountPercentage}}% discount</p>
-                                    <p>Min purchase amount: {{description}}</p>
-                                    <p>Valid till: {{endDate}}</p>
-                                </li>
-                                <hr>
-                            </ul>
-                        </div>
-                    </div> <!-- card end// -->
-                    {{/each}}
+                <div class="col-12">
+                    <div class="row">
+                        {{#each coupons}}
+                        <div class="col-4 card mb-6 me-2">
+                            <div class="card-body">
+                                <ul>
+                                    <li>
+                                        <h4><a href="">{{code}}</a></h4>
+                                        <button class="copy-code-btn" data-clipboard-text="{{code}}">Copy code</button>
+                                        <p>{{discountPercentage}}% discount</p>
+                                        <p>Min purchase amount: {{description}}</p>
+                                        <p>Valid till: {{endDate}}</p>
+                                    </li>
+                                    <hr>
+                                </ul>
+                            </div>
+                        </div> <!-- card end// -->
+                        {{/each}}
+                    </div>
+
                 </div>
             </div>
 

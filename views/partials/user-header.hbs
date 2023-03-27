@@ -16,7 +16,6 @@
                         <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i
                                 class="material-icons md-apps"></i> </button>
                         <ul class="nav">
-
                         </ul>
                     </div> --}}
                 </div>
@@ -29,11 +28,11 @@
                     <div class="logo logo-width-1">
                         <a href="/view-products"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
                     </div>
-
-
                     <div class="header-right">
                         <div class="header-action-right">
                             <div class="header-action-2">
+                                <div>
+                                </div>
                                 {{#if user}}
                                 <div class="header-action-icon-2">
                                     <a href="/wishlist">
@@ -45,7 +44,7 @@
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="/user-cart">
                                         <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                        {{!-- <span class="pro-count blue"></span> --}}
+                                        <span class="pro-count blue">{{count}}</span>
                                     </a>
                                 </div>
                                 {{/if}}

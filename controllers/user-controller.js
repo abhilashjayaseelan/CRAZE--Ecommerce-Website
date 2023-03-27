@@ -1,15 +1,19 @@
+const cartHelpers = require('../helpers/cart-helpers');
 const userHelpers = require('../helpers/user-helpers');
 const sendOtp = require('../middlewares/twilio');
 
 module.exports = {
    // home page
    getHomePage: async (req, res) => {
-      userHelpers.homePage().then((data) => {
-         let user = req.session.user;
-         products = JSON.parse(JSON.stringify(data));
-         // console.log(products);
-         res.render('user/view-products', { user, products, itsUser: true });
-      })
+      try {
+         const user = req.session.user;
+         const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+         const products = JSON.parse(JSON.stringify(await userHelpers.homePage()));
+         res.render('user/view-products', { user, products, itsUser: true, count });
+      } catch (err) {
+         console.error(err);
+         res.render('error', { message: 'Error getting home page', error: err });
+      }
    },
    //  user signup 
    getSignup: (req, res) => {
@@ -120,27 +124,37 @@ module.exports = {
    },
    // show user orders
    showOrders: async (req, res) => {
-      let user = req.session.user;
-      userHelpers.getOrders(user.response._id).then((orderList) => {
-         res.render('user/orders', { user, itsUser: true, orderList })
-      })
-         .catch((err) => {
-            console.log(err);
-         })
-
+      try {
+         const user = req.session.user;
+         const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+         const orders = await userHelpers.getOrders(user.response._id);
+         const orderList = orders.reverse();
+         res.render('user/orders', { user, itsUser: true, orderList, count });
+      } catch (err) {
+         console.error(err);
+         res.render('error', { message: 'Error getting orders', error: err });
+      }
    },
    // get order details
-   orderDetails: (req, res) => {
-      const user = req.session.user;
-      const orderId = req.query.orderId;
-      userHelpers.getOrderDetails(orderId).then((details) => {
+   orderDetails: async (req, res) => {
+      try {
+         const user = req.session.user;
+         const orderId = req.query.orderId;
+
+         const details = await userHelpers.getOrderDetails(orderId);
          const orderDetail = JSON.parse(JSON.stringify(details));
          const status = orderDetail.orderStatus;
-         userHelpers.getOderProducts(orderId).then((products) => {
-            const product = JSON.parse(JSON.stringify(products));
-            res.render('user/order-details', { user, itsUser: true, orderDetail, product, status });
-         })
-      })
+
+         const products = await userHelpers.getOderProducts(orderId);
+         const product = JSON.parse(JSON.stringify(products));
+         const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+
+         res.render('user/order-details', { user, itsUser: true, orderDetail, product, status, count });
+
+      } catch (error) {
+         console.error(error);
+         res.status(500).render('error', { message: 'Something went wrong. Please try again later.' });
+      }
    },
    // cancel order
    cancelOrder: (req, res) => {
@@ -174,12 +188,17 @@ module.exports = {
    },
 
    // get wish-list
-   showWishlist: (req, res) => {
-      const user = req.session.user;
-      userHelpers.getWishlist(user.response._id).then((wishlist) => {
+   showWishlist: async (req, res) => {
+      try {
+         const user = req.session.user;
+         const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+         const wishlist = await userHelpers.getWishlist(user.response._id);
          const product = JSON.parse(JSON.stringify(wishlist));
-         res.render('user/user-wishlist', { user, itsUser: true, product });
-      })
+         res.render('user/user-wishlist', { user, itsUser: true, product, count });
+      } catch (err) {
+         console.log(err);
+         res.render('error', { message: "error getting wish list", error: err })
+      }
    },
    // add to wish-list
    addToWishlist: (req, res) => {
@@ -218,8 +237,31 @@ module.exports = {
    },
 
    // apply coupon code
-   applyCoupon: (req, res) =>{
-      
+   applyCoupon: async (req, res) => {
+      try {
+         const { couponCode } = req.body
+         const { cartItems, cartTotal } = req.session;
+         const result = await userHelpers.applyCoupon(couponCode, cartItems, cartTotal);
+         if (result.status === 'invalid') {
+            res.json({ error: 'Invalid coupon code' });
+         } else if (result.status === 'minAmount') {
+            res.json({ error: 'Cart total does not meet the minimum total amount' });
+         } else if (result.status === 'expired') {
+            res.json({ error: 'This coupon has expired' });
+         } else if (result.status === 'used') {
+            res.json({ error: 'This coupon has already used' });
+         } else {
+            const newTotal = cartTotal - result;
+            req.session.discountPrice = result;
+            req.session.afterDiscount = newTotal;
+            req.session.couponCode = couponCode;
+            res.json({ offer: result, total: newTotal, success: 'Coupon applied' })
+         }
+         req.session.cartItems = false;
+         req.session.cartTotal = false;
+      } catch (err) {
+         console.log(err);
+         res.status(500).send('internal error');
+      }
    }
-
 }            

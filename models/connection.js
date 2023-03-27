@@ -268,13 +268,13 @@ const walletSchema = new mongoose.Schema({
 const couponTemplateSchema = new mongoose.Schema({
   discountPercentage: {
     type: Number,
-    required: true,
+    required: false,
     min: 0,
     max: 100,
   },
   maxDiscountAmount: {
     type: Number,
-    required: true,
+    required: false,
     min: 0,
   },
   minAmount: {

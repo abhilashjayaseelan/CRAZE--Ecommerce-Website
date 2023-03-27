@@ -1,8 +1,16 @@
-const { user, products, orders, wishlist, wallet, userCouponSchema, couponTemplateSchema } = require("../models/connection");
 const bcrypt = require('bcrypt');
 const objectId = require('mongodb').ObjectId
 const moment = require('moment');
 const shortid = require('shortid');
+const {
+  user,
+  products,
+  orders,
+  wishlist,
+  wallet,
+  userCouponSchema,
+  couponTemplateSchema
+} = require("../models/connection");
 
 
 module.exports = {
@@ -391,6 +399,47 @@ module.exports = {
       console.log("coupon error", err);
       return;
     }
+  },
+
+  // applying coupon 
+  applyCoupon: async (couponCode, cartDetails, cartTotal) => {
+    try {
+      const coupon = await userCouponSchema.findOne({ code: couponCode })
+      const currentDate = new Date();
+      //checking the coupon conditions
+      if (!coupon) {
+        return { status: 'invalid' }
+      }
+      if (currentDate > coupon.endDate) {
+        return { status: 'expired' }
+      } else if (coupon.used) {
+        return { status: 'used' }
+      }
+      if (cartTotal < coupon.minAmount) {
+        return { status: 'minAmount' }
+      }
+      //applying the coupon
+      if (coupon.discountPercentage) {
+        const discountAmount = (coupon.discountPercentage / 100) * cartTotal;
+        if (discountAmount > coupon.maxDiscountAmount) {
+          cartTotal = coupon.maxDiscountAmount;
+        } else {
+          cartTotal = discountAmount
+        }
+      } else if (coupon.maxDiscountAmount) {
+        cartTotal = coupon.maxDiscountAmount;
+      }
+      return cartTotal;
+    } catch (err) {
+      return err;
+    }
+
+  },
+
+  // updating the coupon status
+  changeCouponStatus: async(couponCode) =>{
+    await userCouponSchema.findOneAndUpdate({code: couponCode}, {used: true});
+    return;
   }
 
 }

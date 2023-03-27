@@ -27,8 +27,10 @@ module.exports = {
             const { response: { _id } } = req.session.user;
             const products = await cartHelper.getCartItems(_id);
             const total = await cartHelper.cartTotal(_id);
-            console.log(products);
-            res.render('user/user-cart', { user: req.session.user, products, total, itsUser: true });
+            const count = await cartHelper.productCount(_id);
+            req.session.cartItems = products;
+            req.session.cartTotal = total;
+            res.render('user/user-cart', { user: req.session.user, products, total, itsUser: true, count });
         } catch (error) {
             console.log('error while getting cart items: ' + error);
             res.redirect('/');
@@ -54,34 +56,66 @@ module.exports = {
             })
     },
     // get checkout page
-    getCheckout: (req, res) => {
-        const user = req.session.user;
-        // console.log(user.response._id);
-        cartHelper.getCartItems(user.response._id).then((data) => {
-            const products = JSON.parse(JSON.stringify(data))
-            cartHelper.cartTotal(user.response._id).then((total) => {
-                userProfileHelpers.getAddress(user.response._id).then((result) => {
-                    const address = JSON.parse(JSON.stringify(result))
-                    res.render('user/checkout', { user, products, total, address, itsUser: true });
-                })
-            })
-        }) 
+    getCheckout: async (req, res) => {
+        try {
+            const { _id: userId } = req.session.user.response;
+            const { discountPrice, afterDiscount } = req.session;
+
+            const [cartItems, cartTotal, userAddress, count] = await Promise.all([
+                cartHelper.getCartItems(userId),
+                cartHelper.cartTotal(userId),
+                userProfileHelpers.getAddress(userId),
+                cartHelper.productCount(userId)
+            ]);
+
+            const products = JSON.parse(JSON.stringify(cartItems));
+            const total = JSON.parse(JSON.stringify(cartTotal));
+            const address = JSON.parse(JSON.stringify(userAddress));
+
+            res.render('user/checkout', {
+                discountPrice,
+                afterDiscount,
+                user: req.session.user,
+                products,
+                total,
+                address,
+                itsUser: true,
+                count
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server Error');
+        }
     },
     // place order
     placeOrder: async (req, res) => {
         let products = await cartHelper.getCartProductList(req.body.userId);
         let totalPrice = await cartHelper.cartTotal(req.body.userId);
+        const { afterDiscount } = req.session;
+        if (afterDiscount) {
+            totalPrice = afterDiscount;
+        }
         cartHelper.placeOrder(req.body, products, totalPrice).then((response) => {
             // generating coupon if the conditions met
             const coupon = userHelper.generateCoupon(response.totalPrice, response.products, req.body.userId);
             console.log("hai");
             if (req.body['payment_option'] == 'COD') {
-                res.json({coupon, status: 'cod' });
+                res.json({ coupon, status: 'cod' });
             } else if (req.body['payment_option'] == 'Razorpay') {
                 razorPay.generateRazorpay(response.orderId, response.totalPrice).then((order) => {
-                    res.json({coupon, response, order, status: 'razorpay' });
+                    res.json({ coupon, response, order, status: 'razorpay' });
                 })
             }
         })
+
+        // changing the coupon status if a coupon is applied
+        if (afterDiscount) {
+            const { couponCode } = req.session;
+            userHelper.changeCouponStatus(couponCode).then(() => {
+                req.session.discountPrice = false;
+                req.session.afterDiscount = false;
+                req.session.couponCode = false;
+            })
+        }
     }
 }   

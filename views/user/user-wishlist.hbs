@@ -15,9 +15,9 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table shopping-summery text-center">
+                            <table class="table table-hover text-center">
                                 <thead>
-                                    <tr class="main-heading">
+                                    <tr class="main-heading" style="background-color: rgb(199, 210, 206);">
                                         <th scope="col" colspan="2">Product</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Availability</th>
@@ -25,8 +25,8 @@
                                         <th scope="col">Remove</th>
                                     </tr>
                                 </thead>
-                                {{#each product}}
                                 <tbody>
+                                    {{#each product}}
                                     <tr>
                                         <td class="image product-thumbnail"><img src="{{product.images.image1}}"
                                                 alt="#"></td>
@@ -52,8 +52,8 @@
                                                 onclick="removeFromWishlist('{{product._id}}')"><i
                                                     class="fi-rs-trash"></i></a></td>
                                     </tr>
+                                    {{/each}}
                                 </tbody>
-                                {{/each}}
                                 {{#if product}}
                                 {{else}}
                                 <h5>Wishlist is empty</h5>

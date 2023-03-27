@@ -48,7 +48,7 @@
                                             {{totalOrders}}
                                         </td>
                                         <td class="text-center">
-                                            {{totalRevenue}}
+                                            {{formatCurrency totalRevenue}}
                                         </td>
                                     </tr>
                                     {{/each}}
@@ -97,7 +97,7 @@
                                         <a href="">Monthly revenue</a>
                                     </td>
                                     <td>
-                                        <p>₹ {{totalSales}}</p>
+                                        <p>{{formatCurrency totalSales}}</p>
                                     </td>
 
                                 </tr>

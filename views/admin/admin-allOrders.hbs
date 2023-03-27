@@ -60,7 +60,7 @@
                                 </td>
 
                                 <td>{{orderId}}</td>
-                                <td>₹{{totalPrice}}</td>
+                                <td>{{formatCurrency totalPrice}}</td>
                                 <td>{{createdAt}}</td>
 
                                 {{#if (eq orderStatus "placed")}}
