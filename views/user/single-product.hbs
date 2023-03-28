@@ -1,5 +1,4 @@
 <!-- Quick view -->
-
 <main class="main">
     <div class="page-header breadcrumb-wrap">
         <div class="container">
@@ -137,8 +136,13 @@
                                             <span class="qty-val">1</span>
                                             <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                         </div>
+                                        {{#if (productStatus product.totalQty)}}
                                         <button onclick="addToCart('{{product._id}}')"
                                             class="btn btn-outline-secondary">Add to cart</button>
+                                        {{else}}
+                                        <button onclick=""
+                                            class="btn btn-outline-secondary">Notify Me</button>
+                                        {{/if}}
                                         <div class="product-extra-link2">
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
                                                 onclick="addToWishList('{{product._id}}')"><i
@@ -151,8 +155,12 @@
                                         {{!-- <li class="mb-5">SKU: <a href="#">FWM15VKT</a></li> --}}
                                         <li class="mb-5">Tags:<a href="#" rel="tag">{{product.category}}</a>, <a
                                                 href="#" rel="tag">{{product.subCategory}}</a> </li>
-                                        <li>Availability:<span class="in-stock text-success ml-5">{{product.totalQty}}
-                                                Items In Stock</span></li>
+                                        <li>Availability:{{#if (productStatus product.totalQty)}}
+                                            <span class="badge rounded-pill alert-success">In Stock</span>
+                                            {{else}}
+                                            <span class="badge rounded-pill alert-danger">Out of Stock</span>
+                                            {{/if}}
+                                        </li>
                                     </ul>
                                 </div>
                                 <!-- Detail Info -->

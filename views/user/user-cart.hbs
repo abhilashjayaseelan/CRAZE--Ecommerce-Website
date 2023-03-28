@@ -81,12 +81,12 @@
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Shipping</td>
-                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>0</td>
+                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>₹0.00</td>
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Discount</td>
                                                 <td class="cart_total_amount"> <i class="ti-gift mr-5"></i><span
-                                                        id="offer-total">0</span></td>
+                                                        id="offer-total">₹0.00</span></td>
                                             </tr>
                                             <tr>
                                                 <td class="cart_total_label">Total</td>
@@ -102,6 +102,12 @@
                                 <div class="mb-30 mt-50">
                                     <div class="heading_s1 mb-3">
                                         <h4>Apply Coupon</h4>
+                                    </div>
+                                    <div>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#available-coupons"
+                                            data-bs-whatever="@mdo" id="coupons-button"><i
+                                                class="fa-sharp fa-solid fa-ticket"></i>
+                                            Available coupons</a>
                                     </div>
                                     <div class="total-amount">
                                         <div class="left">
@@ -129,7 +135,46 @@
                                     <h5>Amount need to pay: <span id="amount-to-pay">{{formatCurrency total}}</span>
                                     </h5>
                                 </div>
+                                {{!-- modal for showing the available coupons --}}
+                                <div class="modal fade" id="available-coupons" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel" style="color: #088178;">
+                                                    Available coupons</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                            </div>
+                                            <div>
+                                                <div>
+                                                    {{#each coupon}}
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <ul>
+                                                                <li>
+                                                                    <h4><a href="">{{code}}</a></h4>
+                                                                    <button class="copy-code-btn"
+                                                                        data-clipboard-text="{{code}}">Copy
+                                                                        code</button>
+                                                                    <p>{{discountPercentage}}% discount</p>
+                                                                    <p>Valid till: {{formatDate endDate}}</p>
+                                                                </li>
+                                                                <hr>
+                                                            </ul>
+                                                        </div>
+                                                    </div> <!-- card end// -->
+                                                    {{/each}}
+                                                </div>
 
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <a href="/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To
                                     CheckOut</a>
@@ -288,6 +333,22 @@
     </div>
 
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+    <script>
+        var copyCodeBtns = document.querySelectorAll('.copy-code-btn');
+        var clipboard = new ClipboardJS(copyCodeBtns);
+        clipboard.on('success', function (e) {
+            e.trigger.textContent = 'Copied';
+            setTimeout(function () {
+                e.trigger.textContent = 'Copy code';
+            }, 2000);
+        });
+
+        clipboard.on('error', function (e) {
+            console.error('Error copying coupon code: ', e);
+        });
+    </script>
     {{!-- for applying the coupon --}}
     <script>
         $(document).ready(function () {

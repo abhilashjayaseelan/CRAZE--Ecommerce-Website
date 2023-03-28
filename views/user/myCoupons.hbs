@@ -45,7 +45,7 @@
                                         <button class="copy-code-btn" data-clipboard-text="{{code}}">Copy code</button>
                                         <p>{{discountPercentage}}% discount</p>
                                         <p>Min purchase amount: {{description}}</p>
-                                        <p>Valid till: {{endDate}}</p>
+                                        <p>Valid till: {{formatDate endDate}}</p>
                                     </li>
                                     <hr>
                                 </ul>
@@ -53,7 +53,6 @@
                         </div> <!-- card end// -->
                         {{/each}}
                     </div>
-
                 </div>
             </div>
 
@@ -81,7 +80,7 @@
         clipboard.on('success', function (e) {
             e.trigger.textContent = 'Copied';
             setTimeout(function () {
-                e.trigger.textContent = 'Copy';
+                e.trigger.textContent = 'Copy code';
             }, 2000);
         });
 

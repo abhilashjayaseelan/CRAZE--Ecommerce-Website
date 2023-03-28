@@ -18,14 +18,13 @@
                             <input class="form-check-input" type="checkbox" value="">
                         </div> --}}
                     </div>
-                    <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                        <select class="form-select">
-                            <option selected>All category</option>
-                            {{!-- <option>Electronics</option>
-                            <option>Clothes</option>
-                            <option>Automobile</option> --}}
+                    {{!-- <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                        <select class="form-select" id="statusFilter">
+                            <option>All</option>
+                            <option>In Stock</option>
+                            <option>Out of Stock</option>
                         </select>
-                    </div>
+                    </div> --}}
                     {{!-- <div class="col-md-2 col-6">
                         <input type="date" value="02.05.2021" class="form-control">
                     </div>
@@ -49,6 +48,7 @@
                         <th>Color</th>
                         <th>Price</th>
                         <th>Total number</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -80,7 +80,14 @@
                             <p class="fw-normal mb-1">{{totalQty}}</p>
                         </td>
                         <td>
-                            <a href="/admin/edit-product/{{_id}}" class="btn btn-sm font-sm rounded btn-brand">
+                            {{#if (productStatus totalQty)}}
+                            <span class="badge rounded-pill alert-success">In Stock</span>
+                            {{else}}
+                            <span class="badge rounded-pill alert-danger">Out of Stock</span>
+                            {{/if}}
+                        </td>
+                        <td>
+                            <a href="/admin/edit-product/{{slug}}" class="btn btn-sm font-sm rounded btn-brand">
                                 <i class="material-icons md-edit"></i>
                             </a>
                             <a href="/admin/delete-product/{{_id}}" class="btn btn-sm font-sm btn-light rounded"
@@ -94,11 +101,12 @@
             </table>
 
             <div class="pagination-area mt-15 mb-50">
+                <a class="previous">◀prev </a>
                 <nav aria-label="Page navigation example">
                     <ul id="paginationContainer" class="pagination justify-content-start">
                     </ul>
                 </nav>
-                        
+                <a class="next"> next▶</a>
             </div>
     </section> <!-- content-main end// -->
 
@@ -107,23 +115,78 @@
             const itemsPerPage = 5;
             const numItems = $('#ordersContainer').children().length;
             const numPages = Math.ceil(numItems / itemsPerPage);
+            let currentPage = 1;
 
             // Create pagination links
             for (let i = 1; i <= numPages; i++) {
-                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+                $('<li class="page-item"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
             }
 
             // Bind click event to pagination links
             $('.page-link').click(function (e) {
-                const currentPage = $(this).data('page');
-                const startIndex = (currentPage - 1) * itemsPerPage;
+                e.preventDefault();
+                const newPage = $(this).data('page');
+
+                if (newPage === currentPage) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
 
                 $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
-                return false;
-            })
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $(this).parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for next button
+            $('.next').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage + 1;
+
+                if (newPage > numPages) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for previous button
+            $('.previous').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage - 1;
+
+                if (newPage < 1) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
             // Show first page by default
-            $('.page-link:first').addClass('active');
+            $('.page-link:first').parent().addClass('active');
             $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
-        })
+        });
     </script>

@@ -64,6 +64,9 @@ module.exports = {
     },
     oldprice: (actual, discount) => {
         return discount > 0;
-    }
+    },
+    productStatus: (quantity) =>{
+        return quantity > 0;
+    },
     // add more helper functions here...
 }

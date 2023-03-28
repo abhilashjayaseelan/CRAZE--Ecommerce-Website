@@ -26,6 +26,12 @@
                             </span> <br>
                             <small class="text-muted">Order ID: {{orderDetail.orderId}}</small>
                         </div>
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i> <b></b>
+                            </span> <br>
+                            <small class="text-muted">Order Date: {{formatDate orderDetail.createdAt}}</small>
+                        </div>
 
 
                         <div class="col-lg-6 col-md-6 ms-auto text-md-end">
@@ -103,7 +109,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button onclick="returnOrder('{{orderDetail.orderId}}')" class="btn btn-primary">Continue</button>
+                                    <button onclick="returnOrder('{{orderDetail.orderId}}')"
+                                        class="btn btn-primary">Continue</button>
                                 </div>
 
                             </div>
@@ -150,7 +157,7 @@
                                     <input class="form-check-input" type="radio" name="flexRadioDefault"
                                         id="flexRadioDefault2" checked>
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        I have changed my mind  
+                                        I have changed my mind
                                     </label>
                                 </div>
                                 <div class="form-check">
@@ -171,7 +178,8 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
-                                    <button onclick="cancelOrder('{{orderDetail.orderId}}')" class="btn btn-primary">Continue</button>
+                                    <button onclick="cancelOrder('{{orderDetail.orderId}}')"
+                                        class="btn btn-primary">Continue</button>
                                 </div>
 
                             </div>
@@ -244,8 +252,8 @@
                                             {{!-- <th width="20%" class="text-end">Total</th> --}}
                                         </tr>
                                     </thead>
-                                    {{#each  orderDetail.products}}
                                     <tbody>
+                                        {{#each orderDetail.products}}
                                         <tr>
                                             <td>
                                                 <a class="itemside" href="#">
@@ -256,13 +264,13 @@
                                                     <div class="info">{{name}}</div>
                                                 </a>
                                             </td>
-                                            
+
                                             <td> ₹{{price}} </td>
                                             <td> {{quantity}} </td>
                                             {{!-- <td class="text-end"> $99.50 </td> --}}
                                         </tr>
+                                        {{/each}}
                                     </tbody>
-                                    {{/each}}
                                     <tr>
                                         <td colspan="4">
                                             <article class="float-end">

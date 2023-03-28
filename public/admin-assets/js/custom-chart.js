@@ -43,7 +43,7 @@
         let cat = categoryWise.split(",").map(x => parseInt(x));
         var ctx = document.getElementById("myChart2");
         var myChart = new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
                 labels: ['Women', 'Kid', 'Men'],
                 datasets: [{

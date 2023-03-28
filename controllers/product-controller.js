@@ -5,10 +5,10 @@ module.exports = {
     // user side 
     getProduct: async (req, res) => {
         try {
-            const productId = req.params.id;
+            const slug = req.params.id;
             const user = req.session.user;
             const count = user ? await cartHelpers.productCount(user.response._id) : 0;
-            const product = JSON.parse(JSON.stringify(await productHelpers.getProduct(productId)));
+            const product = JSON.parse(JSON.stringify(await productHelpers.getProduct(slug)));
             res.render('user/single-product', { user, product, itsUser: true, count });
         } catch (err) {
             console.error(err);

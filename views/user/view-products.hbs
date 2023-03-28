@@ -145,7 +145,7 @@
                             <div class="product-cart-wrap mb-30">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="/view-singleProduct/{{_id}}">
+                                        <a href="/view-singleProduct/{{slug}}">
                                             <img class="default-img" src="{{images.image1}}" alt="">
                                             <img class="hover-img" src="{{images.image3}}" alt="">
                                         </a>
@@ -184,7 +184,7 @@
                                     </div>
                                     <div class="product-action-1 show">
                                         <a aria-label="Add To Cart" class="action-btn hover-up"
-                                            onclick="addToCart('{{_id}}')"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            onclick="addToCart('{{_id}}','{{totalQty}}')"><i class="fi-rs-shopping-bag-add"></i></a>
                                     </div>
                                 </div>
                             </div>

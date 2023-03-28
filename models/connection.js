@@ -73,6 +73,10 @@ const categorySchema = new Schema({
 })
 
 const productSchema = new Schema({
+  slug: {
+    type: String,
+    required: true
+  },
   category: {
     type: String,
     required: true

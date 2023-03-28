@@ -81,8 +81,8 @@
                                         <label class="form-label">Sub-category</label>
                                         <select id="sub-category" class="form-select" name="subCategory" required="">
                                             <!-- Subcategories will be loaded dynamically -->
+                                            <option>{{data.product.subCategory}}</option>
                                             {{#each data.categories}}
-                                            <option> {{subCategory}}</option>
                                             {{/each}}
                                         </select>
                                     </div>

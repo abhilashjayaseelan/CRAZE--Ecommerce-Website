@@ -392,9 +392,11 @@ module.exports = {
           description: couponTemplate[0].description
         });
         await userCoupon.save();
+        console.log('coupon generated');
+        return userCoupon;
+      } else {
+        return;
       }
-      console.log('coupon generated');
-      return;
     } catch (err) {
       console.log("coupon error", err);
       return;
@@ -437,8 +439,8 @@ module.exports = {
   },
 
   // updating the coupon status
-  changeCouponStatus: async(couponCode) =>{
-    await userCouponSchema.findOneAndUpdate({code: couponCode}, {used: true});
+  changeCouponStatus: async (couponCode) => {
+    await userCouponSchema.findOneAndUpdate({ code: couponCode }, { used: true });
     return;
   }
 

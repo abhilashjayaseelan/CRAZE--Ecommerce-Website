@@ -264,8 +264,8 @@ module.exports = {
                     }
                 }
             ];
-            const result = await cart.aggregate(pipeline);
-            return result[0].totalQuantity;
+            const result = await cart.aggregate(pipeline);   
+            return result[0] ? result[0].totalQuantity : 0;
         } catch (err) {
             console.log(err);
             return err;

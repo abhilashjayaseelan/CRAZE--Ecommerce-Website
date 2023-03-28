@@ -14,7 +14,7 @@
                     </tr>
                 </thead>
                 <tbody id="ordersContainer">
-                {{#each user}}
+                    {{#each user}}
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
@@ -29,7 +29,7 @@
                         <td>
                             <p class="fw-normal mb-1">{{mobile}}</p>
                         </td>
-                        <td>{{createdAt}}</td>
+                        <td>{{formatDate createdAt}}</td>
                         <td>
                             {{#if blocked}}
                             <p class="fw-normal mb-1" style="color: red;">Blocked</p>
@@ -50,15 +50,17 @@
                             </div>
                         </td>
                     </tr>
-                {{/each}}
+                    {{/each}}
                 </tbody>
             </table>
         </div> <!-- card end// -->
         <div class="pagination-area mt-15 mb-50">
+            <a class="previous">◀prev </a>
             <nav aria-label="Page navigation example">
                 <ul id="paginationContainer" class="pagination justify-content-start">
                 </ul>
-            </nav>             
+            </nav>
+            <a class="next"> next▶</a>
         </div>
     </section> <!-- content-main end// -->
 
@@ -112,23 +114,78 @@
             const itemsPerPage = 5;
             const numItems = $('#ordersContainer').children().length;
             const numPages = Math.ceil(numItems / itemsPerPage);
+            let currentPage = 1;
 
             // Create pagination links
             for (let i = 1; i <= numPages; i++) {
-                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+                $('<li class="page-item"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
             }
 
             // Bind click event to pagination links
             $('.page-link').click(function (e) {
-                const currentPage = $(this).data('page');
-                const startIndex = (currentPage - 1) * itemsPerPage;
+                e.preventDefault();
+                const newPage = $(this).data('page');
+
+                if (newPage === currentPage) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
 
                 $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
-                return false;
-            })
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $(this).parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for next button
+            $('.next').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage + 1;
+
+                if (newPage > numPages) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for previous button
+            $('.previous').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage - 1;
+
+                if (newPage < 1) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
             // Show first page by default
-            $('.page-link:first').addClass('active');
+            $('.page-link:first').parent().addClass('active');
             $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
-        })
+        });
     </script>

@@ -1,10 +1,12 @@
+const ObjectId = require('mongodb').ObjectId;
 const { products, category, discount } = require("../models/connection");
+const slugify = require('slugify');
 
 module.exports = {
     // filtering based categories
-    categoryFilter: async(category) =>{
+    categoryFilter: async (category) => {
         try {
-            const filteredProducts = await products.find({category: category});
+            const filteredProducts = await products.find({ category: category });
             return filteredProducts;
         } catch (err) {
             console.log(err);
@@ -14,8 +16,10 @@ module.exports = {
     //admin side
     // adding a new product
     addProduct: async (productData, images) => {
+        const slug = slugify(`${productData.subCategory} ${productData.name}`);
         try {
             const product = new products({
+                slug: slug,
                 category: productData.category,
                 subCategory: productData.subCategory,
                 name: productData.name,
@@ -51,32 +55,37 @@ module.exports = {
             })
     },
     // single product
-    getProduct: (productId) => {
-        return new Promise((resolve, reject) => {
-            products.findOne({ _id: productId }).then((product) => {
-                // console.log(product);
-                resolve(product);
-            })
-        })
+    getProduct: async (slug) => {
+        try {
+            const product = await products.findOne({ slug });
+            return product;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     // admin side product edit
-    getEditProduct: (id) => {
-        return Promise.all([
-            products.findOne({ _id: id }),
-            category.find()
-        ]).then(([product, categories]) => {
-            return { product, categories }
-        })
-            .catch((err) => {
-                console.log(err);
+    getEditProduct: (slug) => {
+        try {
+            return Promise.all([
+                products.findOne({ slug: slug }),
+                category.find()
+            ]).then(([product, categories]) => {
+                return { product, categories }
             })
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+
     },
     // saving edited details
-    postEditProduct: (productId, productData) => {
-        console.log(productData);
-        return new Promise(async (resolve, reject) => {
+    postEditProduct: async (productId, productData) => {
+        const slug = slugify(`${productData.subCategory} ${productData.name}`);
+        try {
             await products.updateOne({ _id: productId }, {
                 $set: {
+                    'slug': slug,
                     'category': productData.category,
                     'subCategory': productData.subCategory,
                     'name': productData.name,
@@ -87,12 +96,11 @@ module.exports = {
                     'price': productData.price,
                     'totalQty': productData.totalQty,
                 }
-            })
-            resolve();
-        })
-            .catch((err) => {
-                console.log(err);
-            })
+            });
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     // deleting product
     deleteProduct: (productID) => {
@@ -133,6 +141,23 @@ module.exports = {
                 reject();
             }
         })
+    },
+
+    // changing quantity after order placing
+    decreaseProductQuantity: async (orderProducts) => {
+        try {
+            for (let i = 0; i < orderProducts.length; i++) {
+                const productId = orderProducts[i].item;
+                const quantity = orderProducts[i].quantity
+
+                await products.updateOne(
+                    { _id: ObjectId(productId) },
+                    { $inc: { totalQty: -quantity } }
+                )
+            }
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 

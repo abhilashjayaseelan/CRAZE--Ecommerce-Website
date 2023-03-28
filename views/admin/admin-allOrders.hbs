@@ -19,11 +19,13 @@
                         <input type="text" placeholder="Search..." class="form-control">
                     </div> --}}
                     <div class="col-lg-2 col-6 col-md-3">
-                        <select class="form-select">
-                            <option>Placed</option>
+                        <select class="form-select" id="statusFilter">
+                            <option>all</option>
                             <option>Pending</option>
+                            <option>Placed</option>
                             <option>Cancelled</option>
                             <option>Delivered</option>
+                            <option>Return</option>
                         </select>
                     </div>
                     {{!-- <div class="col-lg-2 col-6 col-md-3">
@@ -61,7 +63,7 @@
 
                                 <td>{{orderId}}</td>
                                 <td>{{formatCurrency totalPrice}}</td>
-                                <td>{{createdAt}}</td>
+                                <td>{{formatDate createdAt}}</td>
 
                                 {{#if (eq orderStatus "placed")}}
                                 <td><span class="badge rounded-pill alert-success">Placed</span></td>
@@ -87,10 +89,12 @@
             </div> <!-- card-body end// -->
         </div> <!-- card end// -->
         <div class="pagination-area mt-15 mb-50">
+            <a class="previous">◀prev </a>
             <nav aria-label="Page navigation example">
                 <ul id="paginationContainer" class="pagination justify-content-start">
                 </ul>
-            </nav>                 
+            </nav>
+            <a class="next"> next▶</a>
         </div>
     </section> <!-- content-main end// -->
 
@@ -99,23 +103,100 @@
             const itemsPerPage = 5;
             const numItems = $('#ordersContainer').children().length;
             const numPages = Math.ceil(numItems / itemsPerPage);
+            let currentPage = 1;
 
             // Create pagination links
             for (let i = 1; i <= numPages; i++) {
-                $('<li class="page-item active"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+                $('<li class="page-item"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
             }
 
             // Bind click event to pagination links
             $('.page-link').click(function (e) {
-                const currentPage = $(this).data('page');
-                const startIndex = (currentPage - 1) * itemsPerPage;
+                e.preventDefault();
+                const newPage = $(this).data('page');
+
+                if (newPage === currentPage) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
                 const endIndex = startIndex + itemsPerPage;
 
                 $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
-                return false;
-            })
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $(this).parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for next button
+            $('.next').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage + 1;
+
+                if (newPage > numPages) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for previous button
+            $('.previous').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage - 1;
+
+                if (newPage < 1) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#ordersContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
             // Show first page by default
-            $('.page-link:first').addClass('active');
+            $('.page-link:first').parent().addClass('active');
             $('#ordersContainer').children().hide().slice(0, itemsPerPage).show();
-        })
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Listen for changes in the status filter
+            $('#statusFilter').change(function () {
+                var selectedStatus = $(this).val(); // Get the selected status
+                if (selectedStatus == 'all') {
+                    // If 'all' status is selected, show all rows
+                    $('#ordersContainer tr').show();
+                } else {
+                    // Otherwise, hide all rows and show only rows with the selected status
+                    $('#ordersContainer tr').hide();
+                    $('#ordersContainer tr td:nth-child(6)').each(function () {
+                        if ($(this).text() == selectedStatus) {
+                            $(this).parent().show();
+                        }
+                    });
+                }
+            });
+        });
+
     </script>

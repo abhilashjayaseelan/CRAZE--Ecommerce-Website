@@ -1,6 +1,16 @@
 
 // add product to cart
-function addToCart(productId) {
+function addToCart(productId, quantity) {
+    console.log(quantity);
+    if (quantity == 0) {
+        swal({
+            title: "Out of Stock",
+            text: `This product is currently out of stock`,
+            icon: "warning",
+            button: "Ok!",
+        });
+        return;
+    }
     // console.log('clicked');
     $.ajax({
         url: `/add-to-cart/${productId}`,
@@ -15,15 +25,16 @@ function addToCart(productId) {
                     icon: "success",
                     button: "Ok!",
                 })
-                .then(()=>{
-                    location.reload();
-                })
+                    .then(() => {
+                        location.reload();
+                    })
             } else {
-                window.location.href = '/login' 
+                window.location.href = '/login'
             }
         }
     })
 }
+
 
 // changing cart product quantities
 function changeQuantity(cartId, prodId, userId, count) {
@@ -232,7 +243,7 @@ function returnOrder(orderId) {
                 text: `Item will be collected by one our agent within 3 days..`,
                 icon: "success",
                 button: "Ok!",
-            }).then(() => [    
+            }).then(() => [
                 location.replace('/orders')
             ])
         }
