@@ -47,11 +47,11 @@
                                     </td> --}}
                                     <td class="text-center" data-title="Stock">
                                         <button class="cart-item-count mr-3"
-                                            onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}', 1)"
+                                            onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}', 1, '{{product.slug}}')"
                                             style="border: 0cm;">▴</button>
-                                        <p id="{{product._id}}">{{quantity}}</p>
-                                        <button class="cart-item-count ml-3"
-                                            onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}',-1)"
+                                        <p class="cart-quantity" id="{{product._id}}">{{quantity}}</p>
+                                        <button class="cart-item-count ml-3" id="{{product.slug}}"
+                                            onclick="changeQuantity( '{{_id}}','{{ product._id}}', '{{../user.response._id}}',-1, '{{product.slug}}')"
                                             style="border: 0cm;">▾</button>
                                     </td>
                                     <td class="action" data-title="Remove"><a href="#" class="text-muted"
@@ -335,6 +335,22 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const pTags = document.querySelectorAll('.cart-quantity');
+            const downButtons = document.querySelectorAll('.cart-item-count.ml-3');
+            for (let i = 0; i < pTags.length; i++) {
+                const quantity = parseInt(pTags[i].innerText);
+                if (quantity === 1) {
+                    downButtons[i].disabled = true;
+                }
+            }
+        });
+    </script>
+
+
+
     <script>
         var copyCodeBtns = document.querySelectorAll('.copy-code-btn');
         var clipboard = new ClipboardJS(copyCodeBtns);

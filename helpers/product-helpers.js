@@ -1,6 +1,7 @@
 const ObjectId = require('mongodb').ObjectId;
-const { products, category, discount } = require("../models/connection");
+const { products, category, discount, orders, review } = require("../models/connection");
 const slugify = require('slugify');
+const { ObjectID } = require('bson');
 
 module.exports = {
     // filtering based categories
@@ -175,6 +176,103 @@ module.exports = {
             }
         } catch (err) {
             console.log(err);
+        }
+    },
+
+    // adding product review
+    addProductReview: async (ratingInfo, userInfo) => {
+        try {
+            const { starRating, comment, productId } = ratingInfo;
+            const { _id: userID, name, email } = userInfo;
+            const purchased = await orders.aggregate([
+                {
+                    $match: {
+                        userId: ObjectID(userID),
+                        orderStatus: 'recieved'
+                    }
+                },
+                {
+                    $unwind: "$products",
+                },
+                {
+                    $match: {
+                        "products.item": ObjectId(productId),
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        orderId: "$_id",
+                        productId: "$products.item",
+                    },
+                },
+            ])
+            if (purchased.length === 0) {
+                return {
+                    Message: 'You cannot rate this product unless you have already purchased it.',
+                    notPurchased: true
+                }
+            }
+            // if already posted a review 
+            const alreadyPosted = await review.findOne({
+                product: ObjectID(productId),
+                'user.userID': ObjectID(userID)
+            })
+            console.log(alreadyPosted);
+            if (alreadyPosted) {
+                return {
+                    Message: 'You have already submitted the review.',
+                    alreadyPosted: true
+                }
+            }
+            const newRating = new review({
+                product: ObjectID(productId),
+                rating: parseInt(starRating),
+                review: comment,
+                user: {
+                    userID: ObjectID(userID),
+                    name,
+                    email,
+                }
+            })
+            await newRating.save();
+            return {
+                Message: 'Review added',
+                newRating: true
+            }
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+    },
+
+    // getting product reviews
+    getProductReviews: async (prodId) => {
+        try {
+            const productReviews = await review.find({ product: ObjectID(prodId) }).lean();
+            return productReviews;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+    },
+    // getting product rating
+    getProductRating: async (prodId) => {
+        try {
+            
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+    },
+    // getting all reviews
+    allReviews: async()=>{
+        try {
+            const allReviews = await review.find().lean();
+            return allReviews;
+        } catch(err) {
+            console.log(err);
+            return err;
         }
     }
 }

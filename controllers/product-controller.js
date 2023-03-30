@@ -9,7 +9,10 @@ module.exports = {
             const user = req.session.user;
             const count = user ? await cartHelpers.productCount(user.response._id) : 0;
             const product = JSON.parse(JSON.stringify(await productHelpers.getProduct(slug)));
-            res.render('user/single-product', { user, product, itsUser: true, count });
+            const reviews = await productHelpers.getProductReviews(product._id);
+            //const ratings = await productHelpers.getProductRating(product._id);
+            const rateCount = reviews.length;
+            res.render('user/single-product', { user, product, itsUser: true, count, reviews, rateCount });
         } catch (err) {
             console.error(err);
             res.status(500).render('error', { message: 'Error getting product', error: err });
@@ -118,6 +121,28 @@ module.exports = {
         } catch (err) {
             console.log(err);
             res.status(500).send('internal error');
+        }
+    },
+    // posting product review
+    postProductReview: async(req, res) =>{
+        try {
+            const userData = req.session.user.response;
+            const response = await productHelpers.addProductReview(req.body, userData);
+            res.json(response);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({message: 'Error while adding review'});
+        }
+    },
+    // getting all product reviews
+    getAllReviews: async(req, res) =>{
+        try {
+            const allReviews = await productHelpers.allReviews();
+            const prodReviews = allReviews.reverse();
+            res.render('admin/product-reviews', {admin: true, prodReviews});
+        } catch (err) {
+            console.log(err);
+            res.status(500).render('error', {message: 'Error getting reviews'});
         }
     }
 }

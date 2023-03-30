@@ -11,7 +11,6 @@ require('dotenv').config();
 
 const adminRouter = require('./routes/admin');
 const usersRouter = require('./routes/users');
-const productRouter = require('./routes/products');
 const hbs = require('express-handlebars');
 const session = require('express-session');
 
@@ -40,7 +39,6 @@ app.use(session({ secret: "#Key", cookie: { maxAge: 600000 } }));
 
 app.use('/', usersRouter);
 app.use('/admin', adminRouter);
-app.use('/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

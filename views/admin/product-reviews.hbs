@@ -1,0 +1,192 @@
+<main class="main-wrap">
+    <section class="content-main">
+        <div class="content-header">
+            <div>
+                <h2 class="content-title card-title">Reviews</h2>
+            </div>
+
+        </div>
+        <div class="card mb-4">
+            {{!-- <header class="card-header">
+                <div class="row gx-3">
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <select class="form-select">
+                            <option>Status</option>
+                            <option>Active</option>
+                            <option>Disabled</option>
+                            <option>Show all</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <select class="form-select">
+                            <option>Show 20</option>
+                            <option>Show 30</option>
+                            <option>Show 40</option>
+                        </select>
+                    </div>
+                </div>
+            </header> --}}
+            <!-- card-header end// -->
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Sl No</th>
+                                <th>Product Id</th>
+                                <th>Name</th>
+                                <th>Rating</th>
+                                <th>Date</th>
+                                <th class="text-end">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reviewContainer">
+                            {{#each prodReviews}}
+                            <tr>
+                                <td>{{index @index}}</td>
+                                <td><b>{{product}}</b></td>
+                                <td>{{user.name}}</td>
+                                <td class="desc">
+                                    <span><i class="fa fa-sm fa-star star" style="color:#DDDDDD ;"></i></span>
+                                    <span><i class="fa fa-sm fa-star star" style="color:#DDDDDD ;"></i></span>
+                                    <span><i class="fa fa-sm fa-star star" style="color:#DDDDDD ;"></i></span>
+                                    <span><i class="fa fa-sm fa-star star" style="color:#DDDDDD ;"></i></span>
+                                    <span><i class="fa fa-sm fa-star star" style="color:#DDDDDD ;"></i></span>
+                                    <input type="hidden" class="rating-input" value="{{rating}}">
+                                </td>
+                                <td>{{formatDate createdAt}}</td>
+                                <td class="text-end">
+                                    <a href="#" class="btn btn-md rounded font-sm">Detail</a>
+                                    <div class="dropdown">
+                                        <a href="#" data-bs-toggle="dropdown"
+                                            class="btn btn-light rounded btn-sm font-sm">
+                                            <i class="material-icons md-more_horiz"></i> </a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#">View detail</a>
+                                            <a class="dropdown-item" href="#">Edit info</a>
+                                            <a class="dropdown-item text-danger" href="#">Delete</a>
+                                        </div>
+                                    </div> <!-- dropdown //end -->
+                                </td>
+                            </tr>
+                            {{/each}}
+                        </tbody>
+                    </table>
+                </div> <!-- table-responsive//end -->
+            </div>
+            <!-- card-body end// -->
+        </div>
+        <div class="pagination-area mt-15 mb-50">
+            <a class="previous">◀prev </a>
+            <nav aria-label="Page navigation example">
+                <ul id="paginationContainer" class="pagination justify-content-start">
+                </ul>
+            </nav>
+            <a class="next"> next▶</a>
+        </div>
+    </section> <!-- content-main end// -->
+
+
+    {{!-- for pagination --}}
+    <script>
+        $(document).ready(function () {
+            const itemsPerPage = 5;
+            const numItems = $('#reviewContainer').children().length;
+            const numPages = Math.ceil(numItems / itemsPerPage);
+            let currentPage = 1;
+
+            // Create pagination links
+            for (let i = 1; i <= numPages; i++) {
+                $('<li class="page-item"><a class="page-link" data-page="' + i + '" href="#">' + i + '</a></li>').appendTo('#paginationContainer');
+            }
+
+            // Bind click event to pagination links
+            $('.page-link').click(function (e) {
+                e.preventDefault();
+                const newPage = $(this).data('page');
+
+                if (newPage === currentPage) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#reviewContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $(this).parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for next button
+            $('.next').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage + 1;
+
+                if (newPage > numPages) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#reviewContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Add event handler for previous button
+            $('.previous').click(function (e) {
+                e.preventDefault();
+                const newPage = currentPage - 1;
+
+                if (newPage < 1) {
+                    return;
+                }
+
+                const startIndex = (newPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+
+                $('#reviewContainer').children().hide().slice(startIndex, endIndex).show();
+
+                // Update active page link
+                $('.page-item.active').removeClass('active');
+                $('.page-link[data-page="' + newPage + '"]').parent().addClass('active');
+
+                currentPage = newPage;
+            });
+
+            // Show first page by default
+            $('.page-link:first').parent().addClass('active');
+            $('#reviewContainer').children().hide().slice(0, itemsPerPage).show();
+        });
+    </script>
+
+    {{!-- for displaying the star rating --}}
+    <script>
+        // get all the sets of stars and hidden input fields
+        const starSets = document.querySelectorAll('.desc');
+        console.log(starSets)
+        // loop through each set of stars and hidden input fields
+        starSets.forEach((set) => {
+            // get the rating value from the hidden input field
+            let rating = set.querySelector('.rating-input').value;
+            rating = parseInt(rating)
+            // loop through the stars in the current set and fill in the stars based on the rating value
+            const stars = set.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.style.color = '#ED8A19';
+                } else {
+                    star.style.color = '#DDDDDD';
+                }
+            });
+        });
+    </script>

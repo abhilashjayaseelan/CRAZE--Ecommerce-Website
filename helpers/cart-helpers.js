@@ -54,7 +54,8 @@ module.exports = {
                 {
                     $project: {
                         item: '$products.item',
-                        quantity: '$products.quantity'
+                        quantity: '$products.quantity',
+                        slug: '$slug'
                     }
                 },
                 {
@@ -67,7 +68,7 @@ module.exports = {
                 },
                 {
                     $project: {
-                        item: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
+                        slug: 1, item: 1, quantity: 1, product: { $arrayElemAt: ['$product', 0] }
                     }
                 },
             ]);

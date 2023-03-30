@@ -165,5 +165,10 @@ router.post('/apply-coupon',
     sessionHandler.checkingUser,
     userControllers.applyCoupon);
 
+// getting product review
+router.post('/product-review',
+    sessionHandler.checkingUser,
+    productControllers.postProductReview);
+
 
 module.exports = router;  

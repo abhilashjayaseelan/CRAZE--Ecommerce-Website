@@ -346,6 +346,28 @@ const userCouponSchema = new mongoose.Schema({
   }
 });
 
+const productReviewSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'product'
+  },
+  rating: {
+    type: Number,
+    required: true
+  },
+  review: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: Object,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+})
 
 
 module.exports.user = mongoose.model('user', userSchema);
@@ -360,3 +382,4 @@ module.exports.wallet = mongoose.model('wallet', walletSchema);
 module.exports.discount = mongoose.model('discount', discountSchema);
 module.exports.couponTemplateSchema = mongoose.model('couponTemplateSchema', couponTemplateSchema);
 module.exports.userCouponSchema = mongoose.model('userCouponSchema', userCouponSchema);
+module.exports.review = mongoose.model('productReviewSchema', productReviewSchema);

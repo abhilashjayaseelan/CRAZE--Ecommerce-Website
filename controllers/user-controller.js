@@ -9,7 +9,7 @@ module.exports = {
    getHomePage: async (req, res) => {
       try {
          const user = req.session.user;
-         const count = user ? await cartHelpers.productCount(user.response._id) : 0;
+         const count = user ? await cartHelpers.productCount(user.response._id) : 0; 
          const products = JSON.parse(JSON.stringify(await userHelpers.homePage()));
          res.render('user/view-products', { user, products, itsUser: true, count });
       } catch (err) {

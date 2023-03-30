@@ -63,13 +63,13 @@
                                         <div class="pro-details-brand">
                                             <span> Brand: <a href="shop-grid-right.html">{{product.brand}}</a></span>
                                         </div>
-                                        {{!-- <div class="product-rate-cover text-end">
+                                        <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width:90%">
                                                 </div>
                                             </div>
-                                            <span class="font-small ml-5 text-muted"> (25 reviews)</span>
-                                        </div> --}}
+                                            <span class="font-small ml-5 text-muted"> ({{rateCount}} reviews)</span>
+                                        </div>
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
@@ -172,12 +172,8 @@
                                         href="#Description">Description</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" id="Additional-info-tab" data-bs-toggle="tab"
-                                        href="#Additional-info">Additional info</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link" id="Reviews-tab" data-bs-toggle="tab" href="#Reviews">Reviews
-                                        (3)</a>
+                                        ({{rateCount}})</a>
                                 </li>
                             </ul>
                             <div class="tab-content shop_info_tab entry-main-content">
@@ -193,13 +189,6 @@
                                             besides and much circa far over the bucolically hey precarious goldfinch
                                             mastodon goodness gnashed a jellyfish and one however because.
                                         </p>
-                                        <ul class="product-more-infor mt-30">
-                                            <li><span>Type Of Packing</span> Bottle</li>
-                                            <li><span>Color</span> Green, Pink, Powder Blue, Purple</li>
-                                            <li><span>Quantity Per Case</span> 100ml</li>
-                                            <li><span>Ethyl Alcohol</span> 70%</li>
-                                            <li><span>Piece In One</span> Carton</li>
-                                        </ul>
                                         <hr class="wp-block-separator is-style-dots">
                                         <p>Laconic overheard dear woodchuck wow this outrageously taut beaver hey hello
                                             far meadowlark imitatively egregiously hugged that yikes minimally unanimous
@@ -225,180 +214,45 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="Additional-info">
-                                    <table class="font-md">
-                                        <tbody>
-                                            <tr class="stand-up">
-                                                <th>Stand Up</th>
-                                                <td>
-                                                    <p>35″L x 24″W x 37-45″H(front to back wheel)</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="folded-wo-wheels">
-                                                <th>Folded (w/o wheels)</th>
-                                                <td>
-                                                    <p>32.5″L x 18.5″W x 16.5″H</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="folded-w-wheels">
-                                                <th>Folded (w/ wheels)</th>
-                                                <td>
-                                                    <p>32.5″L x 24″W x 18.5″H</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="door-pass-through">
-                                                <th>Door Pass Through</th>
-                                                <td>
-                                                    <p>24</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="frame">
-                                                <th>Frame</th>
-                                                <td>
-                                                    <p>Aluminum</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="weight-wo-wheels">
-                                                <th>Weight (w/o wheels)</th>
-                                                <td>
-                                                    <p>20 LBS</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="weight-capacity">
-                                                <th>Weight Capacity</th>
-                                                <td>
-                                                    <p>60 LBS</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="width">
-                                                <th>Width</th>
-                                                <td>
-                                                    <p>24″</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="handle-height-ground-to-handle">
-                                                <th>Handle height (ground to handle)</th>
-                                                <td>
-                                                    <p>37-45″</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="wheels">
-                                                <th>Wheels</th>
-                                                <td>
-                                                    <p>12″ air / wide track slick tread</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="seat-back-height">
-                                                <th>Seat back height</th>
-                                                <td>
-                                                    <p>21.5″</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="head-room-inside-canopy">
-                                                <th>Head room (inside canopy)</th>
-                                                <td>
-                                                    <p>25″</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="pa_color">
-                                                <th>Color</th>
-                                                <td>
-                                                    <p>Black, Blue, Red, White</p>
-                                                </td>
-                                            </tr>
-                                            <tr class="pa_size">
-                                                <th>Size</th>
-                                                <td>
-                                                    <p>M, S</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
                                 <div class="tab-pane fade" id="Reviews">
                                     <!--Comments-->
                                     <div class="comments-area">
                                         <div class="row">
                                             <div class="col-lg-8">
-                                                <h4 class="mb-30">Customer questions & answers</h4>
+                                                <h4 class="mb-30">Customer reviews</h4>
                                                 <div class="comment-list">
+                                                    <!--single-comment -->
+                                                    {{#each reviews}}
                                                     <div class="single-comment justify-content-between d-flex">
                                                         <div class="user justify-content-between d-flex">
                                                             <div class="thumb text-center">
-                                                                <img src="/assets/imgs/page/avatar-6.jpg" alt="">
-                                                                <h6><a href="#">Jacky Chan</a></h6>
-                                                                <p class="font-xxs">Since 2012</p>
+                                                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                                                                    alt="">
+                                                                <h6><a href="#">{{user.name}}</a></h6>
                                                             </div>
                                                             <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
-                                                                    </div>
-                                                                </div>
-                                                                <p>Thank you very fast shipping from Poland only 3days.
-                                                                </p>
+                                                                <span><i class="fa fa-sm fa-star star"
+                                                                        style="color:#DDDDDD ;"></i></span>
+                                                                <span><i class="fa fa-sm fa-star star"
+                                                                        style="color:#DDDDDD ;"></i></span>
+                                                                <span><i class="fa fa-sm fa-star star"
+                                                                        style="color:#DDDDDD ;"></i></span>
+                                                                <span><i class="fa fa-sm fa-star star"
+                                                                        style="color:#DDDDDD ;"></i></span>
+                                                                <span><i class="fa fa-sm fa-star star"
+                                                                        style="color:#DDDDDD ;"></i></span>
+                                                                <input type="hidden" class="rating-input" value="{{rating}}">
+                                                                <p>{{review}}</p>
                                                                 <div class="d-flex justify-content-between">
                                                                     <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand btn-reply">Reply
-                                                                            <i class="fi-rs-arrow-right"></i> </a>
+                                                                        <p class="font-xs mr-30"> {{formatDate
+                                                                            createdAt}} </p>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
-                                                        <div class="user justify-content-between d-flex">
-                                                            <div class="thumb text-center">
-                                                                <img src="/assets/imgs/page/avatar-7.jpg" alt="">
-                                                                <h6><a href="#">Ana Rosie</a></h6>
-                                                                <p class="font-xxs">Since 2008</p>
-                                                            </div>
-                                                            <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
-                                                                    </div>
-                                                                </div>
-                                                                <p>Great low price and works well.</p>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand btn-reply">Reply
-                                                                            <i class="fi-rs-arrow-right"></i> </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--single-comment -->
-                                                    <div class="single-comment justify-content-between d-flex">
-                                                        <div class="user justify-content-between d-flex">
-                                                            <div class="thumb text-center">
-                                                                <img src="/assets/imgs/page/avatar-8.jpg" alt="">
-                                                                <h6><a href="#">Steven Keny</a></h6>
-                                                                <p class="font-xxs">Since 2010</p>
-                                                            </div>
-                                                            <div class="desc">
-                                                                <div class="product-rate d-inline-block">
-                                                                    <div class="product-rating" style="width:90%">
-                                                                    </div>
-                                                                </div>
-                                                                <p>Authentic and Beautiful, Love these way more than
-                                                                    ever expected They are Great earphones</p>
-                                                                <div class="d-flex justify-content-between">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <p class="font-xs mr-30">December 4, 2020 at
-                                                                            3:12 pm </p>
-                                                                        <a href="#" class="text-brand btn-reply">Reply
-                                                                            <i class="fi-rs-arrow-right"></i> </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!--single-comment -->
+                                                    {{/each}}
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -447,11 +301,18 @@
                                     <!--comment form-->
                                     <div class="comment-form">
                                         <h4 class="mb-15">Add a review</h4>
-                                        <div class="product-rate d-inline-block mb-30">
-                                        </div>
                                         <div class="row">
                                             <div class="col-lg-8 col-md-12">
                                                 <form class="form-contact comment_form" action="#" id="commentForm">
+                                                    <div class="star-rating">
+                                                        <input type="hidden" name="starRating" id="star-rating-value"
+                                                            value="">
+                                                        <i class="star fa fa-star" data-rating="1"></i>
+                                                        <i class="star fa fa-star" data-rating="2"></i>
+                                                        <i class="star fa fa-star" data-rating="3"></i>
+                                                        <i class="star fa fa-star" data-rating="4"></i>
+                                                        <i class="star fa fa-star" data-rating="5"></i>
+                                                    </div>
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group">
@@ -460,25 +321,8 @@
                                                                     placeholder="Write Comment"></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="name" id="name"
-                                                                    type="text" placeholder="Name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="email" id="email"
-                                                                    type="email" placeholder="Email">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <input class="form-control" name="website" id="website"
-                                                                    type="text" placeholder="Website">
-                                                            </div>
-                                                        </div>
                                                     </div>
+                                                    <input type="text" id="prodId" value="{{product._id}}" hidden>
                                                     <div class="form-group">
                                                         <button type="submit" class="button button-contactForm">Submit
                                                             Review</button>
@@ -509,106 +353,6 @@
                             <li><a href="#">Kid's clothing</a></li>
                         </ul>
                     </div>
-                    <!-- Fillter By Price -->
-                    {{!-- <div class="sidebar-widget price_range range mb-30">
-                        <div class="widget-header position-relative mb-20 pb-10">
-                            <h5 class="widget-title mb-10">Fill by price</h5>
-                            <div class="bt-1 border-color-1"></div>
-                        </div>
-                        <div class="price-filter">
-                            <div class="price-filter-inner">
-                                <div id="slider-range"></div>
-                                <div class="price_slider_amount">
-                                    <div class="label-input">
-                                        <span>Range:</span><input type="text" id="amount" name="price"
-                                            placeholder="Add Your Price" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <div class="list-group-item mb-10 mt-10">
-                                <label class="fw-900">Color</label>
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox1" value="">
-                                    <label class="form-check-label" for="exampleCheckbox1"><span>Red (56)</span></label>
-                                    <br>
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox2" value="">
-                                    <label class="form-check-label" for="exampleCheckbox2"><span>Green
-                                            (78)</span></label>
-                                    <br>
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox3" value="">
-                                    <label class="form-check-label" for="exampleCheckbox3"><span>Blue
-                                            (54)</span></label>
-                                </div>
-                                <label class="fw-900 mt-15">Item Condition</label>
-                                <div class="custome-checkbox">
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox11" value="">
-                                    <label class="form-check-label" for="exampleCheckbox11"><span>New
-                                            (1506)</span></label>
-                                    <br>
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox21" value="">
-                                    <label class="form-check-label" for="exampleCheckbox21"><span>Refurbished
-                                            (27)</span></label>
-                                    <br>
-                                    <input class="form-check-input" type="checkbox" name="checkbox"
-                                        id="exampleCheckbox31" value="">
-                                    <label class="form-check-label" for="exampleCheckbox31"><span>Used
-                                            (45)</span></label>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i>
-                            Fillter</a>
-                    </div> --}}
-                    <!-- Product sidebar Widget -->
-                    {{!-- <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
-                        <div class="widget-header position-relative mb-20 pb-10">
-                            <h5 class="widget-title mb-10">New products</h5>
-                            <div class="bt-1 border-color-1"></div>
-                        </div>
-                        <div class="single-post clearfix">
-                            <div class="image">
-                                <img src="/assets/imgs/shop/thumbnail-3.jpg" alt="#">
-                            </div>
-                            <div class="content pt-10">
-                                <h5><a href="shop-product-detail.html">Chen Cardigan</a></h5>
-                                <p class="price mb-0 mt-5">$99.50</p>
-                                <div class="product-rate">
-                                    <div class="product-rating" style="width:90%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-post clearfix">
-                            <div class="image">
-                                <img src="/assets/imgs/shop/thumbnail-4.jpg" alt="#">
-                            </div>
-                            <div class="content pt-10">
-                                <h6><a href="shop-product-detail.html">Chen Sweater</a></h6>
-                                <p class="price mb-0 mt-5">$89.50</p>
-                                <div class="product-rate">
-                                    <div class="product-rating" style="width:80%"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="single-post clearfix">
-                            <div class="image">
-                                <img src="/assets/imgs/shop/thumbnail-5.jpg" alt="#">
-                            </div>
-                            <div class="content pt-10">
-                                <h6><a href="shop-product-detail.html">Colorful Jacket</a></h6>
-                                <p class="price mb-0 mt-5">$25</p>
-                                <div class="product-rate">
-                                    <div class="product-rating" style="width:60%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="banner-img wow fadeIn mb-45 animated d-lg-block d-none">
                         <img src="/assets/imgs/banner/banner-11.jpg" alt="">
                         <div class="banner-text">
@@ -735,3 +479,137 @@
             </div>
         </div>
     </div>
+
+    {{!-- submitting the star rating --}}
+    <script>
+        $(document).ready(function () {
+            $('#commentForm').submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting
+                // Get the form data
+                var formData = {
+                    'starRating': $('#star-rating-value').val(),
+                    'comment': $('#comment').val(),
+                    'productId': $('#prodId').val()
+                };
+                // Send the data to the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/product-review',
+                    data: formData,
+                    dataType: 'json',
+                    encode: true,
+                })
+                    .done(function (data) {
+                        console.log(data)
+                        // Show a success message
+                        if (data.newRating) {
+                            swal({
+                                title: "Success!",
+                                text: data.Message,
+                                icon: "success",
+                                button: "OK",
+                            });
+                        }
+                        else if (data.alreadyPosted) {
+                            swal({
+                                title: "Oops!",
+                                text: data.Message,
+                                icon: "error",
+                                button: "OK",
+                            });
+                        } else if (data.notPurchased) {
+                            swal({
+                                title: "Oops!",
+                                text: data.Message,
+                                icon: "error",
+                                button: "OK",
+                            });
+                        }
+                    })
+                    .fail(function (data) {
+                        // Show an error message
+                        swal("Oops!", "Please login or fill the field !!!.", "error");
+                    });
+            });
+        });
+    </script>
+    <script>
+        // Select all the star elements and attach a click event listener
+        document.querySelectorAll('.star').forEach(function (star) {
+            star.addEventListener('click', function () {
+                // Get the rating value from the data attribute
+                var rating = star.getAttribute('data-rating');
+                // Update the hidden input field with the selected rating value
+                document.querySelector('#star-rating-value').value = rating;
+                // Color the selected stars
+                document.querySelectorAll('.star').forEach(function (star) {
+                    if (star.getAttribute('data-rating') <= rating) {
+                        star.classList.add('selected');
+                    } else {
+                        star.classList.remove('selected');
+                    }
+                });
+            });
+        });
+    </script>
+
+    {{!-- for displaying the user rating --}}
+    <script>
+        // get all the sets of stars and hidden input fields
+        const starSets = document.querySelectorAll('.desc');
+        console.log(starSets)
+        // loop through each set of stars and hidden input fields
+        starSets.forEach((set) => {
+            // get the rating value from the hidden input field
+            let rating = set.querySelector('.rating-input').value;
+            rating = parseInt(rating)
+            // loop through the stars in the current set and fill in the stars based on the rating value
+            const stars = set.querySelectorAll('.star');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.style.color = '#ED8A19';
+                } else {
+                    star.style.color = '#DDDDDD';
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .star-rating .fa-star.selected {
+            color: gold;
+        }
+
+        .star-rating .fa-star {
+            font-size: 2em;
+            /* Increase the size of the stars */
+        }
+
+        .star-rating .fa-star:hover {
+            animation: pop 0.2s ease-out 1, rotate 0.6s ease-in-out 1;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotateY(0deg);
+            }
+
+            100% {
+                transform: rotateY(360deg);
+            }
+        }
+    </style>

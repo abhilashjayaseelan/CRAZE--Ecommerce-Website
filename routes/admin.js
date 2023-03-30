@@ -36,13 +36,6 @@ router.route('/add-productCategory')
 router.post('/get-subcategories',
     categoryController.getSubCategories);
 
-// router.get('/edit-productCategory/:id', adminController.editProductCategory);
-
-// router.patch('/edit-productCategory/:id', adminController.editProductCategory);
-
-// router.get('/delete-productCategory/:id, adminController.deleteProductCategory);
-
-
 // Product handling
 router.get('/view-products',
     sessionHandler.checkingAdmin,
@@ -124,5 +117,10 @@ router.route('/coupons')
     .get(sessionHandler.checkingAdmin,
         adminController.getCoupon)
     .post(adminController.postCoupon);
+
+// getting product reviews 
+router.get('/product-reviews',
+    sessionHandler.checkingAdmin,
+    productController.getAllReviews);
 
 module.exports = router;

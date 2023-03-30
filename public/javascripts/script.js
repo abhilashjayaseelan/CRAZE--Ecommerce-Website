@@ -37,9 +37,8 @@ function addToCart(productId, quantity) {
 
 
 // changing cart product quantities
-function changeQuantity(cartId, prodId, userId, count) {
+function changeQuantity(cartId, prodId, userId, count, slug) {
     let quantity = parseInt(document.getElementById(prodId).innerHTML)
-
     $.ajax({
         url: `/change-quantity`,
         data: {
@@ -55,32 +54,50 @@ function changeQuantity(cartId, prodId, userId, count) {
                 document.getElementById(prodId).innerHTML = quantity + parseInt(count);
                 document.getElementById('cart-subtotal').innerHTML = res.total;
                 document.getElementById('cart-total').innerHTML = res.total;
-
+                let newQuantity = parseInt(document.getElementById(prodId).innerHTML);
+                if (newQuantity === 1) {
+                    document.getElementById(slug).disabled = true;
+                } else {
+                    document.getElementById(slug).disabled = false;
+                }
             }
         }
-
     })
 }
 
 // delete product from the user cart
 function removeProduct(productId) {
-    // console.log('clicked');
-    $.ajax({
-        url: `/delete-from-cart/${productId}`,
-        method: 'get',
-        success(res) {
-            if (res.status) {
-                swal({
-                    title: "Successfull!",
-                    text: `Product removed from cart`,
-                    icon: "success",
-                    button: "Ok!",
-                }).then(() => [
-                    location.reload()
-                ])
-            }
+    // Display confirmation swal alert
+    swal({
+        title: "Are you sure?",
+        text: "You won't be able to undo this action!",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, delete it"],
+        dangerMode: true,
+    }).then((confirmDelete) => {
+        if (confirmDelete) {
+            // User clicked "Yes, delete it", proceed with removing the product
+            $.ajax({
+                url: `/delete-from-cart/${productId}`,
+                method: 'get',
+                success(res) {
+                    if (res.status) {
+                        swal({
+                            title: "Successfull!",
+                            text: `Product removed from cart`,
+                            icon: "success",
+                            button: "Ok!",
+                        }).then(() => [
+                            location.reload()
+                        ])
+                    }
+                }
+            })
+        } else {
+            // User clicked "Cancel", do nothing
+            return false;
         }
-    })
+    });
 }
 
 // delete address
@@ -187,23 +204,39 @@ function addToWishList(productId) {
 
 // remove product from wishlist
 function removeFromWishlist(productId) {
-    $.ajax({
-        url: `/remove-from-wishlist?productId=${productId}`,
-        method: 'get',
-        success: (response) => {
-            if (response.status) {
-                swal({
-                    title: "Successfull!",
-                    text: `Product removed from wishlist`,
-                    icon: "success",
-                    button: "Ok!",
-                }).then(() => [
-                    location.reload()
-                ])
-            }
+    // Display confirmation swal alert
+    swal({
+        title: "Are you sure?",
+        text: "You won't be able to undo this action!",
+        icon: "warning",
+        buttons: ["Cancel", "Yes, remove it"],
+        dangerMode: true,
+    }).then((confirmRemove) => {
+        if (confirmRemove) {
+            // User clicked "Yes, remove it", proceed with removing the product
+            $.ajax({
+                url: `/remove-from-wishlist?productId=${productId}`,
+                method: 'get',
+                success: (response) => {
+                    if (response.status) {
+                        swal({
+                            title: "Successfull!",
+                            text: `Product removed from wishlist`,
+                            icon: "success",
+                            button: "Ok!",
+                        }).then(() => [
+                            location.reload()
+                        ])
+                    }
+                }
+            })
+        } else {
+            // User clicked "Cancel", do nothing
+            return false;
         }
-    })
+    });
 }
+
 
 // cancel order
 function cancelOrder(orderId) {
