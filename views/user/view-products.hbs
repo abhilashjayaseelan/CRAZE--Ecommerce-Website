@@ -158,9 +158,15 @@
                                         {{!-- <a aria-label="Compare" class="action-btn hover-up" href="#"><i
                                                 class="fi-rs-shuffle"></i></a> --}}
                                     </div>
+                                    {{#if (stock totalQty)}}
                                     <div class="product-badges product-badges-position product-badges-mrg">
                                         <span class="hot">Hot</span>
                                     </div>
+                                    {{else}}
+                                    <div class="product-badges product-badges-position product-badges-mrg">
+                                        <span class="hot" style="background-color: red;">Out of stock</span>
+                                    </div>
+                                    {{/if}}
                                 </div>
                                 <div class="product-content-wrap">
                                     <div class="product-category">
@@ -193,9 +199,6 @@
                     </div>
                     <!--End product-grid-4-->
                 </div>
-
-
-
 
                 <section class="banner-2 section-padding pb-0">
                     <div class="container">
@@ -280,12 +283,12 @@
                 <div class="col-lg-2  col-md-3">
                     <h5 class="widget-title wow fadeIn animated">My Account</h5>
                     <ul class="footer-list wow fadeIn animated">
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">View Cart</a></li>
-                        <li><a href="#">My Wishlist</a></li>
-                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/user-cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/orders">Track My Order</a></li>
                         <li><a href="#">Help</a></li>
-                        <li><a href="#">Order</a></li>
+                        <li><a href="/orders">Order</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">

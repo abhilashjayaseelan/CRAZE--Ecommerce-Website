@@ -106,7 +106,6 @@ function deleteAddress(addressId) {
 
 // razorpay payment
 function razorPayPayment(orderDetails) {
-    console.log(orderDetails);
     var options = {
         key: "rzp_test_dT2hX9gH8hyKFB", // Enter the Key ID generated from the Dashboard
         amount: `${(orderDetails.order.amount) * 100}`, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -151,7 +150,7 @@ function verifyPayment(payment, order) {
         method: 'post',
         success: (response) => {
             if (response.status) {
-                location.replace('/orders');
+                location.replace('/landing-page');
             } else {
                 swal({
                     title: "Warning!",

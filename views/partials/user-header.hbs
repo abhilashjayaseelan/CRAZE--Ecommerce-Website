@@ -70,15 +70,22 @@
                                                 {{#if user}}
                                                 <a class="dropdown-item text-dark"
                                                     href="/profile?id={{user.response._id}}"><i
-                                                        class="material-icons md-exit_to_app"></i>Profile</a>
+                                                        class="fa-solid fa-address-card"></i>Profile</a>
                                                 <div class="dropdown-divider"></div>
-                                                {{/if}}
-                                                {{#if user}}
+                                                <a class="dropdown-item text-dark" href="/orders"><i
+                                                        class="fa-solid fa-truck-ramp-box"></i>Orders</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-dark" href="/user-wallet"><i
+                                                        class="fa-solid fa-wallet"></i>Wallet</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item text-dark" href="/my-coupons"><i
+                                                        class="fa-solid fa-ticket"></i>Coupons</a>
+                                                <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item text-dark" href="/logout"><i
-                                                        class="material-icons md-exit_to_app"></i>Logout</a>
+                                                        class="fa-solid fa-right-from-bracket"></i>Logout</a>
                                                 {{else}}
                                                 <a class="dropdown-item text-dark" href="/login"><i
-                                                        class="material-icons md-exit_to_app"></i>Log in </a>
+                                                        class="fa-solid fa-right-to-bracket"></i>Log in </a>
                                                 {{/if}}
                                             </div>
                                         </li>
@@ -153,19 +160,19 @@
                         </div>
                     </div>
 
-
+                    {{!-- mobile view --}}
                     <div class="header-action-right d-block d-lg-none">
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
-                                <a href="#">
+                                <a href="/">
                                     <img alt="Evara" src="/assets/imgs/theme/icons/icon-heart.svg">
-                                    <span class="pro-count white">4</span>
+
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="/user-cart">
                                     <img alt="Evara" src="/assets/imgs/theme/icons/icon-cart.svg">
-                                    <span class="pro-count white">2</span>
+                                    <span class="pro-count white">{{count}}</span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2 d-block d-lg-none">
@@ -186,7 +193,7 @@
         <div class="mobile-header-wrapper-inner">
             <div class="mobile-header-top">
                 <div class="mobile-header-logo">
-                    <a href="#"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
+                    <a href="/"><img src="/assets/imgs/theme/logo.svg" alt="logo"></a>
                 </div>
                 <div class="mobile-menu-close close-style-wrap close-style-position-inherit">
                     <button class="close-style search-close">
@@ -198,6 +205,19 @@
             <div class="mobile-header-content-area">
                 <div class="mobile-menu-wrap mobile-header-border">
                     <div class="main-categori-wrap mobile-header-border">
+                        <div>
+                            {{#if user}}
+                            <h5>{{user.response.name}} </h5>
+                            {{else}}
+                            <h5> User </h5>
+                            {{/if}}
+                        </div>
+                        <div>
+                            {{#if user}}
+                            <a href="/profile?id={{user.response._id}}"><i class="fi-rs-user"></i>Profile</a>
+                            {{/if}}
+                        </div>
+
                         <a class="categori-button-active-2" href="#">
                             <span class="fi-rs-apps"></span> Browse Categories
                         </a>

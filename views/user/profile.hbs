@@ -42,8 +42,7 @@
 
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#walletModal" data-bs-whatever="@mdo"
-                  id="walletButton"><i class="fa-solid fa-wallet"></i>
+                <a href="/user-wallet"><i class="fa-solid fa-wallet"></i>
                   Wallet</a>
               </li>
               <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
@@ -126,47 +125,6 @@
         </div>
       </div>
     </div>
-
-
-    {{!-- modal for the wallet --}}
-    <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="exampleModalLabel" style="color: #088178;">Wallet</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div>
-            <div>
-              <p class="p-3" style="color: black;"> Balance Amount: <span id="balanceAmount"></span></p>
-            </div>
-            <div>
-              <h5 class="p-3">Transaction History</h5>
-              <table class="table shopping-summery text-center">
-                <thead>
-                  <tr class="main-heading">
-                    <th>Date</th>
-                    <th>Transaction Id</th>
-                    <th>Amount</th>
-                  </tr>
-                </thead>
-
-                <tbody id="transactionHistoryBody">
-
-                </tbody>
-
-              </table>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-
   </div>
 </section>
 

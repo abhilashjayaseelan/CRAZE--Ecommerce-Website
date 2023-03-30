@@ -1,18 +1,20 @@
-const { user, address, userCouponSchema } = require('../models/connection')
+const { user, address, userCouponSchema, wallet } = require('../models/connection')
 const bcrypt = require('bcrypt');
 const objectId = require('mongodb').ObjectId
 
 module.exports = {
     userProfile: (userId) => {
-        return Promise.all([
-            user.findOne({ _id: objectId(userId) }),
-            address.find({ userId: objectId(userId) })
-        ]).then(([userData, addressData]) => {
-            return { userData, addressData }
-        })
-            .catch((err) => {
-                console.log(err);
+        try {
+            return Promise.all([
+                user.findOne({ _id: objectId(userId) }),
+                address.find({ userId: objectId(userId) })
+            ]).then(([userData, addressData]) => {
+                return { userData, addressData }
             })
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     postAddress: (addressData, id) => {
         console.log("address", addressData);
@@ -98,7 +100,6 @@ module.exports = {
             } catch (err) {
                 reject(err);
             }
-
         })
     },
 
@@ -106,9 +107,43 @@ module.exports = {
     getCoupons: async (userId) => {
         console.log("userId: ", userId);
         try {
-            const coupons = await userCouponSchema.find({userId: objectId(userId)}).lean();
+            const coupons = await userCouponSchema.find({ userId: objectId(userId) }).lean();
             // console.log("coupon", coupons);
             return coupons;
+        } catch (err) {
+            console.log(err);
+            throw err;
+        }
+    },
+
+    // deducting payment amount from wallet
+    walletPayment: async (userId, orderDetails) => {
+        try {
+            const tranObj = {
+                orderId: orderDetails.orderId,
+                amount: orderDetails.totalPrice,
+                date: new Date(),
+                type: 'debit'
+            }
+            console.log('here', tranObj);
+            const newWallet = await wallet.findOne({ userId: objectId(userId) })
+            if (newWallet) {
+                newWallet.balance -= orderDetails.totalPrice;
+                newWallet.transactions.push(tranObj)
+            }
+            await newWallet.save();
+            return newWallet;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
+    },
+
+    // getting wallet details
+    walletDetails: async (userId) => {
+        try {
+            const details = await wallet.find({userId: objectId(userId)}).lean();
+            return details[0].balance;
         } catch (err) {
             console.log(err);
             throw err;

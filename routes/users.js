@@ -45,7 +45,7 @@ router.get('/view-products',
 router.get('/view-singleProduct/:id',
     productControllers.getProduct);
 
-// getting the user profile page
+// user profile page
 router.get('/profile',
     sessionHandler.checkingUser,
     profileControllers.getProfile);
@@ -96,6 +96,14 @@ router.get('/checkout',
 router.post('/place-order',
     cartController.placeOrder);
 
+// landing page after order placing
+router.get('/landing-page',
+    userControllers.getLanding)
+
+// download invoice
+router.post('/create-invoice',
+    userControllers.makeInvoice);
+
 // verify payment
 router.post('/verify-payment',
     userControllers.verifyPayment);
@@ -143,6 +151,9 @@ router.get('/remove-from-wishlist',
 router.get('/user-wallet',
     sessionHandler.checkingUser,
     userControllers.getWallet);
+
+router.post('/get-wallet-details',
+    userProfileController.getWalletDetails);
 
 // coupon page
 router.get('/my-coupons',

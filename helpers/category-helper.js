@@ -23,7 +23,6 @@ module.exports = {
                 console.log(err);
                 reject(err);
             }
-
         })
     },
     // for adding product finding sub categories

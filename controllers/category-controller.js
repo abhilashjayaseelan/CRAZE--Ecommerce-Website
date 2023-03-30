@@ -1,7 +1,7 @@
 const categoryHelper = require('../helpers/category-helper');
 
 module.exports = {
-    // get product categoiries
+    // get product categories
     getProductCategory: (req, res) => {
         try {
             categoryHelper.getCategory().then((response) => {
@@ -11,23 +11,31 @@ module.exports = {
             })
         } catch (err) {
             console.log(err);
+            res.status(500).send('internal error');
         }
     },
     // adding new product category
     addProductCategory: (req, res) => {
-        existCategory = true;
-        categoryHelper.addCategory(req.body).then((result) => {
-            let existCategory = result.status;
-            res.redirect('/admin/add-productCategory');
-        })
-    },
-    // geting subcategories
-    getSubCategories: (req, res) => {
-        categoryHelper.getSubCategory(req.body).then((category) => {
-            res.json(category);
-        })
-            .catch((err) => {
-                console.log(err);
+        try {
+            existCategory = true;
+            categoryHelper.addCategory(req.body).then((result) => {
+                let existCategory = result.status;
+                res.redirect('/admin/add-productCategory');
             })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal error');
+        }
+    },
+    // getting subcategories
+    getSubCategories: (req, res) => {
+        try {
+            categoryHelper.getSubCategory(req.body).then((category) => {
+                res.json(category);
+            })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal error');
+        }
     }
 }

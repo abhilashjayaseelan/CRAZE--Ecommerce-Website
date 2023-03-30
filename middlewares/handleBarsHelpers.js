@@ -62,11 +62,26 @@ module.exports = {
             return discount;
         }
     },
-    oldprice: (actual, discount) => {
+    oldprice: (discount) => {
         return discount > 0;
     },
-    productStatus: (quantity) =>{
+    productStatus: (quantity) => {
         return quantity > 0;
     },
+    offerIsActive: (date) => {
+        return date > Date.now()
+    },
+    transactionType: (type) => {
+        return type === 'credit';
+    },
+    formatDateTwo: function (dateString) {
+        const date = new Date(dateString)
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }
+        return date.toLocaleString('en-US', options)
+    },
+    reverseArray: (array) =>{
+        return array.reverse();
+    }
+
     // add more helper functions here...
 }

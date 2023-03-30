@@ -5,33 +5,38 @@ const util = require('util');
 module.exports = {
     // monthly revenue
     getMonthlySales: async () => {
-        const monthlySales = await orders.aggregate([
-            {
-                $match: {
-                    orderStatus: "recieved"
-                }
-            },
-            {
-                $project: {
-                    totalPrice: 1,
-                    createdAt: 1
-                }
-            },
-            {
-                $group: {
-                    _id: {
-                        $dateToString: {
-                            format: "%Y-%m",
-                            date: "$createdAt"
+        try {
+            const monthlySales = await orders.aggregate([
+                {
+                    $match: {
+                        orderStatus: "recieved"
+                    }
+                },
+                {
+                    $project: {
+                        totalPrice: 1,
+                        createdAt: 1
+                    }
+                },
+                {
+                    $group: {
+                        _id: {
+                            $dateToString: {
+                                format: "%Y-%m",
+                                date: "$createdAt"
+                            }
+                        },
+                        totalSales: {
+                            $sum: "$totalPrice"
                         }
-                    },
-                    totalSales: {
-                        $sum: "$totalPrice"
                     }
                 }
-            }
-        ])
-        return monthlySales;
+            ])
+            return monthlySales;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     // total revenue
     calculateTotalUsers: async () => {
@@ -45,12 +50,17 @@ module.exports = {
     },
     // total orders
     calculateTotalOrders: async () => {
-        const totalOrders = await orders.aggregate([
-            { $match: { orderStatus: "recieved" } },
-            { $count: "totalOrders" }
-        ])
-        const totalOrd = totalOrders[0] ? totalOrders[0].totalOrders : 0;
-        return totalOrd;
+        try {
+            const totalOrders = await orders.aggregate([
+                { $match: { orderStatus: "recieved" } },
+                { $count: "totalOrders" }
+            ])
+            const totalOrd = totalOrders[0] ? totalOrders[0].totalOrders : 0;
+            return totalOrd;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
     // total number of products
     calculateTotalNumberOfProducts: async () => {
@@ -104,6 +114,7 @@ module.exports = {
             return ordersByMonth;
         } catch (err) {
             console.log(err);
+            return err;
         }
     },
 
@@ -124,9 +135,9 @@ module.exports = {
             });
             return countByCategory;
         } catch (err) {
-            clg(err);
+            console.log(err);
+            return err;
         }
-
     }
 
 

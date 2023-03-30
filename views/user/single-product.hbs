@@ -63,13 +63,13 @@
                                         <div class="pro-details-brand">
                                             <span> Brand: <a href="shop-grid-right.html">{{product.brand}}</a></span>
                                         </div>
-                                        <div class="product-rate-cover text-end">
+                                        {{!-- <div class="product-rate-cover text-end">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width:90%">
                                                 </div>
                                             </div>
                                             <span class="font-small ml-5 text-muted"> (25 reviews)</span>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="clearfix product-price-cover">
                                         <div class="product-price primary-color float-left">
@@ -140,8 +140,7 @@
                                         <button onclick="addToCart('{{product._id}}')"
                                             class="btn btn-outline-secondary">Add to cart</button>
                                         {{else}}
-                                        <button onclick=""
-                                            class="btn btn-outline-secondary">Notify Me</button>
+                                        <button onclick="" class="btn btn-outline-secondary">Notify Me</button>
                                         {{/if}}
                                         <div class="product-extra-link2">
                                             <a aria-label="Add To Wishlist" class="action-btn hover-up"
@@ -505,17 +504,13 @@
                     <div class="widget-category mb-30">
                         <h5 class="section-title style-1 mb-30 wow fadeIn animated">Category</h5>
                         <ul class="categories">
-                            <li><a href="#">Shoes & Bags</a></li>
-                            <li><a href="#">Blouses & Shirts</a></li>
-                            <li><a href="#">Dresses</a></li>
-                            <li><a href="#">Swimwear</a></li>
-                            <li><a href="#">Beauty</a></li>
-                            <li><a href="#">Jewelry & Watch</a></li>
-                            <li><a href="#">Accessories</a></li>
+                            <li><a href="#">Men's clothing</a></li>
+                            <li><a href="#">Women's clothing</a></li>
+                            <li><a href="#">Kid's clothing</a></li>
                         </ul>
                     </div>
                     <!-- Fillter By Price -->
-                    <div class="sidebar-widget price_range range mb-30">
+                    {{!-- <div class="sidebar-widget price_range range mb-30">
                         <div class="widget-header position-relative mb-20 pb-10">
                             <h5 class="widget-title mb-10">Fill by price</h5>
                             <div class="bt-1 border-color-1"></div>
@@ -570,7 +565,7 @@
                         </div>
                         <a href="shop-grid-right.html" class="btn btn-sm btn-default"><i class="fi-rs-filter mr-5"></i>
                             Fillter</a>
-                    </div>
+                    </div> --}}
                     <!-- Product sidebar Widget -->
                     {{!-- <div class="sidebar-widget product-sidebar  mb-30 p-30 bg-grey border-radius-10">
                         <div class="widget-header position-relative mb-20 pb-10">
@@ -696,12 +691,12 @@
                 <div class="col-lg-2  col-md-3">
                     <h5 class="widget-title wow fadeIn animated">My Account</h5>
                     <ul class="footer-list wow fadeIn animated">
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">View Cart</a></li>
-                        <li><a href="#">My Wishlist</a></li>
-                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/user-cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/orders">Track My Order</a></li>
                         <li><a href="#">Help</a></li>
-                        <li><a href="#">Order</a></li>
+                        <li><a href="/orders">Order</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">

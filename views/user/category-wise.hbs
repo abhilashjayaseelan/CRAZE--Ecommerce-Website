@@ -105,7 +105,7 @@
                                     </div>
                                     <div class="product-action-1 show">
                                         <a aria-label="Add To Cart" class="action-btn hover-up"
-                                            onclick="addToCart('{{_id}}')"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            onclick="addToCart('{{_id}}','{{totalQty}}')"><i class="fi-rs-shopping-bag-add"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -191,12 +191,12 @@
                 <div class="col-lg-2  col-md-3">
                     <h5 class="widget-title wow fadeIn animated">My Account</h5>
                     <ul class="footer-list wow fadeIn animated">
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">View Cart</a></li>
-                        <li><a href="#">My Wishlist</a></li>
-                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/user-cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/orders">Track My Order</a></li>
                         <li><a href="#">Help</a></li>
-                        <li><a href="#">Order</a></li>
+                        <li><a href="/orders">Order</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">

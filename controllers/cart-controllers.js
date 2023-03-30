@@ -40,22 +40,29 @@ module.exports = {
     },
     // change the product quantity
     changeProductQuantity: (req, res, next) => {
-        cartHelper.changeQuantity(req.body).then((quantity) => {
-            cartHelper.cartTotal(req.body.user).then((total) => {
-                res.json({ status: quantity, total })
+        try {
+            cartHelper.changeQuantity(req.body).then((quantity) => {
+                cartHelper.cartTotal(req.body.user).then((total) => {
+                    res.json({ status: quantity, total })
+                })
             })
-        })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal error');
+        }
     },
     // delete the product
     deleteProduct: (req, res) => {
-        const userId = req.session.user.response._id;
-        const productId = req.params.id
-        cartHelper.removeProduct(userId, productId).then(() => {
-            res.json({ status: true })
-        })
-            .catch((error) => {
-                console.log(error);
+        try {
+            const userId = req.session.user.response._id;
+            const productId = req.params.id
+            cartHelper.removeProduct(userId, productId).then(() => {
+                res.json({ status: true })
             })
+        } catch (err) {
+            console.log(err);
+            res.status(500).send('internal error');
+        }
     },
     // get checkout page
     getCheckout: async (req, res) => {
@@ -98,18 +105,22 @@ module.exports = {
             if (afterDiscount) {
                 totalPrice = afterDiscount;
             }
-            cartHelper.placeOrder(req.body, products, totalPrice).then((response) => {
-                // generating coupon if the conditions met
-                const coupon = userHelper.generateCoupon(response.totalPrice, response.products, req.body.userId);
-                if (req.body['payment_option'] == 'COD') {
-                    res.json({ coupon, status: 'cod' });
-                } else if (req.body['payment_option'] == 'Razorpay') {
-                    razorPay.generateRazorpay(response.orderId, response.totalPrice).then((order) => {
-                        res.json({ coupon, response, order, status: 'razorpay' });
-                    })
-                }
-            })
-            
+            const response = await cartHelper.placeOrder(req.body, products, totalPrice);
+
+            // generating coupon if the conditions met
+            const coupon = await userHelper.generateCoupon(response.totalPrice, response.products, req.body.userId);
+            if (req.body['payment_option'] == 'COD') {
+                res.json({ status: 'cod' });
+            }
+            else if (req.body['payment_option'] == 'Razorpay') {
+                razorPay.generateRazorpay(response.orderId, response.totalPrice).then((order) => {
+                    res.json({ response, order, status: 'razorpay' });
+                })
+            } else if (req.body['payment_option'] == 'Wallet') {
+                const wallet = await userProfileHelpers.walletPayment(req.body.userId, response);
+                res.json({ response, status: 'wallet', wallet });
+            }
+
             // changing the product quantity
             await productHelpers.decreaseProductQuantity(products);
 

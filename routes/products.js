@@ -13,7 +13,7 @@ const productController = require('../controllers/product-controller');
 // router.get('/orders', userControllers.showOrders); 
 
 // router.get('/cart', userControllers.showCart);
-  
+
 // router.get('/wishlist', userControllers.showWishlist);
 
 module.exports = router;

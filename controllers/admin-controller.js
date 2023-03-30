@@ -154,7 +154,7 @@ module.exports = {
             res.render('admin/sales-report', { admin: true, dateWise, totalSales, users, orders, products });
         } catch (err) {
             console.log(err);
-            return res.status(400).send('inernal error');
+            return res.status(400).send('internal error');
         }
     },
     // making reports

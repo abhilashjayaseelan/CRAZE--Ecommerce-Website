@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { error } = require('console');
 const objectId = require('mongodb').ObjectId
 const moment = require('moment');
 const shortid = require('shortid');
@@ -23,7 +24,7 @@ module.exports = {
         existingUser = await user.findOne({ $or: [{ email: email }, { mobile: mobile }] });
         if (existingUser) {
           response = { status: false }
-          return resolve(response);
+          resolve(response);
         } else {
           var hashedPassword = await bcrypt.hash(userData.password, 10);
           const data = new user({
@@ -38,6 +39,7 @@ module.exports = {
         }
       } catch (err) {
         console.log(err);
+        return err;
       }
     })
   },
@@ -48,7 +50,6 @@ module.exports = {
         let response = {};
         let user1 = await user.findOne({ email: userData.email });
         response = user1;
-        // console.log(response.name);
         if (user1) {
           if (user1.blocked === false) {
             bcrypt.compare(userData.password, user1.password).then((status) => {
@@ -66,17 +67,23 @@ module.exports = {
         }
       } catch (err) {
         console.log(Error);
+        return err;
       }
     })
   },
 
   otpLogin: (userNumber) => {
-    return new Promise(async (resolve, reject) => {
-      let response = {};
-      let user1 = await user.findOne({ mobile: userNumber });
-      response = user1
-      resolve({ response });
-    })
+    try {
+      return new Promise(async (resolve, reject) => {
+        let response = {};
+        let user1 = await user.findOne({ mobile: userNumber });
+        response = user1
+        resolve({ response });
+      })
+    } catch (err) {
+      console.log(err);
+      return err
+    }
   },
 
   // home page
@@ -164,14 +171,19 @@ module.exports = {
       ]);
       return orderDetails;
     } catch (err) {
-      return [];
+      return err;
     }
   },
 
   // getting the order status
   getStatus: async (userId) => {
-    let order = await orders.findOne({ userId: objectId(userId) });
-    return (order);
+    try {
+      let order = await orders.findOne({ userId: objectId(userId) });
+      return (order);
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
   },
 
   // verify payment
@@ -302,7 +314,7 @@ module.exports = {
       return wishlistItems;
     } catch (err) {
       console.log(err);
-      return [];
+      return err;
     }
   },
   // remove from wish-list
@@ -335,7 +347,8 @@ module.exports = {
       const tranObj = {
         orderId: order.orderId,
         amount: amount,
-        date: new Date()
+        date: new Date(),
+        type: 'credit'
       }
       const existingWallet = await wallet.findOne({ userId: objectId(userId) });
       if (existingWallet) {
@@ -358,22 +371,19 @@ module.exports = {
   },
 
   // user wallet
-  getWallet: (userId) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await wallet.findOne({ userId: objectId(userId) }).then((response) => {
-          resolve(response);
-        })
-      } catch (err) {
-        reject(err);
-      }
-    })
+  getWallet: async (userId) => {
+    try {
+      const response = await wallet.findOne({ userId: objectId(userId) }).lean();
+      return response;
+    } catch (err) {
+      return err;
+    }
   },
 
   // generating coupon
   generateCoupon: async (totalPrice, order, userId) => {
     try {
-      if (totalPrice > 1000 || order.length > 1) {
+      if (totalPrice > 2000 || order.length > 3) {
         // Generate random coupon
         let couponTemplate = await couponTemplateSchema.aggregate([{ $sample: { size: 1 } }]);
         let code = shortid.generate();
@@ -435,13 +445,16 @@ module.exports = {
     } catch (err) {
       return err;
     }
-
   },
 
   // updating the coupon status
   changeCouponStatus: async (couponCode) => {
-    await userCouponSchema.findOneAndUpdate({ code: couponCode }, { used: true });
-    return;
+    try {
+      await userCouponSchema.findOneAndUpdate({ code: couponCode }, { used: true });
+      return;
+    } catch (err) {
+      console.log(err);
+      return err;
+    }
   }
-
 }

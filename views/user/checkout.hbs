@@ -154,7 +154,8 @@
                                         <tr>
                                             <th>Total</th>
                                             <td colspan="2" class="product-subtotal"><span
-                                                    class="font-xl text-brand fw-900">{{formatCurrency afterDiscount}}</span>
+                                                    class="font-xl text-brand fw-900">{{formatCurrency
+                                                    afterDiscount}}</span>
                                             </td>
                                         </tr>
                                         {{else}}
@@ -183,9 +184,15 @@
                                     </div>
                                     <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option"
-                                            id="exampleRadios4" checked="" value="Razorpay">
+                                            id="exampleRadios4" value="Razorpay">
                                         <label class="form-check-label" for="exampleRadios4" data-bs-toggle="collapse"
                                             data-target="#" aria-controls="checkPayment">RazorPay</label>
+                                    </div>
+                                    <div class="custome-radio">
+                                        <input class="form-check-input" required="" type="radio" name="payment_option"
+                                            id="exampleRadios5" value="Wallet">
+                                        <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse"
+                                            data-target="#" aria-controls="checkPayment">Wallet</label>
                                     </div>
                                     {{!-- <div class="custome-radio">
                                         <input class="form-check-input" required="" type="radio" name="payment_option"
@@ -273,12 +280,12 @@
                 <div class="col-lg-2  col-md-3">
                     <h5 class="widget-title wow fadeIn animated">My Account</h5>
                     <ul class="footer-list wow fadeIn animated">
-                        <li><a href="#">Sign In</a></li>
-                        <li><a href="#">View Cart</a></li>
-                        <li><a href="#">My Wishlist</a></li>
-                        <li><a href="#">Track My Order</a></li>
+                        <li><a href="/login">Sign In</a></li>
+                        <li><a href="/user-cart">View Cart</a></li>
+                        <li><a href="/wishlist">My Wishlist</a></li>
+                        <li><a href="/orders">Track My Order</a></li>
                         <li><a href="#">Help</a></li>
-                        <li><a href="#">Order</a></li>
+                        <li><a href="/orders">Order</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">
@@ -319,35 +326,101 @@
         </div>
     </div>
 
+
     <script>
         $("#checkout-form").submit((e) => {
             e.preventDefault();
-            $.ajax({
-                method: 'POST',
-                url: ('/place-order'),
-                data: $('#checkout-form').serialize(),
-                success: (response) => {
-                    switch (response.status) {
-                        case 'cod':
-                            swal(
-                                "Successfull !",
-                                "Order Placed Successfully !",
-                                "success"
-                            )
-                                .then(() => {
-                                    location.replace('/orders');
-                                });
-                        case 'razorpay':
-                            razorPayPayment(response)
-
-                    }
-                },
-                error: (response, stat, err) => {
-                    console.log(response);
-                }
-
+            let form_data = $('#checkout-form').serialize();
+            // Add confirmation dialogs for all payment methods
+            swal({
+                title: "Are you sure?",
+                text: "You are about to place an order. Continue?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
             })
-        })
+                .then((confirm) => {
+                    if (confirm) {
+                        let payment_method = $('input[name=payment_option]:checked').val();
+                        console.log(payment_method)
+                        // Wallet payment method requires wallet details confirmation
+                        if (payment_method === 'Wallet') {
+                            $.ajax({
+                                method: 'POST',
+                                url: '/get-wallet-details',
+                                data: form_data,
+                                success: (response) => {
+                                    console.log('res', response)
+                                    if (response.walletTotal < response.cartTotal) {
+                                        swal({
+                                            title: "Insufficient Balance",
+                                            text: "You do not have enough balance in your wallet to complete the transaction.",
+                                            icon: "error"
+                                        });
+                                    }
+                                    else {
+                                        swal({
+                                            title: "Confirm Wallet Payment",
+                                            text: `You have ₹ ${response.walletTotal} in your wallet. Continue?`,
+                                            icon: "warning",
+                                            buttons: true,
+                                            dangerMode: true,
+                                        })
+                                            .then((confirm) => {
+                                                if (confirm) {
+                                                    placeOrder();
+                                                }
+                                            });
+                                    }
+                                },
+                                error: (response, stat, err) => {
+                                    console.log(response);
+                                }
+                            });
+                        }
+                        else {
+                            placeOrder();
+                        }
+                    }
+                });
 
+            function placeOrder() {
+                // Send AJAX request to place order
+                $.ajax({
+                    method: 'POST',
+                    url: ('/place-order'),
+                    data: form_data,
+                    success: (response) => {
+                        switch (response.status) {
+                            case 'cod':
+                                swal(
+                                    "Successful!",
+                                    "Order Placed Successfully!",
+                                    "success"
+                                )
+                                    .then(() => {
+                                        location.replace('/landing-page');
+                                    });
+                                break;
+                            case 'wallet':
+                                swal(
+                                    "Successful!",
+                                    "Order Placed Successfully!",
+                                    "success"
+                                )
+                                    .then(() => {
+                                        location.replace('/landing-page');
+                                    });
+                                break;
+                            case 'razorpay':
+                                razorPayPayment(response);
+                                break;
+                        }
+                    },
+                    error: (response, stat, err) => {
+                        console.log(response);
+                    }
+                });
+            }
+        });
     </script>
-    {{!-- function (order) --}}

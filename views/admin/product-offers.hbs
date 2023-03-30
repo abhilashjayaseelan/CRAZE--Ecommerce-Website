@@ -49,34 +49,43 @@
                                         <th class="text-center">Sl No.</th>
                                         <th class="text-center">Category</th>
                                         <th class="text-center">Sub-category</th>
+                                        <th class="text-center">Start Date</th>
+                                        <th class="text-center">End Date</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{#each categories}}
+                                    {{#each offers}}
                                     <tr>
-                                        {{!-- <td class="text-center">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="" />
-                                            </div>
-                                        </td> --}}
-                                        <td><b>{{name}}</b></td>
-                                        <td>{{subCategory}}</td>
-                                        <td class="text-end">
-                                            <div class="dropdown">
-                                                <a href="#" data-bs-toggle="dropdown"
-                                                    class="btn btn-light rounded btn-sm font-sm"> <i
-                                                        class="material-icons md-more_horiz"></i> </a>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#">View detail</a>
-                                                    <a class="dropdown-item"
-                                                        href="/admin/editProdutCategory/{{_id}}">Edit info</a>
-                                                    {{!-- <a class="dropdown-item text-danger"
-                                                        href="/admin/deleteProductCategory/{{_id}}">Delete</a> --}}
-                                                </div>
-                                            </div> <!-- dropdown //end -->
+                                        <td class="text-center">
+                                            {{index @index}}
                                         </td>
+                                        <td class="text-center">
+                                            {{category}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{subCategory}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{formatDate startDate}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{formatDate endDate}}
+                                        </td>
+                                        <td class="text-center">
+                                            {{#if (offerIsActive endDate)}}
+                                            <span class="badge rounded-pill alert-success">Active</span>
+                                            {{else}}
+                                            <span class="badge rounded-pill alert-danger">Expired</span>
+                                            {{/if}}
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="#" class="btn btn-sm font-sm rounded btn-brand" style="background-color: rgb(243, 86, 86);">
+                                                Delete
+                                            </a>
+                                        </td>
+
                                     </tr>
                                     {{/each}}
 

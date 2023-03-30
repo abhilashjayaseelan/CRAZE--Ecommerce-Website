@@ -190,7 +190,7 @@ module.exports = {
                     'userId': order.userId,
                     'totalPrice': parseInt(totalPrice),
                     'orderStatus': "pending",
-                    'paymentMothod': order.payment_option
+                    'paymentMethod': order.payment_option
                 })
                 await orderData.save()
                 // deleting the items from the cart after placing the order

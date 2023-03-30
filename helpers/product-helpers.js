@@ -45,14 +45,16 @@ module.exports = {
     },
     // getting all products
     getProducts: () => {
-        return new Promise(async (resolve, reject) => {
-            await products.find().then((products) => {
-                resolve(products);
+        try {
+            return new Promise(async (resolve, reject) => {
+                await products.find().then((products) => {
+                    resolve(products);
+                })
             })
-        })
-            .catch((err) => {
-                console.log(err);
-            })
+        } catch (err) {
+            console.log(err);
+            reject(err)
+        }
     },
     // single product
     getProduct: async (slug) => {
@@ -104,11 +106,16 @@ module.exports = {
     },
     // deleting product
     deleteProduct: (productID) => {
-        return new Promise(async (resolve, reject) => {
-            await products.deleteOne({ _id: productID }).then((result) => {
-                resolve(result);
+        try {
+            return new Promise(async (resolve, reject) => {
+                await products.deleteOne({ _id: productID }).then((result) => {
+                    resolve(result);
+                })
             })
-        })
+        } catch (err) {
+            console.log(err);
+            reject(err)
+        }
     },
     // new offer
     newOffer: (data) => {
@@ -138,9 +145,20 @@ module.exports = {
                 resolve();
             } catch (err) {
                 console.log(err);
-                reject();
+                reject(err);
             }
         })
+    },
+    // getting all offers
+    getOffers: async () => {
+        try {
+            const offers = await discount.find().lean();
+            const offer = offers ? offers : [];
+            return offer;
+        } catch (err) {
+            console.log(err);
+            return err;
+        }
     },
 
     // changing quantity after order placing

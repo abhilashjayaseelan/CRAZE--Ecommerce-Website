@@ -1,28 +1,51 @@
-const PDFDocument = require('pdfkit');
+const PDFDocument = require('pdfkit-table');
 const ExcelJS = require('exceljs');
 const fs = require('fs');
 
 async function generateReport(reportType, data) {
-    console.log(reportType);
     try {
         if (reportType === 'pdf') {
-            const doc = new PDFDocument();
-            doc.text(JSON.stringify(data));
+            const doc = new PDFDocument()
+            // const headers = [['Product'], ['Price'], ['Quantity'], ['Subtotal']]
+            const tData = data[0].products.map(product => {
+                return [
+                    product.name,
+                    product.price,
+                    product.quantity,
+                    product.price * product.quantity
+                ]
+            })
+            const subtotal = ['', '', 'Subtotal : ', data[0].totalPrice]
+            const tax = ['', '', 'Tax : ', '0']
+            const shipping = ['', '', 'Shipping charge : ', '0']
+            const total = ['', '', 'Total : ', data[0].totalPrice]
+            tData.push(subtotal, tax, shipping, total)
+            const table = {
+                title: 'CRAZE',
+                subtitle: 'Invoice',
+                headers: ['Product', 'Price', 'Quantity', 'Subtotal'],
+                rows: tData
+
+            }
+            await doc.table(table)
+
+            // doc.text(JSON.stringify(data))
             const filename = 'sales-report.pdf'
-            const writeStream = fs.createWriteStream(filename);
-            doc.pipe(writeStream);
-            doc.end();
+            const writeStream = fs.createWriteStream(filename)
+            doc.pipe(writeStream)
+            doc.end()
             await new Promise((resolve, reject) => {
                 writeStream.on('finish', () => {
-                    console.log(`PDF report saved to ${filename}`);
+                    console.log(`PDF report saved to ${filename}`)
                     resolve(filename)
                 })
                 writeStream.on('error', (error) => {
-                    console.error(`Error saving PDF report: ${error}`);
+                    console.error(`Error saving PDF report: ${error}`)
                     reject(error)
                 })
             })
             return filename
+
         } else if (reportType === 'excel') {
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('Sales Report');
