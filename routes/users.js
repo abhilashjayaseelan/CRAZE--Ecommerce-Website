@@ -96,6 +96,10 @@ router.get('/checkout',
 router.post('/place-order',
     cartController.placeOrder);
 
+// checking product stock
+router.post('/product-stock-check',
+    productControllers.checkStock);
+
 // landing page after order placing
 router.get('/landing-page',
     userControllers.getLanding)

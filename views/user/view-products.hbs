@@ -1,5 +1,5 @@
 <!-- Modal -->
-<!-- Quick view --> 
+<!-- Quick view -->
 <main class="main">
     <section class="home-slider position-relative pt-50">
         <div class="hero-slider-1 dot-style-1 dot-style-1-position-1">
@@ -136,7 +136,6 @@
             <!--End nav-tabs-->
 
 
-
             <div class="tab-content wow fadeIn animated" id="myTabContent">
                 <div class="tab-pane fade show active" id="tab-one" role="tabpanel" aria-labelledby="tab-one">
                     <div class="row product-grid-4">
@@ -151,8 +150,8 @@
                                         </a>
                                     </div>
                                     <div class="product-action-1">
-                                        {{!-- <a aria-label="Quick view" class="action-btn hover-up" data-bs-toggle="modal"
-                                            data-bs-target=""><i class="fi-rs-eye"></i></a> --}}
+                                        {{!-- <a aria-label="Quick view" class="action-btn hover-up"
+                                            data-bs-toggle="modal" data-bs-target=""><i class="fi-rs-eye"></i></a> --}}
                                         <a aria-label="Add To Wishlist" class="action-btn hover-up"
                                             onclick="addToWishList('{{_id}}')"><i class="fi-rs-heart"></i></a>
                                         {{!-- <a aria-label="Compare" class="action-btn hover-up" href="#"><i
@@ -183,14 +182,16 @@
                                     </div>
                                     <div class="product-price">
                                         {{#if (oldprice discountedPrice)}}
-                                        <span  style="text-decoration: line-through;" class="text-muted">₹{{price}}</span>
+                                        <span style="text-decoration: line-through;"
+                                            class="text-muted">₹{{price}}</span>
                                         {{/if}}
                                         <br>
                                         <span>₹{{prices price discountedPrice}}</span>
                                     </div>
                                     <div class="product-action-1 show">
                                         <a aria-label="Add To Cart" class="action-btn hover-up"
-                                            onclick="addToCart('{{_id}}','{{totalQty}}')"><i class="fi-rs-shopping-bag-add"></i></a>
+                                            onclick="addToCart('{{_id}}','{{totalQty}}')"><i
+                                                class="fi-rs-shopping-bag-add"></i></a>
                                     </div>
                                 </div>
                             </div>

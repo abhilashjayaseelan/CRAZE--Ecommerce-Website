@@ -137,7 +137,11 @@
                                                 <dd> <b class="h5">{{formatCurrency details.totalPrice}}</b> </dd>
                                             </dl>
                                             <dl class="dlist">
-                                                <dt class="text-muted">Status:</dt>
+                                            <dt>payment-method: </dt>
+                                            <dd><b>{{details.paymentMethod}}</b></dd>
+                                            </dl>
+                                            <dl class="dlist">
+                                                <dt class="text-muted">Order Status:</dt>
                                                 <dd>
                                                     {{#if (eq status "placed")}}
                                                     <span class="badge rounded-pill alert-success">Placed</span>

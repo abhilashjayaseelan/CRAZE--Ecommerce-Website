@@ -54,7 +54,7 @@ module.exports = {
             console.error(err);
             res.status(500).send("Internal Server Error");
         }
-    },
+    }, 
     // admin logout
     getAdminLogout: (req, res) => {
         req.session.admin = false;

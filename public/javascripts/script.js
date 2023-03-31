@@ -38,32 +38,55 @@ function addToCart(productId, quantity) {
 
 // changing cart product quantities
 function changeQuantity(cartId, prodId, userId, count, slug) {
-    let quantity = parseInt(document.getElementById(prodId).innerHTML)
+    let quantity = parseInt(document.getElementById(prodId).innerHTML);
+    // Make a call to the second URL to check the condition
     $.ajax({
-        url: `/change-quantity`,
+        url: '/product-stock-check',
         data: {
-            cart: cartId,
-            user: userId,
             product: prodId,
-            count: count
         },
         method: 'post',
         success: (res) => {
-            if (res.status) {
-                console.log(res.total);
-                document.getElementById(prodId).innerHTML = quantity + parseInt(count);
-                document.getElementById('cart-subtotal').innerHTML = res.total;
-                document.getElementById('cart-total').innerHTML = res.total;
-                let newQuantity = parseInt(document.getElementById(prodId).innerHTML);
-                if (newQuantity === 1) {
-                    document.getElementById(slug).disabled = true;
-                } else {
-                    document.getElementById(slug).disabled = false;
-                }
+            if (quantity < res || count === -1) {
+                // Condition matched, proceed with the original Ajax call
+                $.ajax({
+                    url: '/change-quantity',
+                    data: {
+                        cart: cartId,
+                        user: userId,
+                        product: prodId,
+                        count: count
+                    },
+                    method: 'post',
+                    success: (res) => {
+                        if (res.status) {
+                            console.log(res.total);
+                            document.getElementById(prodId).innerHTML = quantity + parseInt(count);
+                            document.getElementById('cart-subtotal').innerHTML = res.total;
+                            document.getElementById('cart-total').innerHTML = res.total;
+                            document.getElementById('amount-to-pay').innerHTML = res.total;
+                            let newQuantity = parseInt(document.getElementById(prodId).innerHTML);
+                            if (newQuantity === 1) {
+                                document.getElementById(slug).disabled = true;
+                            } else {
+                                document.getElementById(slug).disabled = false;
+                            }
+                        }
+                    }
+                });
+            } else {
+                // Condition not matched, show warning pop up
+                swal({
+                    title: "Oops!",
+                    text: 'Out of stock!!!',
+                    icon: "error",
+                    button: "OK",
+                });
             }
         }
-    })
+    });
 }
+
 
 // delete product from the user cart
 function removeProduct(productId) {

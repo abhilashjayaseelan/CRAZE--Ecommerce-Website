@@ -124,25 +124,35 @@ module.exports = {
         }
     },
     // posting product review
-    postProductReview: async(req, res) =>{
+    postProductReview: async (req, res) => {
         try {
             const userData = req.session.user.response;
             const response = await productHelpers.addProductReview(req.body, userData);
             res.json(response);
         } catch (err) {
             console.log(err);
-            res.status(500).json({message: 'Error while adding review'});
+            res.status(500).json({ message: 'Error while adding review' });
         }
     },
     // getting all product reviews
-    getAllReviews: async(req, res) =>{
+    getAllReviews: async (req, res) => {
         try {
             const allReviews = await productHelpers.allReviews();
             const prodReviews = allReviews.reverse();
-            res.render('admin/product-reviews', {admin: true, prodReviews});
+            res.render('admin/product-reviews', { admin: true, prodReviews });
         } catch (err) {
             console.log(err);
-            res.status(500).render('error', {message: 'Error getting reviews'});
+            res.status(500).render('error', { message: 'Error getting reviews' });
+        }
+    },
+    // checking product stock
+    checkStock: async (req, res) => {
+        try {
+            const productStock = await productHelpers.getProductStock(req.body);
+            res.json(productStock);
+        } catch (err) {
+            console.log(err);
+            res.status(500).render('error', {message: 'error getting stock'})
         }
     }
 }

@@ -274,6 +274,16 @@ module.exports = {
             console.log(err);
             return err;
         }
+    },
+    // getting product stock
+    getProductStock: async(data)=>{
+        try {
+            const product = await products.find({_id: ObjectID(data.product)}).lean();
+            return product[0].totalQty;
+        }catch(err) {
+            console.log(err);
+            return err;
+        }
     }
 }
 
