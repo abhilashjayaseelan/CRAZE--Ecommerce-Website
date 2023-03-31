@@ -16,26 +16,25 @@ module.exports = {
             return err;
         }
     },
-    postAddress: (addressData, id) => {
-        console.log("address", addressData);
-        return new Promise(async (resolve, reject) => {
-            let data = new address({
-                'name': addressData.name,
-                'mobile': addressData.mobile,
-                'pincode': addressData.pincode,
-                'locality': addressData.locality,
-                'area': addressData.area,
-                'district': addressData.district,
-                'state': addressData.state,
-                'userId': id
-            })
-            try {
-                await data.save()
-                resolve(data);
-            } catch (err) {
-                reject(err);
-            }
-        })
+    postAddress: async (addressData, id) => {
+        console.log("kkjgkgk",addressData);
+        const { name, mobile, pincode, locality, area, district, state } = addressData;
+        const data = new address({
+            name,
+            mobile,
+            pincode,
+            locality,
+            area,
+            district,
+            state,
+            userId: id,
+        });
+        try {
+            await data.save();
+            return data;
+        } catch (err) {
+            return err;
+        }
     },
     removeAddress: (addressId) => {
         return new Promise((resolve, reject) => {
@@ -142,7 +141,7 @@ module.exports = {
     // getting wallet details
     walletDetails: async (userId) => {
         try {
-            const details = await wallet.find({userId: objectId(userId)}).lean();
+            const details = await wallet.find({ userId: objectId(userId) }).lean();
             return details[0].balance;
         } catch (err) {
             console.log(err);
