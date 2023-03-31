@@ -1,24 +1,8 @@
-const { admin, user, orders, couponTemplateSchema } = require('../models/connection');
+const {user, orders, couponTemplateSchema } = require('../models/connection');
 const bcrypt = require('bcrypt');
 objectId = require('mongodb').ObjectId;
 
 module.exports = {
-    // admin login
-    adminLogin: async (adminData) => {
-        try {
-            const admin1 = await admin.findOne({ email: adminData.email });
-            if (!admin1) {
-                return { notExist: true };
-            }
-            const status = await bcrypt.compare(adminData.password, admin1.password);
-            if (!status) {
-                return { status: false };
-            }
-            return { admin: admin1, status: true };
-        } catch (err) {
-            throw new Error(err);
-        }
-    },
     // get users
     getUsers: async () => {
         try {

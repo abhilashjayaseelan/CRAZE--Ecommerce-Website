@@ -1,6 +1,8 @@
 const adminHelper = require('../helpers/admin-helpers');
 const reportHelpers = require('../helpers/report-helpers');
 const generateReport = require('../public/javascripts/generate-report');
+const adminEmail = process.env.admin_email;
+const adminPassword = process.env.admin_password;
 const fs = require('fs');
 
 module.exports = {
@@ -34,14 +36,14 @@ module.exports = {
         req.session.emailErr = false;
         req.session.pswdErr = false;
     },
-    postAdminLogin: async (req, res) => {
+    postAdminLogin: (req, res) => {
         try {
-            const response = await adminHelper.adminLogin(req.body);
-            if (response.status) {
+            const {email, password} = req.body;
+            if (email === adminEmail && password === adminPassword) {
                 req.session.adminLoggedIn = true;
-                req.session.admin = response.admin;
+                req.session.admin = req.body;
                 res.redirect('/admin/dashboard');
-            } else if (response.notExist) {
+            } else if (email !== adminEmail) {
                 req.session.emailErr = "Invalid Email";
                 res.redirect('/admin');
             } else {
