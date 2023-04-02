@@ -1,5 +1,4 @@
-const {user, orders, couponTemplateSchema } = require('../models/connection');
-const bcrypt = require('bcrypt');
+const {user, orders, couponTemplateSchema} = require('../config/connection');
 objectId = require('mongodb').ObjectId;
 
 module.exports = {

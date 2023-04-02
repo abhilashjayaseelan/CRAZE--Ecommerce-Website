@@ -1,17 +1,15 @@
 const bcrypt = require('bcrypt');
-const { error } = require('console');
 const objectId = require('mongodb').ObjectId
 const moment = require('moment');
 const shortid = require('shortid');
-const {
-  user,
+const { user,
   products,
   orders,
   wishlist,
   wallet,
   userCouponSchema,
   couponTemplateSchema
-} = require("../models/connection");
+} = require('../config/connection');
 
 
 module.exports = {

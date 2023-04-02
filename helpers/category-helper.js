@@ -1,4 +1,4 @@
-const { category } = require('../models/connection');
+const { category } = require('../config/connection');
 
 module.exports = {
     addCategory: (categoryData) => {

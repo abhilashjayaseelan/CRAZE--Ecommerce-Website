@@ -1,5 +1,5 @@
-const { orders, products, user } = require('../models/connection');
-const util = require('util');
+const { user, products, orders } = require('../config/connection');
+
 
 
 module.exports = {

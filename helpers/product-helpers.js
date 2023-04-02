@@ -1,7 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
-const { products, category, discount, orders, review } = require("../models/connection");
+const { products, category, discount, orders, review } = require('../config/connection');
 const slugify = require('slugify');
-const { ObjectID } = require('bson');
 
 module.exports = {
     // filtering based categories
@@ -259,28 +258,28 @@ module.exports = {
     // getting product rating
     getProductRating: async (prodId) => {
         try {
-            
+
         } catch (err) {
             console.log(err);
             return err;
         }
     },
     // getting all reviews
-    allReviews: async()=>{
+    allReviews: async () => {
         try {
             const allReviews = await review.find().lean();
             return allReviews;
-        } catch(err) {
+        } catch (err) {
             console.log(err);
             return err;
         }
     },
     // getting product stock
-    getProductStock: async(data)=>{
+    getProductStock: async (data) => {
         try {
-            const product = await products.find({_id: ObjectID(data.product)}).lean();
+            const product = await products.find({ _id: ObjectID(data.product) }).lean();
             return product[0].totalQty;
-        }catch(err) {
+        } catch (err) {
             console.log(err);
             return err;
         }

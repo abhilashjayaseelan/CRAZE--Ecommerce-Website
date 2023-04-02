@@ -1,5 +1,5 @@
-const ObjectId = require('mongodb').ObjectId;
-const { cart, orders, address } = require('../models/connection');
+const ObjectId = require('mongodb').ObjectId; 
+const { cart, orders, address} = require('../config/connection');
 
 module.exports = {
     toCart: (productId, userId) => {

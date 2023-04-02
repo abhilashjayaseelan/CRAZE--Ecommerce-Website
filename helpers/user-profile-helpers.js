@@ -1,4 +1,4 @@
-const { user, address, userCouponSchema, wallet } = require('../models/connection')
+const { user, address, userCouponSchema, wallet } = require('../config/connection');
 const bcrypt = require('bcrypt');
 const objectId = require('mongodb').ObjectId
 
@@ -17,7 +17,6 @@ module.exports = {
         }
     },
     postAddress: async (addressData, id) => {
-        console.log("kkjgkgk",addressData);
         const { name, mobile, pincode, locality, area, district, state } = addressData;
         const data = new address({
             name,
@@ -39,8 +38,6 @@ module.exports = {
     removeAddress: (addressId) => {
         return new Promise((resolve, reject) => {
             address.deleteOne({ _id: objectId(addressId) }).then((response) => {
-                // console.log(response);
-                // console.log(addressId)
                 if (response) {
 
                     resolve({ removed: true })
