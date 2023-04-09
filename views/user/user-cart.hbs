@@ -390,6 +390,27 @@
                             $("#cart-total").text(response.total);
                             $("#offer-total").text(response.offer);
                             $("#apply-coupon-button").prop("disabled", true).text("Applied");
+                            // add remove button 
+                            const removeButton = $('<button>', {
+                                text: 'Remove coupon',
+                                click: function () {
+                                    location.reload();
+                                }
+                            });
+                            removeButton.css({
+                                'background-color': '#F44336',
+                                'border': 'none',
+                                'color': 'white',
+                                'padding': '10px',
+                                'text-align': 'center',
+                                'text-decoration': 'none',
+                                'display': 'inline-block',
+                                'font-size': '16px',
+                                'margin-top': '10px',
+                                'cursor': 'pointer',
+                                'border-radius': '5px'
+                            });
+                            $("#apply-coupon-form").append(removeButton);
                         }
                     },
                     error: function (xhr, status, error) {

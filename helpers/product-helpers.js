@@ -277,7 +277,7 @@ module.exports = {
     // getting product stock
     getProductStock: async (data) => {
         try {
-            const product = await products.find({ _id: ObjectID(data.product) }).lean();
+            const product = await products.find({ _id: ObjectId(data.product) }).lean();
             return product[0].totalQty;
         } catch (err) {
             console.log(err);
